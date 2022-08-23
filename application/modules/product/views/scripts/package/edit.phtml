@@ -1,0 +1,341 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+	$rsitem = $this->rs;
+?>						 
+<title>កែប្រែកញ្ចប់ទំនិញ</title>
+<body>
+	<form class="form-horizontal" id="frm" method="post" action="" >				
+		<script>
+		$('#frm').submit(function() {
+			identity = $("#identity").val();
+		    if(identity==''){
+		        alert("សូមជ្រើសរើស ផលិតផល/សេវាកម្ម! ");
+		        $('#product_id').select2('open');
+		        return false;
+		    }
+			var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+			if (r == true) {
+			    return true;
+			} else {
+			   return false;
+			}
+		});
+			
+		</script>
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>កែប្រែកញ្ចប់ទំនិញ</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="form-body">
+									<div class="row">
+										<div class="col-md-3" style="text-align: left !important;">
+										</div>
+										<div class="col-md-6" style="text-align: left !important;">
+											<div class="form-group">
+												<label class="col-md-4 control-label"><strong>ទំនិញ/សេវាកម្ម</strong></label>
+												<div class="col-md-8">
+													<select name="product_type" class="form-control">
+														<option value="0" <?php if($rsitem['is_service']==0){echo"selected";}?>>ប្រភេទទំនិញ</option>
+														<option value="1" <?php if($rsitem['is_service']==1){echo"selected";}?>>ប្រភេទសេវាកម្ម</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group" >
+												<label class="col-md-4 control-label">កញ្ចប់ទំនិញ/សេវាកម្ម</label>
+												<div class="col-md-8">
+													<input type="text" value="<?php echo $rsitem['item_name'];?>" class="validate[required] form-control"  name="product_name" id="product_name" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">លេខកូដ</label>
+												<div class="col-md-8">
+													<input type="text" value="<?php echo $rsitem['item_code'];?>" class="form-control" name="product_code" id="product_code" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">លេខបារកូដ</label>
+												<div class="col-md-8">
+													<input type="text" class="form-control" name="barcode" id="barcode" value="<?php echo $rsitem['barcode'];?>" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ប្រភេទទំនិញ
+												</label>
+												<div class="col-md-8">
+													<select name="cate_id" id="cate_id" class="form-control select2me">
+														<option value="-1">សូមជ្រើសរើសប្រភេទទំនិញ-សេវាកម្ម</option>
+														<?php if(!empty($this->caters)){ foreach($this->caters as $rs){?>
+														<option value="<?php echo $rs['id']?>" <?php if($rsitem['cate_id']==$rs['id']){echo"selected";}?>><?php echo $rs['name'];?></option>
+														<?php }}?>
+									    			</select>
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ប្រភេទគិតប្រាក់
+												</label>
+												<div class="col-md-8">
+													<select name="is_package_cost" id="is_package_cost" class="form-control select2me">
+														<option value="1" <?php if($rsitem['is_package_cost']==1){echo "selected";}?>>គិតថ្លៃជាដុំ</option>
+														<option value="0" <?php if($rsitem['is_package_cost']==0){echo "selected";}?>>គិតថ្លៃជារាយ</option>
+									    			</select>
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													តម្លៃលក់សរុប
+												</label>
+												<div class="col-md-8">
+													<input type="text" value="<?php echo $rsitem['selling_price'];?>" class="form-control" name="total_cost" id="total_cost" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													សម្គាល់
+												</label>
+												<div class="col-md-8">
+													<input type="text" value="<?php echo $rsitem['note'];?>" class="form-control" name="noted" id="noted" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ស្ថានភាព
+												</label>
+												<div class="col-md-8">
+													<select name="status" id="status" class="form-control select2me">
+														<option value="1" <?php if($rsitem['status']==1){echo "selected";}?>>ប្រើប្រាស់</option>
+														<option value="0" <?php if($rsitem['status']==0){echo "selected";}?>>មិនប្រើប្រាស់</option>
+									    			</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3" style="text-align: left !important;">
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-3"></div>
+										<div class="col-md-6">
+											<div class="form-group" style=""></div>
+											<div class="form-group" style="">
+												<div class="col-md-4">
+													<select name="category_filter" id="category_filter" class="form-control select2me" onchange="getProductByCategory();">
+														<option value="-1">ជ្រើសរើសប្រភេទ</option>
+														<?php if(!empty($this->caters)){ foreach($this->caters as $rs){?>
+														<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+														<?php }}?>
+									    			</select>
+												</div>
+												<div class="col-md-8">
+													<select name="product_id" id="product_id" onchange="addProductRow();" class="form-control select2me">
+														<option value="-1">សូមជ្រើសរើសទំនិញ-សេវាកម្ម</option>
+														<?php if(!empty($this->rsproduct)){ foreach($this->rsproduct as $rs){?>
+														<option value="<?php echo $rs['id']?>"><?php echo $rs['item_name'].' - '.$rs['item_code']?></option>
+														<?php }}?>
+									    			</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3"></div>
+									</div>
+									<div class="row">
+										<div class="col-md-1"></div>
+										<div class="col-md-10">
+											 <div class="portlet box blue">
+												<div class="portlet-title">
+													<div class="caption">
+														<i class="fa fa-cogs"></i>ទំនិញ/សេវាកម្ម
+													</div>
+												</div>
+												 <div class="portlet-body">
+													<div class="table-responsive">
+														 <table id="table_row" class="table table-bordered" style="font-size:12px !important;">
+															<thead>
+																<tr style="text-align: center !important;">
+																	<th class="aligncenter">#</th>
+																	<th class="aligncenter" style="min-width:200px;white-space: nowrap;">ឈ្មោះ/ទំនិញសេវាកម្ម</th>
+																	<th class="aligncenter">ចំនួន</th>
+																	<th class="aligncenter">តម្លៃ</th>
+																	<th class="aligncenter">សរុប</th>
+																	<th class="aligncenter">សម្គាល់</th>
+																	<th class="aligncenter">លុប</th>
+																</tr>
+															</thead>
+															<tbody id="lbl_noproduct">
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<input id="identity" name="identity" type="hidden" />
+											<input id="id" name="id" type="hidden" value="<?php echo $rsitem['id'];?>" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" name="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>
+<script>
+$( document ).ready(function() {
+	initilize();
+});
+index=0;
+title=0;
+temp='';
+function initilize(){
+	<?php if(!empty($this->rspakage)){foreach ($this->rspakage as $key=> $rs){?>
+		index++;
+		var txt_br = "<?php echo $rs['product_name']." - ".$rs['product_code'];?>";
+		var pro_id = '<?php echo $rs['product_id'];?>';
+		
+		if(pro_id<0){return false;}
+		template='<tr id="row_location_'+index+'">';
+		template+='<td>'+index+'</td>';
+		template+='<td>'+txt_br+'<input type="hidden" id="product_id'+index+'" name="product_id'+index+'" value="'+pro_id+'" </td>';
+		template+='<td><input type="text" onkeyup="totalQty('+index+');return isNumberKey(event);" id="qty_'+index+'"  name="qty_'+index+'" class="validate[required,custom[number]] form-control"></td>'; 
+		template+='<td><input type="text" onkeyup="totalQty('+index+');return isNumberKey(event);" id="price_'+index+'" name="price_'+index+'" class="validate[required,custom[number]] form-control"></td>'; 
+		template+='<td><input readonly="readonly" type="text" id="total_'+index+'" name="total_'+index+'"  class="form-control"></td>'; 
+		template+='<td><input type="text" id="note_'+index+'" name="note_'+index+'" class="form-control"></td>';
+		template+='<td><button type="button" onClick="deleteRecord('+index+')" name="save_close" class="btn default red">លុប</button></td>';
+		template+='</tr>';
+		$('#lbl_noproduct').append(template);
+		if($('#identity').val()!="") {
+			var identity = $('#identity').val();
+			$('#identity').val(identity+','+index);
+		} else {$('#identity').val(index);}
+		
+		$("#qty_"+index).val("<?php echo $rs['qty'];?>");
+		$("#price_"+index).val("<?php echo $rs['price'];?>");
+		total = "<?php echo $rs['price'] * $rs['qty'];?>"
+		$("#total_"+index).val(total);
+		$("#note_"+index).val("<?php echo $rs['note'];?>");
+	<?php }}?>
+	netTotal();
+}
+
+function addProductRow(){
+	index++;
+	var branch_text = $("#product_id");
+	var txt_br = $("option:selected",branch_text).text();
+	var pro_id = $("#product_id").val();
+	
+	if(pro_id<0){return false;}
+	template='<tr id="row_location_'+index+'">';
+	template+='<td>'+index+'</td>';
+	template+='<td>'+txt_br+'<input type="hidden" id="product_id'+index+'" name="product_id'+index+'" value="'+pro_id+'" </td>';
+	template+='<td><input type="text" onkeyup="totalQty('+index+');return isNumberKey(event);" id="qty_'+index+'"  name="qty_'+index+'" value="1" class="validate[required,custom[number]] form-control"></td>'; 
+	template+='<td><input type="text" onkeyup="totalQty('+index+');return isNumberKey(event);" id="price_'+index+'" name="price_'+index+'" class="validate[required,custom[number]] form-control"></td>'; 
+	template+='<td><input readonly="readonly" type="text" id="total_'+index+'" name="total_'+index+'"  class="form-control"></td>'; 
+	template+='<td><input type="text" id="note_'+index+'" name="note_'+index+'" class="form-control"></td>';
+	template+='<td><button type="button" onClick="deleteRecord('+index+')" name="save_close" class="btn default red">លុប</button></td>';
+	template+='</tr>';
+	$('#lbl_noproduct').append(template);
+	if($('#identity').val()!="") {
+		var identity = $('#identity').val();
+		$('#identity').val(identity+','+index);
+	} else {$('#identity').val(index);}
+	
+	//$('#product_id').val(-1).select2();
+	getProductPrice(index,pro_id);
+}
+var url_getproduct = '<?php echo $this->url(array('module'=>'product','controller'=>'package','action'=>'getproduct')); ?>';
+function getProductPrice(index,product_id){
+	$.ajax({
+		url: url_getproduct,
+		type: "post",
+		data: {product_id:product_id},	
+		success: function(data){
+			rs = $.parseJSON(data);
+			$('#price_'+index).val(rs);
+			totalQty(index);
+		},
+		error:function(err){
+			alert("failed");
+		   
+		}
+	});
+}
+function totalQty(index){
+	qty=$("#qty_"+index).val();
+	price=$("#price_"+index).val();
+	total = qty*price;
+	$("#total_"+index).val(total.toFixed(3));
+	netTotal();
+}
+function netTotal(){//use
+	var netTotal=0;
+	$('#total_cost').val(0);
+	var rowId = $('#identity').val();
+	var rowIDArray = rowId.split(',');
+	for(var n = 0; n < rowIDArray.length; n++) {
+		netTotal += Number($('#total_'+rowIDArray[n]).val());
+	}
+	if(isNaN(netTotal)){
+		netTotal=0;
+	}
+	$('#total_cost').val(netTotal.toFixed(3));
+}
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	$("#row_location_"+index).remove();
+	netTotal();
+}
+
+var url_getcategory = '<?php echo $this->url(array('module'=>'sales','controller'=>'possale','action'=>'get-productbycategory')); ?>';
+function getProductByCategory(){
+	$('#product_id').empty();
+	category = $("#category_filter").val();
+		$.ajax({
+			url:url_getcategory,
+			type:"post",
+			data:{'category':category,'type':0},
+			success: function(data){
+				rs = $.parseJSON(data);
+				$('#product_id').append(rs); 
+			},
+			error:function(e){
+				alert(e);
+			}
+		});
+}
+
+</script>

@@ -1,0 +1,188 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+?>						 
+<title>ការឧបត្ថមរបស់សប្បុរសជន</title>
+<body>
+	<form id="frm" class="form-horizontal" id="product_id" method="post" action="" autocomplete="off" >				
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>ការឧបត្ថមរបស់សប្បុរសជន</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-md-1">
+								</div>
+								<div class="col-md-5" style="text-align: left !important;border:1px solid #ccc;">
+										<h4 style="border-bottom: 1px solid #ccc;" class="center">ការឧបត្ថមរបស់សប្បុរសជន</h4>
+									<div class="form-group" >
+										<label class="col-md-4 control-label">សប្បុរសជន</label>
+										<div class="col-md-8">
+											<input type="text" class="validate[required] form-control " id="donor" name="donor" value="<?php echo $this->row['donor']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">លេខទូរស័ព្ទ</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control " id="tel" name="tel" value="<?php echo $this->row['tel']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											អាស័យដ្ឋាន
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control " id="address" name="address" value="<?php echo $this->row['address']?>" />
+										</div>
+									</div>
+									<div style="display:none">
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											តម្រូវការប្រើប្រាស់
+										</label>
+										<div class="col-md-8">
+											<input type="hidden" class="form-control " id="required_using" name="required_using" value="<?php echo $this->row['required_using']?>" />
+										</div>
+									</div>
+									<div class="form-group" >
+										<label class="col-md-4 control-label">ខែប្រើប្រាស់យូរបំផុត</label>
+										<div class="col-md-8">
+											<div class="input-icon right">
+												<i class="fa fa-calendar"></i>
+												<input type="hidden" class="form-control date-picker" name="invalid_date" id="invalid_date" value="<?php echo date("d-m-Y",strtotime($this->row['invalid_date']));?>" data-date-format="dd-mm-yyyy" />
+											</div>
+										</div>
+									</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											សម្គាល់(ខ្មែរ)
+										</label>
+										<div class="col-md-8">
+											<textarea class="form-control " name="detail_kh" id="detail_kh" style="height: 60px;" >
+												<?php echo $this->row['detail_kh']?>
+											</textarea>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											សម្គាល់(ចិន)
+										</label>
+										<div class="col-md-8">
+											<textarea class="form-control " name="detail_chi" id="detail_chi" style="height: 60px;" >
+												<?php echo $this->row['detail_chi']?>
+											</textarea>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-5" style="text-align: left !important;border:1px solid #ccc;">
+									<h4 style="border-bottom: 1px solid #ccc;" class="center">ការបង់ប្រាក់</h4>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											លេខបង្កាន់ដៃ
+										</label>
+										<div class="col-md-8">
+											<input type="text" style="color:red;" class="form-control " name="receipt_no" id="receipt_no" value="<?php echo $this->row['receipt_no']?>" readonly />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ថ្ងៃបង់ប្រាក់
+										</label>
+										<div class="col-md-8">
+											<div class="input-icon right">
+												<i class="fa fa-calendar"></i>
+												<input type="text" class="form-control date-picker" name="paid_date" id="paid_date" value="<?php echo date("d-m-Y",strtotime($this->row['paid_date']));?>" data-date-format="dd-mm-yyyy" />
+											</div>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">ចំនួនឧបត្ថម</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control " id="qtys" name="qtys" onkeyup="calculateTotal();" value="<?php echo $this->row['qtys']?>"/>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											តម្លៃរាយ ($)
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="validate[required] form-control " name="unit_price" id="unit_price" onkeyup="calculateTotal();" value="<?php echo $this->row['unit_price']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											តម្លៃសរុប ($)
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="validate[required] form-control " name="total_amount" id="total_amount" readonly value="<?php echo $this->row['total_amount']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											សម្គាល់
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control " name="payment_note" id="payment_note" value="<?php echo $this->row['payment_note']?>"/>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ស្ថានការ
+										</label>
+										<div class="col-md-8">
+											<select type="text" class="form-control select2me" name="status" id="status" >
+												<option value="1" <?php if($this->row['status']==1){echo "selected='selected'";}?>>Active</option>
+												<option value="2" <?php if($this->row['status']==0){echo "selected='selected'";}?>>Deactive</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-1" style="text-align: left !important;">
+								</div>
+							</div>
+							<div class="form-group">
+								<br />
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" name="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>
+
+<script>
+	function calculateTotal(){
+		var qtys = $('#qtys').val();
+		var unit_price = $('#unit_price').val();
+		qtys = isNaN(qtys)?0:qtys;
+		unit_price = isNaN(unit_price)?0:unit_price;
+
+		total = qtys * unit_price;
+		$('#total_amount').val(total);
+	}	
+</script>
+
+
+

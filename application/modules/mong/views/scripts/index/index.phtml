@@ -1,0 +1,127 @@
+<?php 
+	$url_new = $this->url(array('module'=>'mong','controller'=>'index','action'=>'add',));
+	$url_edit = $this->url(array('module'=>'mong','controller'=>'index','action'=>'edit',));
+	$url_delete = $this->url(array('module'=>'mong','controller'=>'index','action'=>'delete',));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$formFilter = $this->formFilter;
+	$rs = $this->product;
+?>
+<title>ផ្នែកលក់ម៉ុងចេតិយ</title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("ផ្នែកលក់ម៉ុងចេតិយ");?>
+				</div>
+				<a href="<?php echo $url_new;?>" class="btn btn-bg blue  pull-right">
+					<i class="fa fa-plus"></i>&nbsp;<?php echo $tr->translate("ADD_NEW");?>
+				</a>
+			</div>
+			<div class="portlet-body form frmfilter">
+				<form method="post" action="<?php echo $formFilter->getAction(); ?>" autocomplete="off">
+					<div class="form-group">
+							<label class="control-label col-md-3">
+								<?php echo $formFilter->getElement('ad_search');?>
+							</label>
+							<label class="control-label col-md-3">
+								<?php echo $formFilter->getElement('branch');?>
+							</label>
+							<label class="control-label col-md-3">
+								<?php echo $formFilter->getElement('customer_id');?>
+							</label>
+							<label class="control-label col-md-3">
+								<select name="is_complete" id="is_complete" class="form-control select2me">
+									<option value="">ស្ថានភាព</option>
+									<option value="1" <?php if($this->search['is_complete']==1){echo "selected='selected'";}?>>បង់ដាច់</option>
+									<option value="2" <?php if($this->search['is_complete']==2){echo "selected='selected'";}?>>មិនទាន់បង់ដាច់</option>
+								</select>
+							</label>
+							<label class="control-label col-md-3">
+								<select name="status" id="status" class="form-control select2me">
+									<option value="-1">ស្ថានការណ៍</option>
+									<option value="1" <?php if($this->search['status']==1){echo "selected='selected'";}?>>ប្រើប្រាស់</option>
+									<option value="0" <?php if($this->search['status']==0){echo "selected='selected'";}?>>មិនប្រើប្រាស់</option>
+								</select>
+							</label>
+							<label class="control-label col-md-3"><div class="input-icon right"><i class="fa fa-calendar"></i>
+								<?php echo $formFilter->getElement('start_date');?></div>
+							</label>
+							<label class="control-label col-md-3"><div class="input-icon right"><i class="fa fa-calendar"></i>
+								<?php echo $formFilter->getElement('end_date');?></div>
+							</label>
+							<label class="control-label col-md-3">
+								<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-search"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+							</label>
+						</div>				
+				</form> 
+				<div class="contain_form" style="clear: both;">
+						<?php echo $this->list; ?>
+			    </div>
+		   </div>
+		</div>
+	</div>
+</div>
+<script>
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {		
+			var m = "clicked: " + key;
+			if(key=="edit"){
+				url='<?php echo $this->baseUrl()."/mong/index/edit/id/";?>';
+			}else if(key=="invoice"){
+				url='<?php echo $this->baseUrl()."/mong/index/invoice/id/";?>';
+			}else if(key=="lastreceipt"){
+				url='<?php echo $this->baseUrl()."/mong/index/lastreceipt/id/";?>';
+			}else if(key=="goodtime"){
+				url='<?php echo $this->baseUrl()."/mong/index/goodtime/id/";?>';
+			}else if(key=="timemol"){
+				url='<?php echo $this->baseUrl()."/mong/index/timemol/id/";?>';
+			}else if(key=="item"){
+				url='<?php echo $this->baseUrl()."/report/index/rpt-mong-item/id/";?>';
+			}
+			
+			gotoAction();
+		},
+		items: {
+			"edit": {name: "កែប្រែ", icon: "edit", accesskey: "e"},
+			"invoice": {name: "វិក្កយបត្រ", icon: "fa-newspaper-o", accesskey: "e"},
+			"lastreceipt": {name: "បង្កាន់ដៃ", icon: "fa-newspaper-o", accesskey: "e"},
+			"goodtime": {name: "សែនបើកឆាក", icon: "fa-clock-o", accesskey: "e"},
+			"timemol": {name: "សែនឆ្លងម៉ុង", icon: "fa-clock-o", accesskey: "e"},
+			"item": {name: "សម្ភារៈសំណង់", icon: "fa-newspaper-o", accesskey: "e"},
+		}
+	});
+});
+function setrowdata(index){
+	  row = index;
+}
+var recordid ='';
+function gotoAction(){
+	 window.open(url+row, '_blank');
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

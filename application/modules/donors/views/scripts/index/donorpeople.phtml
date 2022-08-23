@@ -1,0 +1,150 @@
+
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$db_global = new Application_Model_DbTable_DbGlobal();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();	
+	$row = $this->row
+?>	
+<title>សប្បុរសជនជួយជំនួយ</title>
+<div id="Printdonate">
+	<div  class="wrapper">
+		<style>
+	    	.wrapper{
+	    		width: 100%;
+	    		margin: 0px;
+	    		padding: 0px;
+	    	}
+	    	.contain{
+	    		width: 1024px;
+	    		margin: 0 auto;
+	    	}
+			table {
+	    		border-collapse: collapse;
+	    		width: 100%;
+			}
+			th, td {
+	    		padding: 4px;
+			}
+			#borderimg1 { 
+			    border: 85px dotted ;
+			    border-image: url("<?php echo $this->baseUrl()?>/images/ifrmas.jpg") 125 stretch;
+			}
+	    </style>
+	    <div id="borderimg1" style="background: #fff;width:25cm;margin: 0 auto;min-height: 36cm; padding: 0.9cm;">
+		<table cellpadding="0" cellspacing="0" width="100%">
+			<tr class="no-boder">
+				<td>
+				<table width="100%"  style="margin-top: -95px;">
+					<tr>
+						<td width="20%" align="center">
+							<img style="max-height:100px;"><br>
+							<span style="font-family: Freestyle Script;font-size: 20px;"></span>
+							
+						</td>
+						<td width="60%">
+							<table   style="text-align:center; border:solid 1px #FFF; line-height: 49px;">
+								<tr style="list-style:11px; font-family:  Khmer OS Muol; font-size:30px;font-weight: bold;">
+									<td>ព្រះរាជាណាចក្រកម្ពុជា</td>
+								</tr>
+								<tr style="list-style:11px; font-family:  Khmer OS Muol; font-size:28px;font-weight: bold;">
+									<td>ជាតិ សាសនា ព្រះមហាក្សត្រ</td>
+								</tr>
+								<tr style="list-style:11px;font-weight: bold;font-size:13px;" class="img-size">
+									<td>
+										<img style="width: 43%; height: 135px;"  alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br>
+									</td>
+								</tr>
+								<tr style="list-style:15px;font-family: Times New Roman, cursive;font-size:30px;font-weight: bold;">
+									<td><?php echo $tr->translate("PHONE_BUNA");?></td>
+								</tr>
+							</table>
+						</td>
+						<td width="20%" >&nbsp;</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	  	<tr>
+	  		<td>
+	  			<table style="font-size:15px;font-family:  Khmer OS Muol;">	
+		  			<tr>
+  						<td colspan="3" align="left" style="list-style:25px; font-family:  Khmer OS Muol; font-size:30px;font-weight: bold; color:black;">
+  							热心者　(សប្បុរសជន):
+						</td>
+					</tr>
+			  		<tr>
+  						<td colspan="3" align="center" style="list-style:25px; font-family:  Khmer OS Muol; font-size:38px;font-weight: bold; color:red !important;">
+  							<?php echo $this->row['donor']?>
+						</td>
+					</tr>
+  					<tr>
+	  					<td align="center" style="list-style:23px; font-family:  Khmer OS Muol; font-size:32px;font-weight: bold; color:#C70039 !important;">
+	  						<?php echo $this->row['tel']?>
+	  					</td>
+	  				</tr>		
+					<?php if(!empty($this->row['address'])){?>
+					<tr>
+	  					<td align="center" style="list-style:20px; font-family:  Khmer OS Muol; font-weight: bold; color: red !important;">
+	  						<span style="color: #6A5ACD !important; font-size: 34px;">លំនៅដ្ឋាន៖ </span>
+	  						<span style="color: red !important; font-size:34px;"> <?php echo $this->row['address']?></span>
+	  					</td>
+	  				</tr>	
+					<?php }?>					
+		  			<tr>
+	  					<td align="center" style="list-style:23px; font-family:  Khmer OS Muol; font-size:36px; font-weight: bold; color:#22B424 !important;">
+	  						<?php echo $this->row['detail_chi']?>
+	  					</td>
+					</tr>	
+	  				<tr>
+  						<td colspan="3" align="center" style="list-style:25px; font-family:  Khmer OS Muol; font-size:36px;font-weight: bold; color:#22B424 !important;">
+  							<?php echo $this->row['detail_kh']?>
+						</td>
+					</tr>
+  					
+	  				<tr>
+	  					<td style="list-style:23px; font-family:  Khmer OS Muol; font-size:34px;font-weight: bold; color:#22B424 !important;">
+	  						ព័ត៌មានមានការបង់ប្រាក់៖
+	  					</td>
+	  				</tr>	  				
+	  				<tr style="font-family:  Khmer OS Muol; font-size:30px;font-weight: bold; line-height:50px; list-style:none;">
+	  					 <?php 
+	  					 ?>
+	  					<td>
+	  						<li style="color: #6A5ACD !important;">លេខបង្កាន់ដៃ  (<?php echo $row['receipt_no'];//$db_global->getNumberInkhmer($row['receipt_no'])?>)</li>	
+	  						<li style="color: #6A5ACD !important;">ចំនួន:&nbsp;<?php echo number_format($row['qtys'],0);//$db_global->getNumberInkhmer(number_format($row['qtys'],0))?>&nbsp;x&nbsp;<?php echo number_format($row['unit_price'],0);//$db_global->getNumberInkhmer(number_format($row['unit_price'],0))?>&nbsp;=&nbsp;<?php echo number_format($row['total_amount'],0)//echo $db_global->getNumberInkhmer(number_format($row['total_amount'],0))?> USD</li>						
+	  						<li style="color: #6A5ACD !important;">ថ្ងៃទី <?php echo date('d',strtotime($this->row['paid_date']));//$db_global->getNumberInkhmer(date('d',strtotime($this->row['paid_date'])));?> ខែ <?php echo date('m',strtotime($this->row['paid_date']));//$db_global->getNumberInkhmer(date('m',strtotime($this->row['paid_date'])));?> ឆ្នាំ <?php echo date('Y',strtotime($this->row['paid_date']))//$db_global->getNumberInkhmer(date('y',strtotime($this->row['paid_date'])));?></li>
+	  						<li align="center"></li>
+	  					</td>
+	  					<?php 
+                    	?>
+	  				</tr>	  	
+	  			</table>
+	  		</td>
+	  	</tr>
+	</table>
+	</div>
+	</div>
+</div>
+<div style="padding-left:17%; margin: 0 auto;"> 
+<lable class="col-md-3" style=""></lable>
+<div class="col-md-2">
+<a href="<?php echo $this->baseUrl();?>/mong/index"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i>ចាកចេញ</button></a>
+</div>
+<lable class="col-md-2" style="">
+<button type="button" onclick="printinvoice();" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i> បោះពុម្ភ </button>
+</lable>
+<lable class="col-md-3" style=""></lable>
+</div>
+<script>
+function printinvoice(){
+	var printContents = document.getElementById('Printdonate').innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+	document.getElementById("office_donate").submit();
+}
+</script>
+

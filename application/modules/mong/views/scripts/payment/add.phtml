@@ -1,0 +1,174 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+?>						 
+<title>ផ្នែកបង់ លុយប្រាក់ថ្លៃសាងសង់</title>
+<body>
+	<form class="form-horizontal" id="product_id" method="post" action="" >				
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>ផ្នែកបង់ លុយប្រាក់ថ្លៃសាងសង់</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-md-12">
+									<ul class="nav nav-tabs">
+										<li class="active">
+											<a href="#tab_1" data-toggle="tab">
+											<strong>ការលក់</strong></a>
+										</li>
+										<li>
+											<a href="#tab_2" data-toggle="tab"><strong>ព័ត៌មានប្រវត្តិបង់ប្រាក់</strong></a>
+										</li>
+									</ul>
+								</div>
+								<div class="tab-content">
+									<div class="tab-pane active" id="tab_1">
+										<div class="form-body">
+											<div class="row">
+												<div class="col-md-6" style="text-align: left !important;">
+													<div class="form-group" >
+														<label class="col-md-4 control-label">អ្នកម៉ៅការ</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" name="" id="" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">លេខចំនាយ</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" name="" id="" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															ថ្ងៃចំនាយ
+														</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" name="" id="" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															សម្គាល់
+														</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" name="" id="" />
+														</div>
+													</div>
+													
+												</div>
+												<div class="col-md-6" style="text-align: left !important;">
+													
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-1"></div>
+												<div class="col-md-8">
+													<div class="form-group" style=""></div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															<strong>ស្វែងរកមុខទំនិញ</strong>
+														</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" name="" id="" />
+														</div>
+													</div>
+												</div>
+												<div class="col-md-1"></div>
+											</div>
+											<div class="row">
+												<div class="col-md-12">
+													 <table id="table_row"  style=";border-collapse: collapse; border:1px solid #ccc;width:100%;">
+														<thead>
+															<tr id="head-title" class="table table-bordered" align="right" style="background:#ccc">
+																<th class="aligncenter">#</th>
+																<th class="aligncenter">ម៉ុង-ចេតិយ</th>
+																<th class="aligncenter">លេខម៉ុង</th>
+																<th class="aligncenter">ប្រភេទម៉ុង</th>
+																<th class="aligncenter">តម្លៃជួល</th>
+																<th class="aligncenter">ប្រាក់បានបង់សរុប</th>
+																<th class="aligncenter">ប្រាក់នៅជំពាក់</th>
+															</tr>
+															<tr>
+																<td colspan="7" id="lbl_noproduct" align="center">មិនមាន ទំនិញ ក្នុងកន្រ្តក</td>
+															</tr>
+														</thead>
+													</table>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-1"></div>
+												<div class="col-md-6"></div>
+												<div class="col-md-5" style="text-align: left !important;">
+													<div class="form-group" style=""></div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															តម្លៃសរុប
+														</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" name="" id="" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															បានបង់ពីមុនសុរប
+														</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" name="" id="" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															បានបង់សរុប
+														</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" name="" id="" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															នៅខ្វះ
+														</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" name="" id="" />
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+									</div><!-- end tab1 -->
+									<div class="tab-pane " id="tab_2">
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" name="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>

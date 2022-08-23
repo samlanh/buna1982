@@ -1,0 +1,200 @@
+<title>បន្ថែមអ្នកប្រើប្រាស់</title>
+<?php $form=$this->form; ?>
+      
+<script type="text/javascript">
+</script>
+<?php 
+	Application_Model_Decorator::removeAllDecorator($form);
+	$cancel_url=$this->url(array(
+		'module'=>'rsvAcl',
+		'controller'=>'user',
+		'action'=>'index',
+	)); 	
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$url_cancel = $this->url(array('module'=>'rsvacl','controller'=>'user','action'=>'index'));
+?>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo "បន្ថែមអ្នកប្រើប្រាស់";?>
+				</div>
+				<div class="tools" >
+					<a href="<?php echo $url_cancel;?>" class="btn btn-sm pull-right" style="color:white;">
+					<i class="fa fa-undo"></i>	&nbsp;<?php echo $tr->translate("GO_BACK");?>
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="frm" action="<?php //echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post" autocomplete="off">
+					<div class="form-body">
+						<div class="form-group">
+							<div class="col-md-2">
+							</div>
+							
+							<div class="col-md-6">
+								<div class="form-group">
+									<label class="control-label col-md-4"><?php echo $tr->translate('ភេទ');?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('title');?>
+										</div>
+									</div>
+								</div>	
+								<div class="form-group">
+									<label class="control-label col-md-4"><?php echo $tr->translate('ឈ្មោះ');?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('fullname');?>
+										</div>
+									</div>
+								</div>
+								
+								<div class="form-group">			
+									<label class="control-label col-md-4"><?php echo $tr->translate('EMAIL');?><span class="required">
+										 </span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<?php echo $form->getElement('email');?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4"><?php echo $tr->translate('USER_NAME');?><span class="required">
+									* </span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+										<?php echo $form->getElement('username');?>
+										</div>
+									</div>
+								</div>	
+								
+								<div class="form-group">
+									<label class="control-label col-md-4"><?php echo $tr->translate('PASSWORD');?><span class="required">
+										 </span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<?php echo $form->getElement('password');?>
+										</div>
+									</div>
+								</div>	
+								<div class="form-group">			
+									<label class="control-label col-md-4"><?php echo $tr->translate('បញ្ជាក់លេខសម្ងាត់');?><span class="required">
+									* </span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<?php echo $form->getElement('confirm_password');?></div>
+									</div>
+								</div>
+								<div class="form-group" >
+									<label class="control-label col-md-4"><?php echo $tr->translate('USER_TYPE');?><span class="required">
+										 </span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<?php echo $form->getElement('user_type_id');?>
+										</div>
+									</div>
+								</div>	
+								<div class="form-group">			
+									<label class="control-label col-md-4"><?php echo $tr->translate("សាខា");?><span class="required">
+										 </span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<?php echo $form->getElement("LocationId");?>
+										</div>
+									</div>
+								</div>
+								<br >
+								<br >
+								<div class="form-group">
+									<div class="col-md-5">
+										<div class="input-icon right">
+										</div>
+									</div>
+									<div class="col-md-4">
+										<button type="submit" name="save_close" id="save_close" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_NEW")?> </button>
+									</div>
+									<div class="col-md-3">
+									</div>
+								</div>
+							</div>				
+							<div class="col-md-4">
+							</div>				
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+	$('#frm').submit(function() {
+		fullname=$("#fullname").val();
+		if(fullname==""){
+			alert("Please input name !!!");
+			$('#fullname').focus();
+			return false;	
+		}
+		
+		username=$("#username").val();
+		if(username==""){
+			alert("Please input username !!!");
+			$('#username').focus();
+			return false;	
+		}
+		
+		password=$("#password").val();
+		if(password==""){
+			alert("Please input password !!!");
+			$('#password').focus();
+			return false;	
+		}
+		
+		confirm_password=$("#confirm_password").val();
+		if(confirm_password==""){
+			alert("Please input confirm password !!!");
+			$('#confirm_password').focus();
+			return false;	
+		}
+		
+		user_type_id=$("#user_type_id").val();
+		if(user_type_id==""){
+			alert("Please select user type !!!");
+			$('#user_type_id').select2('open');
+			return false;	
+		}
+		
+		if(password!=confirm_password){
+			alert("confirm password not match !!!");
+			$('#confirm_password').focus();
+			return false;	
+		}
+		
+		var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+		if (r == true) {
+			$("#save_close").attr("disabled", true);
+			return true;
+		} else {
+		   return false;	    
+		}
+	});
+	
+</script>	
+
+

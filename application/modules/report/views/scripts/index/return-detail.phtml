@@ -1,0 +1,179 @@
+<?php 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+$frm_sales_report = $this->form_salemong;
+?>
+<title><?php echo $tr->translate("របាយការណ៍ផ្ទេរទំនិញចូលស្តុកលម្អិត");?></title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("របាយការណ៍ផ្ទេរទំនិញចូលស្តុកលម្អិត");?>
+				</div>
+					<div class="btn-group pull-right">
+					 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+					   Actions <i class="fa fa-angle-down"></i>
+					 </button>
+					<ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#" onclick="doPrint();">
+								<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+							</a>
+						</li>
+						<li>
+							<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+						</li>
+					</ul>
+				</div>
+			</div>
+	<div style=" min-height:12cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm;overflow: scroll;">
+	<div id="divPrint" style="width: 100%;">
+	<style>
+		.style{
+			line-height: 25px;font-size: 12px !important;
+			font-family: 'Khmer OS Battambang';
+		}
+		ul{margin: 0;padding:0;}
+		table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
+		th{padding: 5px;}
+		.hover:hover{background: #ccc;}
+	</style>
+		<table style="font-family: 'Khmer OS Content'; width:100%;">
+			<tbody>
+			<tr>
+		    	<td align="center">
+		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
+		            	<tbody><tr>
+		                	<td align="center" width="16%" valign="top"><img  height="95px" src="<?php echo $this->baseUrl();?>/images/logosbona.jpg"></td>
+		                	<td width="70%" valign="top">
+		                		<ul>
+		                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
+		                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'"><?php echo $tr->translate("របាយការណ៍ផ្ទេរទំនិញចូលស្តុកលម្អិត");?></li>
+		                		</ul>
+		                	</td>
+		                    <td width="20%"></td>
+		                </tr> 
+		                <tr>
+		                	<td colspan="3" valign="top">
+			                </td>
+			            </tr>   
+		            </tbody></table>
+		        </td>
+		    </tr>
+		    <tr>
+		    	<td class="table2excel" id="exportExcel">
+		            <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
+		                 <tbody><tr bgcolor="#abd5ff" class="style" align="center" style="font-weight:bold; line-height: 205x; font-size:12px; padding:1px 0px; white-space: nowrap; ">
+		                    <td><?php echo $tr->translate("ល.រ");?></td>
+							<td><?php echo $tr->translate("លេខកូដ");?></td>
+							<td><?php echo $tr->translate("ចំណងជើង");?></td>
+							
+							<td>&nbsp;<?php echo $tr->translate("ទំនិញ");?></td>
+							<td width="10%">&nbsp;<?php echo $tr->translate("ចំនួន");?></td>
+							<td><?php echo $tr->translate("តម្លៃ");?></td>
+							<td><?php echo $tr->translate("តម្លៃសរុប");?></td>
+							<td>&nbsp;<?php echo $tr->translate("សម្គាល់");?></td>
+		                </tr>
+		                <?php $num=1; 
+		                $netotal = 0;
+		                if(!empty($this->return_detail))foreach ($this->return_detail AS $index => $rs){?>
+						<tr class='row-format<?php echo $num; $num=1-$num;?> hover' style="border:1px solid #000;">
+						   <td align="center" style="white-space: nowrap;">&nbsp;<?php echo $index+1?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo $rs["return_code"];?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo $rs["title"];?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo $rs["product_name"];?></td>
+						   <td align="center" style="white-space: nowrap;">&nbsp;<?php echo $rs["qty"];?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo "$ ".number_format($rs["price"],2);?></td>
+						   <td style="white-space: nowrap;">&nbsp;<?php echo "$ ".number_format($rs["total"],2);?></td>
+						   <td>&nbsp;<?php echo $rs["note"];?></td>
+						</tr>
+						   <?php 
+								$netotal = $netotal+$rs["total"];
+                    	}?>
+		                </tbody>
+		           </table>
+		            <br>
+		             <table border="1" align="center" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="30%" cellspacing="0">
+		                <tbody>
+			                <tr height="30px;" bgcolor="#abd5ff" class="style" align="center" style=" padding:2px 0px; ">
+			                    <td><strong style="font-size:15px;"><?php echo $tr->translate("ទឹកប្រាក់សរុប");?></strong></td>
+			                </tr>
+			                <tr class="style" style=" line-height: 24px;">
+			                    <td align="center" style="font-size:14px;">&nbsp;<?php echo "$ ".number_format($netotal,2);?>&nbsp;</td>
+			                </tr>
+		               </tbody>
+		             </table>
+		              <br>
+		              <table align="center" width="100%">
+						   <tbody><tr style="font-size: 11px;">
+						        <th style="width:20%;text-align:center;  font-family:'Khmer MEF2'">យល់ព្រមដោយ</th>
+						        <th></th>
+						        <th style="width:20%;text-align:center; font-family:'Khmer MEF2'">ត្រួតពិនិត្យដោយ</th>
+						        <th></th>
+						        <th style="width:20%;text-align:center;font-family:'Khmer MEF2'">រៀបចំដោយ</th>
+						   </tr>
+						</tbody>
+					</table>	
+		    		</td>
+		    	</tr>
+			</tbody>
+		</table>
+		</div>
+	  </div>		
+	 </div>
+   </div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script>
+function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+
+/*var currentTime = new Date();
+var month = currentTime.getMonth() + 1;
+var day = currentTime.getDate();
+var year = currentTime.getFullYear();
+	var date =(year + "-" + month + "-" + day );
+
+var start_date = $('#start_date').val();
+var end_date =$('#end_date').val();
+
+if(end_date!="" | start_date!=""){
+    start_date = $('#start_date').val();
+	end_date =$('#end_date').val();
+	
+}else{
+	start_date = $('#start_date').val(date);
+	end_date = $('#end_date').val(date);
+}*/
+
+<?php //$url_item_filter =  $this->url(array('module'=>'report','controller'=>'index','action'=>'get-item-filter')); ?>
+/*function getProductFilter(){
+	var location_id=$("#LocationId").val();
+	var branch_id = $('#branch_id').val();
+	var category_id = $('#category_id').val();
+		$.ajax({
+			url:"<?php //echo $url_item_filter;?>",
+			type:"post",
+			data:{'category_id':category_id,'branch_id':branch_id,'location_id':location_id},
+			success: function(data){
+				items = $.parseJSON(data);
+				if(items){
+					 $('#item').empty();
+					 $('#item').val('').trigger("liszt:updated");
+					 $('#item').append($("<option></option>").attr("value","").text("Please Select Item"));
+					 for (var index = 1 ; index <= items.length; index++) {
+							$('#item').append($("<option></option>").attr("value",items[index-1]['pro_id']).text(items[index-1]['item_code'] + items[index-1]['item_name'])); 
+							$("select#item").find("option#items[index-1]['pro_id']").attr("selected", true);
+					 }           
+					$('#item').val('').trigger("liszt:updated");
+				}else{
+					 $('#item').empty();
+					 $('#item').val('').trigger("liszt:updated");
+						 $('#item').append($("<option></option>").attr("value","").text("No Items Result!"));
+						 $('#item').val('').trigger("liszt:updated");
+				}
+			},
+			error:function(){
+			}
+		});
+	}*/
+</script>

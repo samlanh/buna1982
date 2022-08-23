@@ -1,0 +1,335 @@
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$form=$this->form_sale;
+	$url_submit = $this->url(array('module'=>'mong','controller'=>'constructorpayment','action'=>'edit'));
+?>
+<title><?php echo $tr->translate("កែប្រែបង់ប្រាក់ថ្លៃជាង");?></title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo $tr->translate("កែប្រែបង់ប្រាក់ថ្លៃជាង")?>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post" autocomplete="off">
+					<div class="form-body" style="background:#fbf9f9;">
+						<div class="form-group" style="">
+							<label class="control-label col-md-2"> 
+								<?php echo $tr->translate("BRANCH_NAME");?>
+							</label>
+							<div class="col-md-4">
+								<select name="branch" id="branch" class="form-control select2me" onchange="getAllBranchFunction();" >
+									<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+									<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+									<option value="<?php echo $branch['id']?>" <?php if($branch['id']==$this->row['branch_id']){echo "selected='selected'";}?>><?php echo $branch['name'];?></option>
+									<?php }}?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("លេខវិក័យបត្រ");?><span class="required">
+								</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<select name="mong_id" id="mong_id" class="form-control select2me" onchange="getReceipt(1);" >
+										<option value="-1">ជ្រើសរើសវិក័យបត្រ</option>
+										<?php if(!empty($this->invoice)){foreach($this->invoice as $invoice){?>
+										<option value="<?php echo $invoice['id']?>" <?php if($invoice['id']==$this->row['mong_id']){echo "selected='selected'";}?>><?php echo $invoice['invoice_no']?></option>
+										<?php }}?>
+									</select>
+								</div>
+							</div>
+							
+							<label class="control-label col-md-2"><?php echo $tr->translate("ឈ្មោះជាង");?><span class="required">
+								</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<select name="constructor_id" id="constructor_id" class="form-control select2me" onchange="getReceipt(2);" >
+										<option value="-1">ជ្រើសរើសជាង</option>
+										<?php if(!empty($this->constructor)){foreach($this->constructor as $constructor){?>
+										<option value="<?php echo $constructor['id']?>" <?php if($constructor['id']==$this->row['mong_id']){echo "selected='selected'";}?>><?php echo $constructor['name']?></option>
+										<?php }}?>
+									</select>
+								</div>
+							</div>
+							
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("បង់ជា");?><span class="required">
+							*</span>
+							</label>
+							<div class="col-md-4">
+								<select name="payment_type" id="payment_type" class="form-control select2me" onchange="checkpayment();" >
+									<option value="Cash" <?php if($this->row['payment_type']=="Cash"){echo "selected='selected'";}?>>Cash</option>
+									<option value="Cheque" <?php if($this->row['payment_type']=="Cheque"){echo "selected='selected'";}?>>Cheque</option>
+									<option value="Credit" <?php if($this->row['payment_type']=="Credit"){echo "selected='selected'";}?>>Credit</option>
+									<option value="Bank Transtransfer" <?php if($this->row['payment_type']=="Bank Transtransfer"){echo "selected='selected'";}?>>Bank Transtransfer</option>
+								</select>
+							</div>
+							
+							
+							<label class="control-label col-md-2"><?php echo $tr->translate("សែក");?>
+								<span class="required">*</span>
+							</label>
+							<div class="col-md-2">
+								<input type="text" class="form-control" name="cheque_number" id="cheque_number" value="<?php echo $this->row['cheque_number'];?>" readonly placeholder="លេខសែក"​/>
+							</div>
+							<div class="col-md-2">
+								<input type="text" class="form-control" name="bank_name" id="bank_name" value="<?php echo $this->row['bank_name'];?>" readonly placeholder="ឈ្មោះធនាគារ"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("សម្គាល់");?>
+							</label>
+							<div class="col-md-4">
+								<textarea name="note" id="note" class="form-control" rows="1"><?php echo $this->row['note'];?></textarea>
+							</div>
+							
+							
+							<label class="control-label col-md-2"><?php echo $tr->translate("កាលបរិច្ឆេទ");?><span class="required">
+							*</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<i class="fa fa-calendar"></i>
+									<input class="form-control date-picker" name="date_payment" id="date_payment" value="<?php echo date("d-m-Y",strtotime($this->row['date_payment']))?>" data-date-format="dd-mm-yyyy" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group" style="">
+							<label class="control-label col-md-2"><?php echo $tr->translate("ស្ថានភាព");?></span>
+							</label>
+							<div class="col-md-4">
+								<select name="status" id="status" class="form-control select2me" >
+									<option value="1" <?php if($this->row['status']==1){echo "selected='selected'";}?>>ប្រើប្រាស់</option>
+									<option value="0" <?php if($this->row['status']==0){echo "selected='selected'";}?>>មិនប្រើប្រាស់</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="portlet-body">
+							<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
+								<tr height="33px" align="center" style="font-weight: bold;">
+									<td><?php echo $tr->translate("NUM");?></td>
+									<td style="white-space:nowrap;"><?php echo $tr->translate("ថ្ងៃបង់");?></td>
+									<td><?php echo $tr->translate("លេខបង្កាន់ដៃ");?></td>
+									<td><?php echo $tr->translate("ចំនួនទឹកប្រាក់");?></td>
+									<td><?php echo $tr->translate("ទឹកប្រាក់បានបង់");?></td>
+									<td><?php echo $tr->translate("ទឹកប្រាក់នៅខ្វះ");?></td>
+								</tr>
+							</table>
+						 	<input type="hidden" id="identity" name="identity" />
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-7"><span class="required">
+								 </span>
+							</label>
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("ជំពាក់សរុប​ :");?>Total
+							</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" name="total_payment" id="total_payment" value="<?php echo $this->row['total_payment'];?>" readonly />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-7">
+							</label>
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("ប្រាក់បានបង់");?> (Paid)
+							</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" name="paid" id="paid" value="<?php echo $this->row['paid'];?>" onkeyup="doRemain();" />
+							</div>	
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-7">
+							</label>
+							
+							<label class="control-label col-md-2">
+								ប្រាក់នៅសល់ (Balance)​ :<span class="required">*</span>
+							
+							</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" name="balance" id="balance" value="<?php echo $this->row['balance'];?>" readonly />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-4"></div>
+							<div class="col-md-2">
+								<a href="<?php echo $this->baseUrl();?>/mong/constructorpayment/"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
+							</div>
+							<div class="col-md-2">
+								<div class="input-icon right">
+									<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> <?php echo $tr->translate("កែប្រែទិន្នន័យ")?></button>
+								</div>
+							</div>
+							<div class="col-md-4">
+							</div>
+						</div>
+					</div>	
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end new product -->
+<script>
+	$(document).ready(function() {
+		getReceipt(0);
+		setReadonly();
+	});
+	
+	function setReadonly(){
+		$('#branch').prop('readonly', true);
+		$('#mong_id').prop('readonly', true);
+		$('#constructor_id').prop('readonly', true);
+		$('#payment_type').prop('readonly', true);
+		$('#date_payment').prop('readonly', true);
+		$('#note').prop('readonly', true);
+		$('#paid').prop('readonly', true);
+		
+		status = "<?php echo $this->row['status']?>";
+		if(status==0){
+			$('#status').prop('readonly', true);
+		}
+	}
+	
+	$('#frm').submit(function() {
+		mong_id=$("#mong_id").val();
+		if(mong_id<=0){
+			alert("Please select invoice !!! ");
+			$('#mong_id').select2('open');
+			return false;	
+		}
+		
+		paid=$("#paid").val();
+		if(paid<=0){
+			alert("Please input paid amount !!!");
+			$('#paid').focus();
+			return false;	
+		}
+		var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+		if (r == true) {
+			$("#save_close").attr("disabled", true);
+			return true;
+		} else {
+		   return false;	    
+		}
+	});
+	
+	function checkpayment(){
+		payment_type = $("#payment_type").val();
+		if(payment_type=="Cheque"){
+			$( "#bank_name" ).attr( "readOnly", false );
+			$( "#cheque_number" ).attr( "readOnly", false );
+		}else{
+			$("#bank_name").val("");
+			$("#cheque_number").val("");
+			$( "#bank_name" ).attr( "readOnly", true );
+			$( "#cheque_number" ).attr( "readOnly", true );}
+	}
+	
+	
+	<?php $urlreceipt =  $this->url(array('module'=>'mong','controller'=>'constructorpayment','action'=>'get-constructor-payment')); ?>
+	function getReceipt(type){
+		if(type==1){
+			mong_id=$("#mong_id").val();
+			$("#constructor_id").val(mong_id).select2();
+		}else if(type==2){
+			mong_id=$("#constructor_id").val();
+			$("#mong_id").val(mong_id).select2();
+		}else{
+			mong_id=$("#constructor_id").val();
+		}
+		
+		if(mong_id>0){
+			$.ajax({
+				url:"<?php echo $urlreceipt;?>",
+				type:"post",
+				data:{'mong_id':mong_id,'action':"edit"},
+				success: function(data){	
+					$("#table_order").html("");
+					template='<tr height="33px" align="center" style="font-weight: bold;">';
+						template+='<td><?php echo $tr->translate("NUM");?></td>';
+						template+='<td style="white-space:nowrap;"><?php echo $tr->translate("ថ្ងៃបង់");?></td>';
+						template+='<td><?php echo $tr->translate("ចំនួនទឹកប្រាក់");?></td>';
+						template+='<td><?php echo $tr->translate("ទឹកប្រាក់បានបង់");?></td>';
+						template+='<td><?php echo $tr->translate("ទឹកប្រាក់នៅខ្វះ");?></td>';
+						template+='<td><?php echo $tr->translate("សម្គាល់");?></td>';
+						template+='<td><?php echo $tr->translate("ស្ថានភាព");?></td>';
+					template+='</tr>';
+					
+					$('#identity').val("");
+					data = $.parseJSON(data);
+					
+					for(i=0;i<data.length;i++){
+						/*if(i==0){
+							$("#customer_id").val(data[i].customer_id);
+							$("#customer_id").select2();
+						}*/
+						index=i+1;
+						template+='<tr style="height:30px;" align="center">';
+							template+='<td >'+index+'</td>';
+							template+='<td >'+data[i].receipt_date+'</td>';
+							//template+='<td >'+data[i].receipt_no+'<input type="hidden" value='+data[i].id+' id="invoice_no'+index+'" name="invoice_no'+index+'"/></td>';
+							template+='<td >'+"$ "+data[i].total_payment+'<input type="hidden" value='+data[i].total_payment+' id="subtotal'+index+'" name="subtotal'+index+'"/></td>';
+							if(data[i].paid==null){data[i].paid=0;}
+							template+='<td >'+"$ "+data[i].paid+'<input type="hidden" value='+data[i].paid+' id="paid_amount'+index+'" name="paid_amount'+index+'"/></td>';
+							template+='<td >'+"$ "+data[i].balance+'<input type="hidden" value='+data[i].balance+' id="balance_after'+index+'" name="balance_after'+index+'"/></td>';
+							template+='<td >'+data[i].note+'<input type="hidden" value='+data[i].note+' id="note_'+index+'" name="note_'+index+'"/></td>';
+							template+='<td >'+data[i].status_name+'<input type="hidden" value='+data[i].status_name+' id="status_'+index+'" name="status_'+index+'"/></td>';
+						template+="</tr>";
+						
+						if($('#identity').val()!="") {
+							var identity = $('#identity').val();
+							$('#identity').val(identity+','+index);
+						} else {$('#identity').val(index);}
+						
+						// $('#total_payment').val(data[i].constructor_balance);
+						// $('#balance').val(data[i].constructor_balance);
+					}
+					$('#table_order').append(template);
+					
+					//if(data.length>0){netTotal();}else{$('#balance').val(0);$('#all_total').val(0);$('#paid').val(0); alert("No invoice to make payment");}
+				},
+				error:function(e){
+					alert("error"+e);
+				}
+			});	
+		}
+	}
+
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		$("#row_order_"+index).remove();
+		netTotal();
+	}
+	function doRemain() {
+		var total_payment = Number($('#total_payment').val());
+		var paid = Number($('#paid').val());
+		if(paid > total_payment){
+			var paid = $('#paid').val(total_payment);
+			 $('#balance').val(0);
+	   }else{
+		   remain = total_payment-paid;
+		   $('#balance').val(remain.toFixed(2));
+		}	
+	}
+
+</script>	

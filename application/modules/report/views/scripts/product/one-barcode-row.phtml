@@ -1,0 +1,181 @@
+<?php 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+$brach_name =  $this->branch;
+$formFilter = $this->formFilter;
+$base_url = $this->baseUrl();
+?>
+<title>របាយការណ៍បញ្ជីផលិតផល</title>
+<script src="<?php echo $base_url;?>/js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>/js/dojo-1.6.1/dijit/themes/soria/soria.css"/>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("របាយការណ៍បញ្ជីផលិតផល");?>
+				</div>
+				<div class="btn-group pull-right">
+					 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+					   Actions <i class="fa fa-angle-down"></i>
+					 </button>
+					 <ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#" onclick="doPrint();">
+								<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+							</a>
+						</li>
+						<li>
+							<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+						</li>
+					 </ul>
+				</div>
+			</div>
+            <div class="portlet-body form frmfilter">
+				
+					<div class="form-body">
+						<div class="form-group">
+							<label class="control-label col-md-3">
+								<select class="form-control select2me" id="pro_id" name="pro_id" >
+									<option value="0">ផលិតផល</option>
+									<?php if(!empty($this->rsproduct)){foreach ($this->rsproduct as $pro){?>
+										<option value="<?php echo $pro['id']?>" <?php if($pro['id']==$this->search['pro_id']){echo "selected";}?>><?php echo $pro['name']?></option>
+									<?php }}?>
+								</select>
+							</label>
+							<label class="control-label col-md-3">
+								<input name="qty" id="qty" class="form-control" type="number" value="1" />
+							</label>
+							<label class="control-label col-md-1">
+								<button type="button" onClick="addRow();" class="btn btn-primary col-md-12"><?php echo $tr->translate("បន្ថែម");?></button>
+							</label>
+						</div>
+					</div>
+					<div style="clear:both;"></div>	
+				
+			</div>	
+		</div>	
+		<style>
+			.label_price{
+				margin-top: -14% !important;
+				margin-left: 72% !important;
+			}
+		</style>
+		<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm">
+			<div id="divPrint">
+				<style>
+					.col-md-3{
+						float: left;
+						width: 25%;
+						page-break-inside:avoid; 
+						page-break-after:auto;
+					}
+					.center {
+						text-align: center !important;
+					}
+					.label_price{
+						margin-top: -19%;
+						margin-left: 80%;
+						text-align: left;
+					}
+					
+				</style>
+				<?php /*?>
+				<div  style="width: 100%;">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="portlet-body form">
+								<div class="form-body">
+									<?php $total = $this->search['qty'];
+										if(!empty($this->product)){for ($i=1;$i<=$this->search['qty'];$i++){
+									?>
+									<div class="col-md-3 center" style="white-space: nowrap;font-family: Khmer OS Battambang;">
+										<?php $url_barcode = $this->url(array("module"=>"report","controller"=>"product","action"=>"generate-barcode","pro_code"=>$this->product['item_code']),null,true); ?>
+										<div style="font-size: 11px;"><?php echo $this->product['item_name']?></div>
+										<img style="max-width: 125px;" src="<?php echo $url_barcode;?>" /><div class="label_price" style="font-size: 11px;"><?php echo $this->product['selling_price']."$"?></div>
+									</div>
+									<?php }}?>
+								</div>
+							</div>
+						</div>
+					</div>	
+				</div>
+				<?php */?>
+				<form method="post" action="<?php echo $this->url(array('module'=>'report','controller'=>'product','action'=>'print-barcode')); ?>" autocomplete="off">
+				<div class="row">
+					<div class="col-md-7">
+						<table width="100%" id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+							<thead>
+								<tr id="head-title" align="center" class="table table-bordered" align="right" style="border:1px solid #4c6184 !important;font-weight:bold">
+									<td width="5%" class="aligncenter">#</td>
+									<td width="65%" class="aligncenter">មុខទំនិញ</td>
+									<td width="20%"  class="aligncenter">ចំនួន</td>
+									<td width="10%"  class="aligncenter">លុប</td>
+								</tr>
+								<input type="text" name="identity" id="identity" />
+							</thead>
+							<tbody id="lbl_product_item">
+							</tbody>
+						</table>
+					</div>
+					
+						<button type="submit" class="btn btn-primary col-md-12"><?php echo $tr->translate("Print");?></button>
+				</div>
+				</form> 
+				
+			</div>
+	 	</div>
+   	</div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script>
+
+function doPrint() {
+	  var divToPrint=document.getElementById('divPrint');
+
+	  var newWin=window.open('','Print-Window');
+
+	  newWin.document.open();
+
+	  newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+	  newWin.document.close();
+
+	  setTimeout(function(){newWin.close();},10);
+}
+
+var index=0
+function addRow(){
+	var product_name = $("#pro_id");
+	var txt_product_name = $("option:selected",product_name).text();
+	var product_id = $("#pro_id").val();
+	var qty = $("#qty").val();
+	index++;
+	template='<tr style="white-space:nowrap;" align="center" id="row'+index+'">';
+	template+='<td width="5%"  >&nbsp;&nbsp;'+index+'&nbsp;&nbsp;</td>';
+	template+='<td width="50%" style="font-size:13px;">&nbsp;&nbsp;&nbsp;'+txt_product_name+'&nbsp;&nbsp;&nbsp;<input type="hidden" id="pro_'+index+'" name="pro_'+index+'" value="'+product_id+'" </td>';
+	template+='<td width="35%" ><input id="qty_'+index+'" name="qty_'+index+'" value="'+qty+'" style="text-align:center;" class="form-control " /></td>';
+	template+='<td width="10%" ><button type="button" onClick="deleteSaleRecord('+index+')" name="deleteSale" class="btn default red">លុប</button></td>';
+	template+='</tr>';
+	
+	$('#lbl_product_item').append(template);
+
+	if($("#identity").val()!="") {
+		var identity = $("#identity").val();
+		$("#identity").val(identity+','+index);
+	} else {$("#identity").val(index);}
+	
+}
+
+function deleteSaleRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	$("#row"+index).remove();
+}
+
+</script>

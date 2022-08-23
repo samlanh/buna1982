@@ -1,0 +1,71 @@
+<?php 
+    
+	$url_edit = $this->url(array('module'=>'product','controller'=>'index','action'=>'edit',));
+	$url_delete = $this->url(array('module'=>'product','controller'=>'index','action'=>'delete',));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$formFilter = $this->formFilter;
+	$rs = $this->product;
+	
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+?>
+<title>ផ្ទេរទំនិញចូលស្តុកវិញ</title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("ផ្ទេរទំនិញចូលស្តុកវិញ");?>
+				</div>
+				<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'add'),null,true);?>" class="btn btn-bg blue  pull-right">
+					<i class="fa fa-plus"></i>&nbsp;<?php echo $tr->translate("ADD_NEW");?>
+				</a>
+			</div>
+			<div class="portlet-body form frmfilter">
+				<form method="post" action="<?php echo $formFilter->getAction(); ?>" autocomplete="off">
+					<div class="form-group">
+						<label class="control-label col-md-2">
+							<?php echo $formFilter->getElement('branch');?>
+						</label>
+						<label class="control-label col-md-2">
+							<?php echo $formFilter->getElement('ad_search');?>
+						</label>
+						<label class="control-label col-md-2">
+							<?php echo $formFilter->getElement('status');?>
+						</label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('start_date');?></div></label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('end_date');?></div></label>
+						<label class="control-label col-md-2">
+							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+						</label>
+					</div>				
+				</form> 
+				<div class="contain_form" style="clear: both;">
+						<?php echo $this->list; ?>
+			    </div>
+		   </div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

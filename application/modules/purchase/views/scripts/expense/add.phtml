@@ -1,0 +1,352 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$frm = $this->frm_expense;
+?>
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$form=$this->form_purchase;
+	$url_submit = $this->url(array('module'=>'purchase','controller'=>'expense','action'=>'add'));
+	$url_cancel = $this->url(array('module'=>'purchase','controller'=>'expense','action'=>'index'));
+	$frm = $this->frm_expense;
+?>
+<title><?php echo $tr->translate("ADD_EXPENSE");?></title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo $tr->translate("ADD_EXPENSE")?>
+				</div>
+				<div class="tools" >
+					<a href="<?php echo $url_cancel;?>" class="btn btn-sm pull-right" style="color:white;">
+					<i class="fa fa-undo"></i>	&nbsp;<?php echo $tr->translate("GO_BACK");?>
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" autocomplete="off" enctype="multipart/form-data" method="post">
+					
+					<div class="form-body">
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("BRANCH_NAME")?><span class="required">
+								</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<select name="branch" id="branch" class="form-control select2me" onchange="getAllBranchFunction();" >
+										<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+										<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+										<option value="<?php echo $branch['id']?>"><?php echo $branch['name'];?></option>
+										<?php }}?>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("ពណ៌នាចំនាយ")?><span class="required">
+								</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<input type="text" class="form-control validate[required]" name="expense_title" id="expense_title"   />
+								</div>
+							</div>
+							
+							<label class="control-label col-md-2"><?php echo $tr->translate("លេខបង្កាន់ដៃ")?><span class="required">
+								</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<input type="text" class="form-control" style="color:red;" name="receipt" id="receipt" readonly value="" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("TOTAL_EXPENSE")?>
+							</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" name="total_amount" id="total_amount" readonly  />
+							</div>
+							
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("DATE")?>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<i class="fa fa-calendar"></i>
+									<input class="form-control date-picker" name="for_date" id="for_date" value="<?php echo date("d-m-Y")?>" data-date-format="dd-mm-yyyy" />
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("NOTE")?><span class="required">
+								 </span>
+							</label>
+							<div class="col-md-4">
+								<textarea name="note" id="note" style="height: 35px;" class="form-control"></textarea>
+							</div>
+						</div>
+						
+						<div class="form-group" >
+							<label class="control-label col-md-2">
+							</label>
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("EXPENSE_TITLE")?>
+							</label>
+							<div class="col-md-6">
+								<div class="input-icon right">
+									<i class="fa"></i>
+									<?php //echo $frm->getElement('title');?>
+									
+									<select class="form-control select2me" id="title" name="title" onchange="showexpense();addRowExpense();" >
+										<option value="0">ជ្រើសរើសមុខទំនិញ/សេវាកម្ម</option>
+										<option value="-1">Add New Expense Title</option>
+										<?php if(!empty($this->expense)){foreach ($this->expense as $rs){?>
+										<option value="<?php echo $rs['id']?>"><?php echo $rs['title'];?></option>
+										<?php }}?>
+									</select>
+									
+								</div>
+							</div>
+							<label class="control-label col-md-2">
+							</label>
+						</div>
+						
+						
+						<div class="form-group" style="">
+							<div class="col-md-1 control-label">
+							</div>
+							<div class="col-md-10 control-label">
+								<table id="table_row" border="1" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+									<thead>
+										<tr id="head-title" class="table table-bordered" align="right" style="background:#ccc">
+											<th class="center">#</th>
+											<th class="center">ប្រភេទចំនាយ</th>
+											<th class="center">តម្លៃ</th>
+											<th class="center">ផ្សេងៗ</th>
+											<th class="center">លុប</th>
+										</tr>
+									</thead>
+									
+									<input type="hidden" name="identity" id="identity" />
+									
+									<tbody id="lbl_expense">
+									</tbody>
+								</table>
+							</div>
+							<div class="col-md-1 control-label">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-md-12">
+								&nbsp;
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-4">
+							</div>
+						    <div class="col-md-2">
+								<a href="<?php echo $this->baseUrl();?>/purchase/expense/"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
+							</div>
+							<div class="col-md-2">
+								<div class="input-icon right">
+									<button type="submit"  id="btnsavenew"class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
+								</div>
+							</div>
+							<div class="col-md-4">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="productpopup" class="modal fade" tabindex="-1" data-width="1200">
+	<div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">   
+		<div class="row">
+		<div class="col-md-12">
+			<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo $tr->translate("បន្ថែមឈ្មោះការចំនាយ");?>
+				</div>
+				<div class="caption pull-right">
+					<a href="<?php //echo $url_new;?>" >
+						 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<form id="frmtitle" id="frmtitle" class="form-horizontal" autocomplete="off" enctype="multipart/form-data" method="post">
+				<script>
+					$('#frmtitle').submit(function(){
+				        $("#save").attr("disabled", true);
+				      });
+					</script>
+				<div class="form-body">
+						<div class="form-group">
+							<label class="control-label col-md-3"><?php echo $tr->translate("TITLE");?><span class="required">
+								</span>
+							</label>
+							<div class="col-md-9">
+								<div class="input-icon right">
+									<i class="fa"></i>
+									<textarea name="expense_title" id="expense_title" class="validate[required] form-control" placeholder="Enter Name EN" style="height:40px;" rows="24" cols="80"></textarea>
+								</div>
+							</div>
+						</div>
+					<div class="form-group">
+						<label  class="col-md-12 col-md-offset-4 col-md-8">
+							<button type="button" id="save" Onclick="addExpense();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE PRODUCT")?> </button>
+						</label>
+					</div>
+				</div>
+				</form>
+			   </div>
+		     </div>
+	        </div>
+          </div>
+          </div>
+        </div>
+    </div>
+</div>
+<script>
+$( document ).ready(function() {
+	getAllBranchFunction();
+	
+});
+function getAllBranchFunction(){
+	expenseNumberByBranch();
+}
+<?php $urlGetReceipt =  $this->url(array('module'=>'purchase','controller'=>'expense','action'=>'getinvoceno')); ?>
+function expenseNumberByBranch(){
+	branch_id = $("#branch").val();
+	if(branch_id=="" || branch_id=="-1"){
+		return false;
+	}
+	$.ajax({
+		url: "<?php echo $urlGetReceipt;?>",
+		type: "post",
+		data: {'branch_id':branch_id,},
+		success: function(data){
+			 $("#receipt").val(data);
+		},
+		error:function(err){
+			 alert(err);
+		}
+	});
+	
+}
+$('#frm').submit(function() {
+
+	branch_id=$("#branch").val();
+	if(branch_id<=0){
+		alert("<?php echo $tr->translate("Please select branch");?> !!!");
+		$('#branch').select2('open');
+		return false;	
+	}
+	
+	expense_title = $("#expense_title").val();
+	if(expense_title==""){
+		alert("Please input title");
+		$('#expense_title').focus();
+		return false;
+	}
+
+	identity =$("#identity").val();
+	if(identity==''){
+		alert("Please add expense row");
+		$('#title').select2('open');
+		return false;
+	}
+	
+	var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+	if (r == true) {
+		$("#save_close").attr("disabled", true);
+		return true;
+	} else {
+	   return false;	    
+	}
+});
+
+function showexpense(){
+	title = $("#title").val();
+	if(title==-1){
+		$('#productpopup').modal('show');
+	}
+}
+
+<?php $url_add_new =  $this->url(array('module'=>'purchase','controller'=>'expensetitle','action'=>'addexpensetitle')); ?>
+function addExpense(){
+	title_id = $("#expense_title").val();
+	$.ajax({
+        url: "<?php echo $url_add_new;?>",
+        type: "post",
+        data: $('#frmtitle').serialize(),
+        success: function(data){
+	      data = $.parseJSON(data);
+	      $('#title').append($("<option></option>").attr("value",data['id']).attr("selected",true).text($("#expense_title").val()));                       
+		  $("#title").select2();
+	      $('#productpopup').modal('hide');
+		  
+		  addRowExpense();
+        },
+        error:function(){
+           
+        }
+    });	
+}
+
+index=0;
+function addRowExpense(){
+	var title = $("#title");
+	var txt_title = $("option:selected",title).text();
+	var title_id = $("#title").val();
+	if(title_id>0){
+		index++;
+		template='<tr align="center" id="row_title_'+index+'">';
+		template+='<td>'+index+'</td>';
+		template+='<td>'+txt_title+'<input type="hidden" id="title_'+index+'" name="title_'+index+'" value="'+title_id+'" </td>';
+		template+='<td><input style="text-align:center;" type="text" id="price_'+index+'" name="price_'+index+'" onkeyup="netTotal();" value="0" class="form-control "></td>';
+		template+='<td><input style="text-align:center;" type="text" id="note_'+index+'" name="note_'+index+'"  value="" class="form-control"></td>';
+		template+='<td><button type="button" onClick="deleteRecord('+index+')" name="delete" class="btn default red">លុប</button></td>';
+		template+='</tr>';
+		$('#lbl_expense').append(template);
+		if($('#identity').val()!="") {
+			var identity = $('#identity').val();
+			$('#identity').val(identity+','+index);
+		} else {$('#identity').val(index);}
+	}
+}
+
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	$("#row_title_"+index).remove();
+	netTotal();
+}
+
+function netTotal() {
+	var netTotal=0;
+	var rowId = $('#identity').val();
+	var rowIDArray = rowId.split(',');
+	for(var n = 0; n < rowIDArray.length; n++) {
+		netTotal += Number($('#price_'+rowIDArray[n]).val());
+	}
+	$('#total_amount').val(netTotal.toFixed(3));
+	//dijit.byId('total_amount').attr('value',netTotal);
+}
+
+</script>

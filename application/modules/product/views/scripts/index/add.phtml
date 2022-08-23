@@ -1,0 +1,911 @@
+<?php 
+	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$form=$this->form;
+	$url_submit =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add'));
+    $url_cencel =  $this->url(array('module'=>'product','controller'=>'index','action'=>'index'));
+    $url_check =  $this->url(array('module'=>'product','controller'=>'index','action'=>'check'));
+    $url_new = $this->url(array('module'=>'product','controller'=>'index','action'=>'add'));
+	$user_info = new Application_Model_DbTable_DbGetUserInfo();
+	$result = $user_info->getUserInfo();
+	$session_user=new Zend_Session_Namespace('auth');
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$level = $result["level"];
+?>						 
+<title><?php echo $tr->translate("បន្ថែមទំនិញ");?></title>
+<style>
+.imgBlog {
+    border: solid 1px #eee;
+    text-align: center;
+    padding: 10px;
+}
+img#image_viewbg {
+       width: 85%;
+	   min-height: 170px;
+	   max-height: 200px;
+}
+.button_browse {
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    height: 38px;
+    background: #fbf9f9;
+    border: 1px solid #e8e8e8;
+}
+.button_browse span {
+    line-height: 33px;
+    font-weight: 600;
+    cursor: pointer;
+}
+input.btn_borwse_image {
+    position: absolute;
+    width: 70%;
+    height: 38px;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
+}
+</style>
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><?php echo $tr->translate("បន្ថែមទំនិញ");?>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $url_cencel;?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i><?php echo $tr->translate("GO_BACK");?></button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<form class="form-horizontal" id="frm" method="post" action="<?php echo $url_submit;?>" enctype="multipart/form-data" autocomplete="off">	
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+							<div class="form-body">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+											<label class="col-md-4 control-label"><strong><?php echo $tr->translate("ប្រភេទ");?></strong></label>
+											<div class="col-md-8">
+												<select name="product_type" id="product_type" class="form-control">
+													<option value="0">ប្រភេទទំនិញ</option>
+													<option value="1">ប្រភេទសេវាកម្ម</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-4 control-label"><strong><?php echo $tr->translate("ឈ្មោះទំនិញ");?></strong></label>
+											<div class="col-md-8">
+												<?php echo $form->getElement('name');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-4 control-label"><?php echo $tr->translate("លេខកូដ");?></label>
+											<div class="col-md-8">
+												<?php echo $form->getElement('pro_code');?>
+											</div>	
+										</div>
+										<div class="form-group">
+											<label class="col-md-4 control-label"><?php echo $tr->translate("លេខបាកូដ");?></label>
+											<div class="col-md-8">
+												<?php echo $form->getElement('barcode');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-4 control-label"><?php echo $tr->translate("ម៉ាក");?></label>
+											<div class="col-md-8">
+												<?php echo $form->getElement('brand');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-4 control-label"><strong><?php echo $tr->translate("ប្រភេទទំនិញ");?></strong></label>
+											<div class="col-md-8">
+												<?php echo $form->getElement('category');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-4 control-label"><?php echo $tr->translate("ពណ៍");?></label>
+											<div class="col-md-8">
+												<?php echo $form->getElement('color');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-4 control-label"><?php echo $tr->translate("ខ្នាត");?></label>
+											<div class="col-md-2">
+												<?php echo $form->getElement('unit');?>
+											</div>
+											<div class="col-md-6">
+												<?php echo $form->getElement('measure');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-3 control-label"  id="lb_measure" ></label>
+											<label class="col-md-1 control-label">=</label>
+											<div class="col-md-4">
+												<?php echo $form->getElement('qty_unit');?>
+											</div>
+											<div class="col-md-4">
+												<?php echo $form->getElement('label');?>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-8">
+										<div class="col-md-8">
+											<div class="form-group">
+												<label class="col-md-4 control-label"><?php echo $tr->translate("អត្រាប្តូរប្រាក់");?></label>
+												<div class="col-md-8">
+													<input name="label_exchange" id="label_exchange" readOnly value="<?php echo "1 ដុល្លា = ".$this->exchange_rate." ៛";?>" class="form-control" />
+													<input type="hidden" name="exchange_rate" id="exchange_rate"  value="<?php echo $this->exchange_rate;?>" class="form-control" />
+												</div>
+											</div>
+											
+											<div class="form-group">
+												<label class="col-md-4 control-label"><strong><?php echo $tr->translate("ថ្លៃដើម");?></strong></label>
+												<div class="col-md-4">
+													<select onchange="checkCostprice();" name="cost_pricetype" id="cost_pricetype" class="form-control select2me">
+														<option value="0">មិនគិតថ្លៃដើម</option>
+														<option value="1">គិតថ្លៃដើម</option>
+													</select>
+												</div>
+												<div class="col-md-4">
+													<?php echo $form->getElement('price');?>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-4 control-label"><strong><?php echo $tr->translate("តម្លៃលក់");?></strong></label>
+												<label class="col-md-1 control-label">
+													រៀល 
+												</label>
+												<div class="col-md-3">
+													<?php echo $form->getElement('selling_price_khmer');?>
+												</div>
+												<label class="col-md-1 control-label">
+													ដុល្លា 
+												</label>
+												<div class="col-md-3">
+													<?php echo $form->getElement('selling_price');?>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-md-4 control-label"><?php echo $tr->translate("សម្គាល់");?></label>
+												<div class="col-md-8">
+													<?php echo $form->getElement('description');?>
+												</div>
+											</div>
+											<!-- <div class="form-group">
+												<label class="col-md-4 control-label"><?php //echo $tr->translate("ស្ថានការ");?></label>
+												<div class="col-md-8">
+													<?php //echo $form->getElement('status');?>
+												</div>
+											</div> -->
+											<div class="form-group">
+												<label class="col-md-4 control-label"><strong><?php echo $tr->translate("សាខា");?></strong></label>
+												<div class="col-md-8">
+													<?php echo $form->getElement('branch');?>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="imgBlog">
+												<img class="image_view bd" id="image_viewbg" src="<?php echo $this->baseUrl().'/images/no-image.png';?>" alt=""  />
+												<div class="button_browse">
+													<span>Upload Imags &nbsp;&nbsp;<span><i class="fa fa-camera" aria-hidden="true"></i></span></span>
+													<input class="btn_borwse_image"  type="file" id="photo" name="photo" ">
+												</div>
+											</div>
+										</div>
+										<div class="row" style="">
+										</div>
+										<div class="row" style="">
+											<div class="form-group">
+											<div class="col-md-1"></div>
+											<div class="col-md-11">
+													<div class="portlet box blue">
+														<div class="portlet-title">
+															<div class="caption">
+																<i class="fa fa-building"></i><?php echo $tr->translate("PRODUCT_LOCATION");?>
+															</div>
+														</div>
+														<div class="portlet-body">
+															<div class="table-responsive">
+																<table class="table table-bordered" style="font-size:12px !important; white-space:nowrap;">
+																	<thead>
+																		<tr align="center" style="font-weight:bold;">
+																			<td>#</td>
+																			<td><?php echo $tr->translate("LOCATION_NAME");?></td>
+																			<td><?php echo $tr->translate("UNIT_QTY");?></td>
+																			<td><?php echo $tr->translate("QTY_PER_UNIT");?></td>
+																			<td><?php echo $tr->translate("TOTAL_QTY");?></td>
+																			<td><?php echo $tr->translate("QTY_WARNING");?></td>
+																			<td><?php echo $tr->translate("DELETE");?></td>
+																		</tr>
+																	</thead>
+																	<tbody id="tr_location">
+																	
+																	</tbody>
+																</table>
+															</div>
+															<input type="hidden" name="identity" id="identity" value="" >
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+									</div><!-- end of 8col -->
+								</div>
+							</div>
+							</div>
+							<div class="portlet-body">
+								<div class="table-responsive"></div>
+								<input type="hidden" name="identity_price" id="identity_price" value="" >
+							</div>
+							<div class="form-group">
+								<div class="col-md-3">
+								</div>
+								<div class="col-md-2">
+									<a href="<?php echo $this->baseUrl();?>/product/index"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
+								</div>
+								<div class="col-md-2">
+									<div class="input-icon right">
+										<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<button type="submit" id="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_NEW")?> </button>
+								</div>
+								<div class="col-md-3">
+								</div>
+							</div>
+						</div>	
+					</div>
+				</div>
+				</form>	
+			</div>
+	
+	
+<!--Popup Form Brand-->
+<?php $formBrand = $this->frmBrand; ?>
+<div id="brandpopup" class="modal fade" tabindex="-1" data-width="1200">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      	<div class="modal-header">   
+			<div class="row">
+					<div class="col-md-12">
+						<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="icon-home"></i><?php echo $tr->translate("ADD_NEW_BRAND");?>
+							</div>
+							<div class="caption pull-right">
+								<a href="<?php echo $url_new;?>" >
+									 <button type="button" class="close" data-dismiss="modal" ></button>
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body form">
+							<form id="frmbrand" id="frmcustomer" class="form-horizontal" enctype="multipart/form-data" method="post" autocomplete="off">
+									<div class="form-body">
+										<div class="form-group">
+											<label class="col-md-2 control-label"><?php echo $tr->translate("PARENT");?></label>
+											<div class="col-md-4">
+												<?php echo $formBrand->getElement('parent');?>
+											</div>
+											<label class="col-md-2 control-label"><?php echo $tr->translate("BRAND_NAME");?></label>
+											<div class="col-md-4">
+												<?php echo $formBrand->getElement('brand_name');?>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
+											<div class="col-md-4">
+												<?php echo $formBrand->getElement('status');?>
+											</div>
+															
+											<label class="col-md-2 control-label"><?php echo $tr->translate("REMARK");?></label>
+											<div class="col-md-4">
+												<?php echo $formBrand->getElement('remark');?>
+											</div>
+									</div>
+									<div class="form-group">
+										<label  class="col-md-5 ">
+										</label>
+										<label  class="col-md-2 ">
+											<button type="button" id="btnsavenew" onclick="addNewBrand();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
+										</label>
+										<label  class="col-md-5 ">
+										</label>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+          </div>
+        </div>
+    </div>
+ </div>	
+<!-- CATEGORY Popup -->
+<?php $formcat = $this->frmCat; ?>
+<div id="categorypopup" class="modal fade" tabindex="-1" data-width="1200">
+       <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">   
+		<div class="row">
+		<div class="col-md-12">
+			<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo $tr->translate("ADD_PRODUCT_CATEGORY");?>
+				</div>
+				<div class="caption pull-right">
+					<a href="<?php echo $url_new;?>" >
+						 <button type="button" class="close" data-dismiss="modal" ></button>
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<form id="frmCat" id="frmcustomer" class="form-horizontal" enctype="multipart/form-data" method="post" autocomplete="off">
+						<div class="form-body">
+						<div class="form-group">
+							<label class="col-md-2 control-label"><?php echo $tr->translate("PARENT");?></label>
+							<div class="col-md-4">
+								<?php echo $formcat->getElement('parent');?>
+							</div>
+							<label class="col-md-2 control-label"><?php echo $tr->translate("CATEGORY_NAME");?></label>
+							<div class="col-md-4">
+								<?php echo $formcat->getElement('cat_name');?>
+							</div>
+											
+						</div>
+						<div class="form-group">
+											
+							<label class="col-md-2 control-label"><?php echo $tr->translate("STATUS");?></label>
+							<div class="col-md-4">
+								<?php echo $formcat->getElement('status');?>
+							</div>
+							<label class="col-md-2 control-label"><?php echo $tr->translate("REMARK");?></label>
+							<div class="col-md-4">
+								<?php echo $formcat->getElement('remark');?>
+							</div>
+						</div>
+						<div class="form-group">
+							<label  class="col-md-5 ">
+							</label>
+							<label  class="col-md-2 ">
+								<button type="button" id="btnsavenew" onclick="addNewCategory();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
+							</label>
+							<label  class="col-md-5 ">
+							</label>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+          </div>
+        </div>
+    </div>
+ </div>	
+
+<!-- MEASURE Popup-->
+<?php $frmMesure = $this->frmMesure; ?>
+<div id="measurepopup" class="modal fade" tabindex="-1" data-width="1200">
+       <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">   
+		<div class="row">
+		<div class="col-md-12">
+			<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo $tr->translate("ADD_MEASURE_NAME");?>
+				</div>
+				<div class="caption pull-right">
+					<a href="<?php echo $url_new;?>" >
+						 <button type="button" class="close" data-dismiss="modal" ></button>
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<form id="frmMesure" id="frmcustomer" class="form-horizontal" enctype="multipart/form-data" method="post" autocomplete="off">
+				<script>
+						 $('#frmMesure').submit(function() {
+							 $("#btnsavenew").attr("disabled", true);
+						});							
+				</script>
+				<div class="form-body">
+					<div class="form-group">
+								<label class="col-md-4 control-label"><?php echo $tr->translate("MESUER_NAME");?></label>
+								<div class="col-md-6">
+									<?php echo $frmMesure->getElement('measure_name');?>
+								</div>
+												
+							</div>
+							<div class="form-group">
+												
+								<label class="col-md-4 control-label"><?php echo $tr->translate("STATUS");?></label>
+								<div class="col-md-6">
+									<?php echo $frmMesure->getElement('status');?>
+								</div>
+							</div>
+							<div class="form-group">
+												
+								<label class="col-md-4 control-label"><?php echo $tr->translate("REMARK");?></label>
+								<div class="col-md-6">
+									<?php echo $frmMesure->getElement('remark');?>
+								</div>
+							</div>
+					
+					<div class="form-group">
+						<label  class="col-md-5 ">
+						</label>
+						<label  class="col-md-2 ">
+							<button type="button" id="btnsavenew" onclick="addNewMeasure();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
+						</label>
+						<label  class="col-md-5 ">
+						</label>
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+          </div>
+        </div>
+    </div>
+ </div>	
+<!-- Color Model Size Popup -->
+<?php $frmOther = $this->frmOther; ?>
+<div id="otherpopup" class="modal fade" tabindex="-1" data-width="1200">
+       <div class="modal-dialog">
+     	 <div class="modal-content">
+	     	 <div class="modal-header">   
+				<div class="row">
+				<div class="col-md-12">
+					<div class="portlet box blue">
+					<div class="portlet-title">
+					<div class="caption">
+						<i class="icon-home"></i><?php echo $tr->translate("ADD_NEW_COLOR");?>
+					</div>
+					<div class="caption pull-right">
+						<a href="<?php echo $url_new;?>" >
+							 <button type="button" class="close" data-dismiss="modal" ></button>
+						</a>
+					</div>
+				</div>
+				<div class="portlet-body form">
+					<form id="frmOther" id="frmOther" class="form-horizontal" enctype="multipart/form-data" method="post" autocomplete="off">
+					<script>
+							 $('#frmOther').submit(function() {
+								 $("#btnsavenew").attr("disabled", true);
+							});							
+					</script>
+					<div class="form-body">
+						<div class="form-group">
+										<label class="col-md-4 control-label"><?php echo $tr->translate("TITLE");?></label>
+										<div class="col-md-6">
+											<?php echo $frmOther->getElement('title_en');?>
+										</div>
+														
+									</div>
+									<div class="form-group">
+										<label class="col-md-4 control-label"><?php echo $tr->translate("TYPE");?></label>
+										<div class="col-md-6">
+											<?php echo $frmOther->getElement('type');?>
+										</div>
+														
+									</div>
+									<div class="form-group">
+														
+										<label class="col-md-4 control-label"><?php echo $tr->translate("STATUS");?></label>
+										<div class="col-md-6">
+											<?php echo $frmOther->getElement('status');?>
+										</div>
+									</div>
+						
+						<div class="form-group">
+							<label  class="col-md-5 ">
+							</label>
+							<label  class="col-md-2 ">
+								<button type="button" id="savecolor" id="btnsavenew" onclick="addNewColor();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("SAVE_CLOSE")?> </button>
+							</label>
+							<label  class="col-md-5 ">
+							</label>
+						</div>
+					</div>
+					</form>
+					</div>
+					</div>
+				</div>
+			</div>
+          </div>
+        </div>
+    </div>
+ </div>
+<script>
+	$('#frm').submit(function() {
+		name = $("#name").val();
+		if(name==''){
+			alert("សូមបញ្ចូលឈ្មោះទំនិញ! ");
+			$('#name').focus();
+			return false;
+		}
+		category = $("#category").val();
+		if(category==''){
+			alert("សូមជ្រើសរើស ប្រភេទផលិតផល! ");
+			$('#category').select2('open');
+			return false;
+		}
+		selling_price = $("#selling_price").val();
+		if(selling_price==''){
+			alert("សូមបញ្ចូលតម្លៃលក់! ");
+			$('#selling_price').focus();
+			return false;
+		}
+		identity = $("#identity").val();
+		if(identity==''){
+			alert("សូមបញ្ចូលទំនិញក្នុងស្តុក តាមសាខា! ");
+			$('#branch').select2('open');
+			return false;
+		}	
+		var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+		if (r == true) {
+			return true;
+			$("#btnsavenew").attr("disabled", true);
+		} else {
+		   return false;    
+		}
+	});
+	
+	function getMeasureLabel(){
+		var sel = $("#measure");
+		measureid = $("#measure").val();
+		document.getElementById('lb_measure').innerHTML = ''; 
+		if(measureid!=-1){
+			var text = $("option:selected",sel).text();
+			document.getElementById('lb_measure').innerHTML = text; 
+		}
+	}
+	index = 0;
+	function totalQty(index){
+		o_measure = $('#qty_unit').val();
+		unit_qty = $('#current_qty_'+index).val();
+		other_qty = $('#other_qty_'+index).val();
+		total_other_qty = parseFloat(other_qty)/parseFloat(o_measure);
+		total_qty = (parseFloat(unit_qty)+ total_other_qty).toFixed(3);
+		$('#total_qty_'+index).val(total_qty);
+	}
+	
+	function doTotalQty(){
+		o_measure = $('#qty_unit').val();
+		if(o_measure=="" || o_measure==0){
+			$('#qty_unit').val(1);
+		}
+		var identity = $('#identity').val();
+		if(identity!=""){
+			var arrays = identity.split(',');
+			for(var index=0;index<arrays.length;index++) {
+				o_measure = $('#qty_unit').val();
+				unit_qty = $('#current_qty_'+index).val();
+				other_qty = $('#other_qty_'+index).val();
+				total_other_qty = parseFloat(other_qty)/parseFloat(o_measure);
+				total_qty = parseFloat(unit_qty)+ total_other_qty;
+				$('#total_qty_'+index).val(total_qty);
+			}
+		}
+		var strings = arrays.join(',');
+	}
+	function addNewProLocation(){
+		index++;
+		var branch_text = $("#branch");
+		var txt_br = $("option:selected",branch_text).text();
+		var branch_id = $("#branch").val();
+		
+		
+		var iden = $("#identity").val();
+		var arrays = iden.split(',');
+		 if(arrays!=""){
+			 for(var i=0;i< arrays.length;i++) {
+				 readychoose = $('#branch_id_'+arrays[i]).val();
+				 if(readychoose==branch_id){
+						alert("<?php echo $tr->translate("Choosen ready")?>");
+					 	return false;
+				 }
+			}
+		}
+		
+		if(branch_id>0){
+			template='<tr id="row_location_'+index+'">';
+			template+='<td>'+index+'</td>';
+			template+='<td>'+txt_br+'<input type="hidden" id="branch_id_'+index+'" name="branch_id_'+index+'" value="'+branch_id+'" </td>';
+			template+='<td><input type="text" id="current_qty_'+index+'" onkeypress="return isNumberKey(event);" onKeyup="totalQty('+index+')" name="current_qty_'+index+'" value="0"></td>'; 
+			template+='<td><input type="text" id="other_qty_'+index+'" onkeypress="return isNumberKey(event);" onKeyup="totalQty('+index+')" name="other_qty_'+index+'" value="0" "></td>'; 
+			template+='<td><input type="text" id="total_qty_'+index+'" onkeypress="return isNumberKey(event);" name="total_qty_'+index+'" value="0" class="form-control"></td>'; 
+			template+='<td><input type="text" id="qty_warning_'+index+'" onkeypress="return isNumberKey(event);" name="qty_warnning_'+index+'" value="0" class="form-control"></td>';
+			template+='<td><button type="button" onClick="deleteRecord('+index+',1)" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
+			template+='</tr>';
+			$('#tr_location').append(template);
+			if($('#identity').val()!="") {
+				var identity = $('#identity').val();
+				$('#identity').val(identity+','+index);
+			} else {$('#identity').val(index);}
+			$('#branch').val('').select2();
+		}
+	}	
+	
+	
+	indexs=0;
+	
+	function deleteRecord(index,type) {
+		if(type==1){
+			var identity = $('#identity').val();
+			var arrays = identity.split(',');
+		}else{
+			var identity = $('#identity_price').val();
+			var arrays = identity.split(',');
+		}
+		
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		
+		if(type==1){
+			$('#identity').val(strings);
+			$("#row_location_"+index).remove();
+		}else{
+			$('#identity_price').val(strings);
+			$("#row_price_"+index).remove();
+		}
+	}
+	function getPopupBrand(){
+		val = $('#brand').val();
+		if(val==-1){
+			$('#brandpopup').modal('show');
+		}
+	}
+	
+	function getPopupCategory(){
+		val = $('#category').val();
+		if(val==-1){
+			$('#categorypopup').modal('show');
+		}
+	}
+	
+	function getPopupMeasure(){
+		val = $('#measure').val();
+		if(val==-1){
+			$('#measurepopup').modal('show');
+		}
+	}
+	
+	function getPopupColor(){
+		val = $('#color').val();
+		if(val==-1){
+			$('#otherpopup').modal('show');
+			$('#type').val(4);
+			$('#type').attr('readOnly',true);
+			$('#savemodel').hide();
+			$('#savesize').hide();
+			$('#savecolor').show();
+		}
+	}
+	
+	function getPopupModel(){
+		val = $('#model').val();
+		if(val==-1){
+			$('#otherpopup').modal('show');
+			$('#type').val(2);
+			$('#type').attr('readOnly',true);
+			$('#savecolor').hide();
+			$('#savesize').hide();
+			$('#savemodel').show();
+		}
+	}
+	
+	function getPopupSize(){
+		val = $('#size').val();
+		if(val==-1){
+			$('#otherpopup').modal('show');
+			$('#type').val(3);
+			$('#type').attr('readOnly',true);
+			$('#savemodel').hide();
+			$('#savecolor').hide();
+			$('#savesize').show();
+		}
+	}
+	
+	<?php $url_add_brand =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-brand')); ?>
+	function addNewBrand(){
+		//alert(1);
+		var brand_name  = $("#brand_name").val();
+		if(brand_name==''){return false;}
+		$.ajax({
+			url: "<?php echo $url_add_brand;?>",
+			type: "post",
+			data: $('#frmbrand').serialize(),
+			success: function(data){
+				rs = $.parseJSON(data);
+				 $('#brand').append($("<option></option>").attr("value",rs['brand_id']).attr("selected",true).text(brand_name));                       
+				 $("#brand").select2();
+				$('#brandpopup').modal('hide');
+			},
+			error:function(err){
+				alert("faile insert");
+			   
+			}
+		});
+	}
+	<?php $url_add_category =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-category')); ?>
+	function addNewCategory(){
+		var cat_name  = $("#cat_name").val();
+		if(cat_name==''){return false;}
+		$.ajax({
+			url: "<?php echo $url_add_category;?>",
+			type: "post",
+			data: $('#frmCat').serialize(),
+			success: function(data){
+				rs = $.parseJSON(data);
+				 $('#category').append($("<option></option>").attr("value",rs['cat_id']).attr("selected",true).text(cat_name));                       
+				 $("#category").select2();
+				$('#categorypopup').modal('hide');
+			},
+			error:function(err){
+				alert("faile insert");
+			   
+			}
+		});
+	}
+	<?php $url_add_measure =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-measure')); ?>
+	function addNewMeasure(){
+		var measure_name  = $("#measure_name").val();
+		if(measure_name==''){return false;}
+		$.ajax({
+			url: "<?php echo $url_add_measure;?>",
+			type: "post",
+			data: $('#frmMesure').serialize(),
+			success: function(data){
+				rs = $.parseJSON(data);
+				 $('#measure').append($("<option></option>").attr("value",rs['measure_id']).attr("selected",true).text(measure_name));                       
+				 $("#measure").select2();
+				$('#measurepopup').modal('hide');
+				document.getElementById('lb_measure').innerHTML = measure_name; 
+			},
+			error:function(err){
+				alert("faile insert");
+			}
+		});
+	}
+	
+	<?php $url_add_color =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-other')); ?>
+	function addNewColor(){
+		var title  = $("#title_en").val();
+		if(title==''){return false;}
+		$.ajax({
+			url: "<?php echo $url_add_color;?>",
+			type: "post",
+			data: $('#frmOther').serialize(),
+			success: function(data){
+				rs = $.parseJSON(data);
+				 $('#color').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
+				 $("#color").select2();
+				$('#otherpopup').modal('hide');
+			},
+			error:function(err){
+				alert("faile insert");
+			   
+			}
+		});
+	}
+	
+	function addNewModel(){
+		//alert(1);
+		var title  = $("#title_en").val();
+		if(title==''){return false;}
+		$.ajax({
+			url: "<?php echo $url_add_color;?>",
+			type: "post",
+			data: $('#frmOther').serialize(),
+			success: function(data){
+				rs = $.parseJSON(data);
+				 $('#model').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
+				 $("#model").select2();
+				$('#otherpopup').modal('hide');
+			},
+			error:function(err){
+				alert("faile insert");
+			   
+			}
+		});
+	}
+	function checkCostprice(){
+		cost_pricetype = $("#cost_pricetype").val();	
+		if(cost_pricetype==0){
+			 $("#price").val(0);	
+		}
+	}
+	function addNewSize(){
+		var title  = $("#title_en").val();
+		if(title==''){return false;}
+		$.ajax({
+			url: "<?php echo $url_add_color;?>",
+			type: "post",
+			data: $('#frmOther').serialize(),
+			success: function(data){
+				rs = $.parseJSON(data);
+				 $('#size').append($("<option></option>").attr("value",rs['other_id']).attr("selected",true).text(title));                       
+				 $("#size").select2();
+				$('#otherpopup').modal('hide');
+			},
+			error:function(err){
+				alert("faile insert");
+			   
+			}
+		});
+	}
+	
+	function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#image_viewbg').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    var maxSize = 0;
+    $("#photo").change(function(){
+    	var iSize = ($("#photo")[0].files[0].size / 1024); 
+        if (iSize / 1024 > 1) 
+        { 
+           if (((iSize / 1024) / 1024) > 1) 
+           { 
+               iSize = (Math.round(((iSize / 1024) / 1024) * 100) / 100);
+               maxSize = 0;
+               //$("#lblSize").html( iSize + "Gb"); 
+           }else{ 
+               iSize = (Math.round((iSize / 1024) * 100) / 100);
+               if(iSize>5){
+                   alert('<?php echo $tr->translate("Image size more than 5Mb can not upload");?>');
+                   maxSize = 1;
+                   $('#image_viewbg').attr('src', "<?php echo $this->baseUrl().'/images/no-image.png';?>");
+                   return false;
+               }
+               //$("#lblSize").html( iSize + "Mb"); 
+           } 
+        } 
+        else 
+        {
+           iSize = (Math.round(iSize * 100) / 100);
+           maxSize = 0;
+           //$("#lblSize").html( iSize  + "kb"); 
+        }    
+        
+        readURL(this);
+    });
+	
+	function isNumberKey(evt)
+	{
+	  	var charCode = (evt.which) ? evt.which : event.keyCode;
+	  	if (charCode != 46 && charCode != 45 && charCode > 31 && (charCode < 48 || charCode > 57)){
+			return false;
+	  	}else{
+			return true;
+	  	}
+	}
+	
+	function convertToDollar(){
+		var selling_price_khmer  = $("#selling_price_khmer").val();
+		var exchange_rate  = $("#exchange_rate").val();
+		dollar = (selling_price_khmer / exchange_rate).toFixed(3);
+		$("#selling_price").val(dollar);
+	}
+	
+</script>		

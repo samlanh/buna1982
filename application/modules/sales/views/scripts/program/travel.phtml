@@ -1,0 +1,132 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+	$db_global = new Application_Model_DbTable_DbGlobal();
+	$row = $this->row;
+	//print_r($this->row); exit();
+	//echo $row["lerk_sop_time_mail"]; exit();	
+// 	$db_global = new Application_Model_DbTable_DbGlobal();
+// 	echo $db_global->getNumberInkhmer(date('m',strtotime($this->row['lerk_sop_date'])));//exit();
+?>
+<title>ព័ត៌មានកម្មវិធីបុណ្យ</title>
+<div id="Printdonate">
+	<div class="wrapper" id="borderimg1" style="background: #fff;width:27cm;margin: 0 auto;min-height: 39cm;padding: -0.4cm;">
+		<style>
+	    	.wrapper{
+	    		width: 100%;
+	    		margin: 0px;
+	    		padding: 0px;
+	    	}
+			table {
+	    		border-collapse: collapse;
+	    		width: 100%;
+			}
+			th, td {
+	    		padding: 4px;
+			}
+			th, td, label {
+	    		font-size: 32px;
+			}
+			#borderimg1 { 
+			    border: 80px dotted ;
+			    border-image: url("<?php echo $this->baseUrl()?>/images/ifrmas.jpg") 120 stretch;
+			}			
+	    </style>
+		<table cellpadding="0" cellspacing="0" width="100%" style="font-family:  Khmer OS Muol; font-weight: bold; margin-top: 0px; ">		 
+			<tr class="no-boder">
+				<td>
+				<table width="100%" >
+					<tr>
+						<td width="25%" align="center">
+							<img style="width: 80%; height: 130px;" alt="<?php ?>" src="<?php echo $this->baseUrl()?>/images/logosbona.jpg"><br>
+							<span style="font-family: Freestyle Script;font-size: 20px;"></span>
+							
+						</td>
+						<td width="70%" valign="top" align="center">
+							<table style="text-align:left;border:solid 1px #FFF;">
+								<tr style="list-style:12px; font-family:  Khmer OS Muol; font-weight: bold;">
+									<td style="color:red !important; font-size:85px; ">ចៅ ប៊ុនណា </td>
+								</tr>	
+							</table>
+						</td>
+						<td width="5%" >&nbsp;</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+		  	<tr>
+		  		<td colspan="3" align="center" style="color: blue !important;font-size: 48px;">
+	 				លើកសពចូលម្ឈូស
+	  			</td>
+	  		</tr>		
+  			<tr>
+  				<td colspan="3" align="center" style="color: #000;font-size: 33px;line-height:65px;">
+  					ថ្ងៃទី <?php echo $db_global->getNumberInkhmer(date('d',strtotime($this->row['lerk_sop_date'])));?> ខែ  <?php echo $db_global->getNumberInkhmer(date('m',strtotime($this->row['lerk_sop_date'])));?> ឆ្នាំ  ២០<?php echo $db_global->getNumberInkhmer(date('y',strtotime($this->row['lerk_sop_date'])));?> 
+  					ម៉ោងៈ  <?php echo $this->row['lerk_sop_time']?>&nbsp;<?php if(!empty($this->row['lerk_sop_time_to'])){?> ដល់ <?php echo $this->row['lerk_sop_time_to']?><?php }?>&nbsp;<?php echo $this->row['lerk_sop_time_mail']?><br />
+  					ឆុងនឹងឆ្នាំៈ <?php echo $this->row['hae_sop_jol_mchhos']?> 					
+  				</td>	
+  			</tr>
+  			<tr>
+  				<td colspan="3" align="center" style="color:blue !important;font-size: 48px;"> 
+  					ហែរសពចេញ
+  				</td>
+  			</tr>
+  			<tr >
+  				<td colspan="3" align="center" style="color: #000;font-size: 33px;line-height:65px;">
+  					ថ្ងៃទី <?php echo $db_global->getNumberInkhmer(date('d',strtotime($this->row['hae_sop_date'])));?> ខែ <?php echo $db_global->getNumberInkhmer(date('m',strtotime($this->row['hae_sop_date'])));?> ឆ្នាំ ២០<?php echo $db_global->getNumberInkhmer(date('y',strtotime($this->row['hae_sop_date'])));?> 
+  					ម៉ោងៈ  <?php echo $this->row['hae_sop_time']?><?php if(!empty($this->row['hae_sop_time_to'])){?> ដល់ <?php echo $this->row['hae_sop_time_to']?><?php }?>&nbsp;<?php echo $this->row['hae_sop_mail']?><br />
+  					ឆុងនឹងឆ្នាំៈ  <?php echo $this->row['hae_sop_jenh']?>
+  				</td>
+	  		</tr>
+  			<tr>
+  				<td colspan="3" align="center">
+  					<span style="font-size: 40px; color:red !important; "><?php echo $this->row['type_romleay']?> </span>
+  					<span style="font-size: 40px; color:blue !important; ">នៅ </span>
+  					<span style="font-size: 40px; color:red !important; "><?php echo $this->row['place_pjos_sop']?> </span>
+  				</td>
+  			</tr>
+  			<tr>
+  				<td colspan="3" align="center" style="color: #000;font-size: 33px;line-height:65px;">
+  					ថ្ងៃទី  <?php echo $db_global->getNumberInkhmer(date('d',strtotime($this->row['pjos_sop_date'])));?> ខែ <?php echo $db_global->getNumberInkhmer(date('m',strtotime($this->row['pjos_sop_date'])));?> ឆ្នាំ ២០<?php echo $db_global->getNumberInkhmer(date('y',strtotime($this->row['pjos_sop_date'])));?>
+  					ម៉ោងៈ  <?php echo $this->row['pjos_sop_time']?><?php if(!empty($this->row['pjos_sop_time_to'])){?> ដល់ <?php echo $this->row['pjos_sop_time_to']?><?php }?>&nbsp;<?php echo $this->row['pjos_sop_mail']?><br />
+  					ឆុងនឹងឆ្នាំៈ  <?php echo $this->row['pjos_sop']?>
+  				</td>
+  			</tr>
+	  		<tr>
+  				<td colspan="3" align="center" style="font-size: 40px; ">
+  					<u style="color:#22B424 !important;">កូនចៅកាន់ទុក្ខមិនឆុងទេ!</u>
+  				</td>
+  			</tr>
+  			<tr align="center" style="list-style:25px; font-family:  Khmer OS Muol; line-height: 60px; color: #000; font-size:30px;font-weight: bold; list-style:none;">
+  				<td  colspan="3" align="center" style="color:blue !important; ">
+  					<span class="iconprint"><i class="fa fa-home" style="font-size: 38px;"></i></span> ផ្ទះលេខ ៧៣ ផ្លូវមាត់ទន្លេកែងផ្លូវលេខ១០០ <br>(មុខក្រសួងប្រៃសណីយ៍វត្តភ្នំ)<br >
+  					<span class="iconprint"><i class="fa fa-facebook-square" style="font-size: 35px;"></i></span> Chao Bunna 73 Funeral Service <br >
+  					<span class="iconprint"><i class="fa fa-phone-square" style="font-size: 35px;"></i></span> <?php echo $tr->translate("PHONE_BUNA");?> , 012 31 73 73
+  				</td>
+  			</tr>	  								  	
+		</table>
+	</div>
+</div>
+<div style="padding-left:16%; margin: 0 auto;"> 
+	<lable class="col-md-3" style=""></lable>
+	<div class="col-md-2">
+		<a href="<?php echo $this->baseUrl();?>/sales/program"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i>ចាកចេញ</button></a>
+	</div>
+	<lable class="col-md-2" style="">
+		<button type="button" onclick="printinvoice();" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i> បោះពុម្ភ </button>
+	</lable>
+	<lable class="col-md-3" style=""></lable>
+</div>
+<script>
+function printinvoice(){
+	var printContents = document.getElementById('Printdonate').innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+}
+</script>
+
+

@@ -1,0 +1,74 @@
+<?php 
+	$url_new = $this->url(array('module'=>'rsvacl','controller'=>'branch','action'=>'add',));
+	$url_edit = $this->url(array('module'=>'rsvacl','controller'=>'branch','action'=>'edit',));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$formFilter = $this->formFilter;
+	
+	$rs = $this->resulr;
+?>
+<title><?php echo $tr->translate("សាខា");?></title>
+	<div class="portlet box blue">
+		<div class="portlet-title">
+			<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("សាខា");?>
+			</div>
+			<a href="<?php echo $url_new;?>" class="btn btn-sm green  pull-right">
+				<i class="fa fa-plus"></i>&nbsp;<?php echo $tr->translate('ADD_NEW');?>
+			</a>
+		</div>
+		<div class="portlet-body form">
+			<form class="form-horizontal" method="post" action="" >
+				<div class="form-body">
+					<div class="form-group">
+						<label class="col-md-2 control-label"><?php echo $tr->translate("LOCATION_NAME");?></label>
+						<div class="col-md-4">
+							<?php echo $formFilter->getElement('branch_name');?>
+						</div>
+						<div class="col-md-4">
+							<?php echo $formFilter->getElement('status');?></button>
+						</div>				
+						<div class="col-md-2">
+							<button type="submit" class="btn green"><?php echo $tr->translate("SEARCH");?></button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		
+		<div class="portlet-body">
+			<table class="table table-striped table-bordered table-hover" id="sample_2">
+			<thead>
+				<tr align="center" style="font-weight:bold;">
+					<td><?php echo $tr->translate("NO");?></td>
+					<td><?php echo $tr->translate("សាខា");?></td>
+					<td><?php echo $tr->translate("លេខទូរស័ព្ទ");?></td>
+					<td><?php echo $tr->translate("EMAIL");?></td>
+					<td><?php echo $tr->translate("អាស័យដ្ឋាន");?></td>
+					<td><?php echo $tr->translate("STATUS");?></td>
+					<td><?php echo $tr->translate("ACTION");?></td>
+				</tr>
+			</thead>
+			<tbody style="font-size: 12px;">
+				<?php if(!empty($rs)){ foreach ($rs as $key => $row){?>
+				<tr class="odd gradeX">
+					<td><?php echo $key+1;?></td>
+					<td><?php echo $row["name"]?></td>
+					<td><?php echo $row["phone"]?></td>
+					<td><?php echo $row["email"]?> </td>
+					<td class="center"><?php echo $row["address"]?></td>
+					<td>
+						<?php if($row["status"] == 1){?>
+							<?php echo $tr->translate("ប្រើប្រាស់");?>
+						<?php }else{?>
+							<?php echo $tr->translate("មិនប្រើប្រាស់");?>
+						<?php }?>
+					</td>
+					<td>
+						<a href="<?php echo $url_edit;?>/id/<?php echo $row["id"]?>"><?php echo $tr->translate("EDIT");?></a> 
+					</td>
+				</tr>
+				<?php }}?>
+			</tbody>
+			</table>
+		</div>
+	</div>

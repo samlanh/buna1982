@@ -1,0 +1,79 @@
+<?php 
+$user_info = new Application_Model_DbTable_DbGetUserInfo();
+$result = $user_info->getUserInfo();
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$session_user=new Zend_Session_Namespace('auth');
+$request=Zend_Controller_Front::getInstance()->getRequest();
+?>
+	<div class="page-header-inner">
+		<!-- BEGIN LOGO -->
+		<div class="page-logo">
+			<a href="<?php echo $this->baseUrl(); ?>/default/index/dashboad">
+				<img src="<?php echo $this->baseUrl()?>/images/cam-app-logo.png" style="height: 35px;line-height: 115px;margin-top: 5px;" alt="CAM APP TECHNOLOGY">
+			</a>
+			<div class="menu-toggler sidebar-toggler hide">
+			</div>
+		</div>
+		<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+		</a>
+		<div class="top-menu">
+			<ul class="nav navbar-nav pull-right">
+				<li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+						<i class="fa fa-language"></i>
+					</a>
+					<ul class="dropdown-menu extended tasks">
+						<li>
+							<ul class="dropdown-menu-list scroller" style="height: 110px;" data-handle-color="#637283">
+								<li>
+									<a onclick="changeLange(1);" href="#">
+									<span class="task">
+									<span class="desc">Khmer</span>
+									</span>
+									</a>
+								</li>
+								<li>
+									<a onclick="changeLange(2);" href="#">
+									<span class="task">
+									<span class="desc">English</span>
+									</span>
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li class="dropdown dropdown-user">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+						<img alt="" class="img-circle" src="<?php echo $this->baseUrl()?>/assets/admin/layout/img/avatar3_small.jpg"/>
+						<span class="username username-hide-on-mobile">
+							<?php echo $session_user->fullname;?>
+						</span>
+						<i class="fa fa-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu dropdown-menu-default">
+						<li>
+							<a href="<?php echo $this->baseUrl()."/default/index/logout/value/1";?>">
+							<i class="icon-key"></i>ចាកចេញ | Log Out </a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<!-- END TOP NAVIGATION MENU -->
+	</div>
+	<script>	
+var url_changelang = '<?php echo $this->url(array('module'=>'default','controller'=>'index','action'=>'changelange'));?> ';
+function changeLange(lang){
+	$.ajax({
+		url:url_changelang,
+		type:"post",
+		data:{'lange':lang,},
+		success: function(data){
+			location.reload();
+		},
+		error:function(e){
+		}
+	});
+}
+</script>

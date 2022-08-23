@@ -1,0 +1,131 @@
+<?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+   
+   $user_info = new Application_Model_DbTable_DbGetUserInfo();
+	$result = $user_info->getUserInfo();
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage(); 
+	$session_user=new Zend_Session_Namespace('auth');
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	 $level = $result["level"];
+  
+  ?>
+ <title>របាយការណ៍ ចំំណូល</title> 
+<div class="row">
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat green-haze">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'income','action'=>'rpt-sales'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("របាយការណ៍លក់");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat blue-madison">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'income','action'=>'rptsalemong'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("របាយការណ៍លក់ម៉ុង");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat purple-plum">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'income','action'=>'rpt-customer-payment'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("របាយការណ៍អតិថិជនបង់ប្រាក់");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat green-haze">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'income','action'=>'rpt-all-income'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("របាយការណ៍ចំណូលសរុបទាំងអស់");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat red-intense">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'income','action'=>'rpt-balancesheet'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("របាយការណ៍ចំណេញ-ខាត");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat purple-plum">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'product','action'=>'rptproductsold'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("របាយការណ៏លក់ផលិតផល");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+</div>

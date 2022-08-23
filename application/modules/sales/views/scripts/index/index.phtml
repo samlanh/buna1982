@@ -1,0 +1,80 @@
+<?php 					
+	$url_new = $this->url(array('module'=>'sales','controller'=>'index','action'=>'add',));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$formFilter = $this->formFilter;
+?>
+<title>តារាងការលក់</title>
+<meta charset="utf-8" />
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("តារាងការលក់");?>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>"sales",'controller'=>"possale",'action'=>'add'),null,true); ?>"><button type="button" name="calcel" class="btn blue"><i class="fa fa-plus"></i>បន្ថែមថ្មី</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<form method="post" action="<?php echo $formFilter->getAction(); ?>" autocomplete="off">
+					<div class="form-group" style="padding-top: 6px;">
+						<label class="control-label col-md-2"><?php echo $formFilter->getElement('ad_search');?></label>
+						<label class="control-label col-md-2"><?php echo $formFilter->getElement('customer_id');?></label>
+						<label class="control-label col-md-2">
+							<select name="is_complete" id="is_complete" class="form-control select2me">
+								<option value="">ស្ថានភាព</option>
+								<option value="1" <?php if($this->search['is_complete']==1){echo "selected='selected'";}?>>បង់ដាច់</option>
+								<option value="2" <?php if($this->search['is_complete']==2){echo "selected='selected'";}?>>មិនទាន់បង់ដាច់</option>
+							</select>
+						</label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('start_date');?></div></label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('end_date');?></div></label>
+						<label class="control-label col-md-2">
+							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+						</label>
+					</div>		
+				</form> 
+					<div class="contain_form" style="clear: both;">
+						<?php echo $this->list; ?>
+					</div>
+		   </div>
+		</div>
+	</div>
+</div>
+<script>
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {
+			var m = "clicked: " + key;
+			if(key=="edit"){
+				url='<?php echo $this->baseUrl()."/sales/possale/edit/id/";?>';
+			}else if(key=="invoice"){
+				url='<?php echo $this->baseUrl()."/sales/possale/invoice/id/";?>';
+			}else if(key=="convert"){
+				url='<?php echo $this->baseUrl()."/sales/dn/convert/id/";?>';
+			}else if(key=="lastreceipt"){
+				url='<?php echo $this->baseUrl()."/sales/index/lastreceipt/id/";?>';
+			}
+			
+			gotoAction();
+		},
+		items: {
+			"edit": {name: "កែប្រែ", icon: "edit", accesskey: "e"},
+			"invoice": {name: "វិក័យប័ត្រ", icon: "fa-newspaper-o", accesskey: "e"},
+			"convert": {name: "Convert to បញ្ជីទំនិញ", icon: "fa-newspaper-o", accesskey: "e"},
+			"lastreceipt": {name: "បង្កាន់ដៃ", icon: "fa-newspaper-o", accesskey: "e"},
+		}
+	});
+});
+function setrowdata(index){
+	  row = index;
+	}
+var recordid ='';
+function gotoAction(){
+	 window.open(url+row, '_blank');
+}
+</script>

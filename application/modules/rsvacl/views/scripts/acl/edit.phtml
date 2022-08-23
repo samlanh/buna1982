@@ -1,0 +1,133 @@
+<title>កែប្រែសិទ្ធ</title>
+
+<style>
+	fieldset.fifthy {	
+		border-right: 0px;
+		width: 50%;
+	}
+	table.user td{
+		vertical-align: top;
+	}
+	.left{
+		text-align: left !important;
+	}
+</style> .
+
+<?php 
+	$cancel_url=$this->url(array(
+			'module'=>'rsvacl',
+			'controller'=>'acl',
+			'action'=>'index',
+		));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo $tr->translate("កែប្រែសិទ្ធ")?>
+				</div>
+				<div class="tools" >
+					<a href="<?php echo $cancel_url;?>" class="btn btn-sm pull-right" style="color:white;">
+					<i class="fa fa-undo"></i>	&nbsp;<?php echo $tr->translate("GO_BACK");?>
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="frm" action="<?php //echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post">
+					<div class="form-body">
+						<div class="form-group">
+						
+							<label class="control-label col-md-4">
+							</label>
+							
+							<div class="col-md-4" >
+								<div class="form-group">
+									<label class="control-label col-md-3 left" >
+										Label
+									</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" name="label" id="label"  placeholder="Label"​ value="<?php echo $this->row['label']?>"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3 left">
+										Module
+									</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" name="module" id="module"  placeholder="Module"​ value="<?php echo $this->row['module']?>"/>
+									</div>
+								</div>	
+								<div class="form-group">
+									<label class="control-label col-md-3 left">
+										Controller
+									</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" name="controller" id="controller"  placeholder="Controller"​ value="<?php echo $this->row['controller']?>"/>
+									</div>
+								</div>	
+								<div class="form-group">	
+									<label class="control-label col-md-3 left">
+										Action
+									</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" name="action" id="action"  placeholder="Action"​ value="<?php echo $this->row['action']?>"/>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="control-label col-md-3 left">
+										Order
+									</label>
+									<div class="col-md-9">
+										<input type="text" class="form-control" name="order" id="order"  placeholder="Order" value="<?php echo $this->row['rank']?>"​/>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="control-label col-md-3 left">
+										Type
+									</label>
+									<div class="col-md-9">
+										<select name="type" id="type" class="form-control select2me" >
+										    <option value="1" <?php if($this->row['is_menu']==1){echo "selected='selected'";}?>>Menu</option>
+											<option value="0" <?php if($this->row['is_menu']==0){echo "selected='selected'";}?>>Not Menu</option>
+										</select>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="control-label col-md-3 left">
+										Status
+									</label>
+									<div class="col-md-9">
+										<select name="status" name="status" class="form-control select2me">
+										    <option value="1" <?php if($this->row['status']==1){echo "selected='selected'";}?>>Active</option>
+											<option value="0" <?php if($this->row['status']==0){echo "selected='selected'";}?>>Deactive</option>
+										</select>
+									</div>
+								</div>
+								
+								
+								<div class="form-group">
+									<div class="col-md-4">
+									</div>
+									<div class="col-md-4">
+										<button type="submit" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("រក្សាទុក")?> </button>
+									</div>
+									<div class="col-md-4">
+									</div>
+								</div>
+							</div>
+							
+							<label class="control-label col-md-4">
+							</label>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

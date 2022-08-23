@@ -1,0 +1,206 @@
+<?php 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+?>
+<title>តារាងចំណាយផ្នែកម៉ុង</title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("តារាងចំណាយផ្នែកម៉ុង");?>
+				</div>
+						<div class="btn-group pull-right">
+							 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+							   Actions <i class="fa fa-angle-down"></i>
+							 </button>
+								<ul class="dropdown-menu" role="menu">
+									<li>
+										<a href="#" onclick="doPrint();">
+											<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+										</a>
+									</li>
+									<li>
+										<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+									</li>
+									
+								</ul>
+					</div>
+			</div>
+            <div class="portlet-body form frmfilter">
+					<div style="clear:both;"></div>	
+	<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm">
+	<div id="divPrint" style="width: 100%;">
+	<style>
+		.style{
+			line-height: 20px;font-size: 12px !important;
+			font-family: 'Khmer OS Battambang';
+		}
+		ul{margin: 0;padding:0;}
+		table tr td ul li{text-align: center;list-style: none;line-height: 25px; font-weight: bold;}
+		th{padding: 5px;}
+		ul.pur_info li{line-height:22px; font-weight: normal !important;}
+		ul.pur_info li strong{font-weight: bold;}
+       .hover:hover{background: #ccc;}
+	</style>
+		<table style="font-family: 'Khmer OS Content'; width:100%;">
+			<tbody>
+			<tr>
+		    	<td align="center">
+		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
+		            	<tbody><tr>
+		                	<td width="20%" valign="top"></td>
+		                	<td width="60%" valign="top">
+		                		<ul>
+		                			<li style="text-align:center; font-size:18px; font-family:'Khmer MEF2'">តារាងចំណាយផ្នែកម៉ុង</li>
+		                		</ul>
+		                	</td>
+		                    <td width="20%"></td>
+		                </tr> 
+		                <tr>
+		                	<td colspan="3" valign="top">
+		                		<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+		                			<tbody>
+		                			<tr>
+		                				<td width="50%" style="font-size: 14px;" valign="top">
+		                				    <table width="100%" border="0" cellpadding="0" cellspacing="0" >
+												<tr>
+													<td width="20%" style="font-size: 14px;" valign="top">
+														សាខា
+													</td>
+													<td width="80%" style="font-size: 14px;" valign="top">
+														: <strong><?php echo $this->mong['branch_name'];?></strong>
+													</td>
+												</tr>
+												<tr>
+													<td width="20%" style="font-size: 14px;" valign="top">
+														អតិថិជន
+													</td>
+													<td width="80%" style="font-size: 14px;" valign="top">
+														: <strong><?php echo $this->mong['customer_name']."-".$this->mong['place_bun']."-".$this->mong['phone'];?></strong>
+													</td>
+												</tr>
+												<tr>
+													<td width="20%" style="font-size: 14px;" valign="top">
+														វិក័យបត្រលេខ
+													</td>
+													<td width="80%" style="font-size: 14px;" valign="top">
+														: <strong><?php echo $this->mong['invoice_no'];?></strong>
+													</td>
+												</tr>
+												<tr>
+													<td width="20%" style="font-size: 14px;" valign="top">
+														ជាងសាងសង់
+													</td>
+													<td width="80%" style="font-size: 14px;" valign="top">
+														: <strong><?php echo $this->mong['constructor_name'];?></strong>
+													</td>
+												</tr>
+											</table>
+		                				</td>
+		                				<td width="10%"></td>
+		                				<td width="40%" style="text-align: left;font-size: 14px;">
+											<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+												<tr>
+													<td width="20%" style="font-size: 14px;" valign="top">
+														លេខចំណាយ
+													</td>
+													<td width="80%" style="font-size: 14px;" valign="top">
+														: <strong><?php echo $this->mong['expense_number'];?></strong>
+													</td>
+												</tr>
+												<tr>
+													<td width="20%" style="font-size: 14px;" valign="top">
+														ថ្ងៃចំណាយ
+													</td>
+													<td width="80%" style="font-size: 14px;" valign="top">
+														: <strong><?php echo date("d/m/Y",strtotime($this->mong['date_payment']));?></strong>
+													</td>
+												</tr>
+												<tr>
+													<td width="20%" style="font-size: 14px;" valign="top">
+														សម្គាល់
+													</td>
+													<td width="80%" style="font-size: 14px;" valign="top">
+														: <strong><?php echo $this->mong['note'];?></strong>
+													</td>
+												</tr>
+												<tr>
+													<td width="20%" style="font-size: 14px;" valign="top">
+														ស្ថានការណ៏
+													</td>
+													<td width="80%" style="font-size: 14px;" valign="top">
+														: <strong><?php echo $this->mong['status_name'];?></strong>
+													</td>
+												</tr>
+											</table>
+		                				</td>
+		                			</tr>
+				                </tbody></table>
+				              </td>
+				           </tr>   
+		            	</tbody>
+		            </table>
+		        </td>
+		    </tr>
+		    <tr>
+		    	<td class="table2excel" id="exportExcel"><br />
+		            <table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
+		                 <tbody>
+			                 <tr align="center" style="background:#b0bdfd !important;font-weight:bold; line-height: 25px; font-size:14px; padding:1px 0px; white-space: nowrap; ">
+			                    <td width="10%">&nbsp;<?php echo $tr->translate("NUM");?></td>
+								<td width="40%"><?php echo $tr->translate("ឈ្មោះចំណាយ");?></td>
+								<td width="15%">&nbsp;<?php echo $tr->translate("តម្លៃ");?></td>
+								<td width="15%">&nbsp;<?php echo $tr->translate("ចំនួន");?></td>
+								<td width="20%"><?php echo $tr->translate("សរុប");?></td>
+			                </tr>
+			                <?php $num=1; 
+			                if(!empty($this->expense_detail)){foreach ($this->expense_detail AS $index => $rs){?>
+							<tr class='row-format<?php echo $num; $num=1-$num;?> hover' style="border:1px solid #000;font-size:13px;line-height: 24px;">
+							   <td align="center" style="white-space: nowrap;">&nbsp;<?php echo $index+1?></td>
+							   <td style="white-space: nowrap;font-weight: bold;">&nbsp;<?php echo $rs["expense_name"];?></td>
+							   <td style="white-space: nowrap; min-width: 120px;">&nbsp;<?php echo "$ ".number_format($rs["item_price"],2);?></td>
+							   <td align="center" style="white-space: nowrap; min-width: 120px;">&nbsp;<?php echo $rs["item_qty"];?></td>
+							   <td style="white-space: nowrap; min-width: 120px;">&nbsp;<?php echo "$ ".number_format($rs["item_total"],2);?></td>
+							</tr>
+							  
+	                    	<?php }}?>
+		                    <tr style="font-size: 14px;font-weight: bold;">
+		                    	<td colspan="3" ></td>
+								<td align="center" style="border-left:1px solid #000;">&nbsp;&nbsp;តម្លៃសរុប</td>
+								<td >&nbsp;&nbsp;<?php echo "$ ".number_format($this->mong['total_payment'],2);?></td>
+							</tr>
+		                </tbody>
+		           </table>
+		              <br>
+		              <table align="center" width="100%">
+						   <tbody>
+						   <tr style="font-size: 13px;">
+						        <th style="width:20%;text-align:center;  font-family:'Khmer MEF2'">យល់ព្រមដោយ</th>
+						        <th></th>
+						        <th style="width:20%;text-align:center; font-family:'Khmer MEF2'">ត្រួតពិនិត្យដោយ</th>
+						        <th></th>
+						        <th style="width:20%;text-align:center;font-family:'Khmer MEF2'">រៀបចំដោយ</th>
+						   </tr>
+						</tbody>
+					</table>	
+		    		</td>
+		    	</tr>
+			</tbody>
+		</table>
+		</div>
+	  </div>		
+	</div>
+	 </div>
+   </div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script>
+	function doPrint() {
+		var divToPrint = document.getElementById('divPrint');
+		var htmlToPrint = '' +'<style type="text/css">' +'</style>';
+		htmlToPrint += divToPrint.outerHTML;
+		window.document.write(htmlToPrint);
+		window.print();
+		window.close();
+	}
+</script>

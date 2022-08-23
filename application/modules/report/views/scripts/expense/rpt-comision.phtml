@@ -1,0 +1,210 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$session_user=new Zend_Session_Namespace('auth');
+	$user_id=$session_user->user_id;
+?>
+<title><?php echo $tr->translate("របាយការណ៍កំរៃជើងសា");?></title>
+
+	<style>
+		.hover:hover{ background: #ddd;}
+	</style>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("របាយការណ៍កំរៃជើងសា");?>
+				</div>
+				<div class="btn-group pull-right">
+				 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+				   Actions <i class="fa fa-angle-down"></i>
+				 </button>
+					<ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#" onclick="doPrint();">
+								<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+							</a>
+						</li>
+						<li>
+							<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="portlet-body form frmfilter">
+				<form method="post" action="<?php //echo $formFilter->getAction(); ?>" autocomplete="off">
+					<div class="form-group" style="padding-top: 6px;">
+						<?php $formFilter = $this->formFilter; ?>
+						<label class="control-label col-md-3"><?php echo $formFilter->getElement('text_search');?></label>
+						<label class="control-label col-md-3"><?php echo $formFilter->getElement('branch_id');?></label>
+						<label class="control-label col-md-3">
+							<select name="sale_id" id="sale_id" class="form-control select2me" >
+								<option value="-1" <?php if($this->search['sale_id']==-1){echo "selected='selected'";}?>>ភ្នាក់ងារលក់</option>
+								<?php if(!empty($this->sale_agent)){foreach ($this->sale_agent as $rs){?>
+									<option value="<?php echo $rs['id']?>" <?php if($this->search['sale_id']==$rs['id']){echo "selected";}?>><?php echo $rs['name'];?></option>
+								<?php }}?>
+							</select>
+						</label>
+						<label class="control-label col-md-3">
+							<select name="type" id="type" class="form-control select2me" >
+								<option value="0" <?php if($this->search['type']==0){echo "selected='selected'";}?>>កំរៃជើងសាទាំងអស់</option>
+								<option value="1" <?php if($this->search['type']==1){echo "selected='selected'";}?>>កំរៃជើងសាផ្នែកលក់</option>
+								<option value="2" <?php if($this->search['type']==2){echo "selected='selected'";}?>>កំរៃជើងសាផ្នែកម៉ុង</option>
+							</select>
+						</label>
+						<label class="control-label col-md-3">
+							<select name="status" id="status" class="form-control select2me" >
+								<option value="-1" <?php if($this->search['status']==-1){echo "selected='selected'";}?>>ស្ថានការ</option>
+								<option value="1" <?php if($this->search['status']==1){echo "selected='selected'";}?>>ប្រើប្រាស់</option>
+								<option value="0" <?php if($this->search['status']==0){echo "selected='selected'";}?>>មិនប្រើប្រាស់</option>
+							</select>
+						</label>
+						<label class="control-label col-md-3"><div class="input-icon right"><i class="icon-calendar"></i><?php echo $formFilter->getElement('start_date');?></div></label>
+						<label class="control-label col-md-3"><div class="input-icon right"><i class="icon-calendar"></i><?php echo $formFilter->getElement('end_date');?></div></label>
+						<label class="control-label col-md-3">
+							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+						</label>
+					</div><div style="clear:both;"></div>	
+				</form> 
+			</div>
+			<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+				<div id="divPrint"  >
+					<table class="table2excel" style="background:#fff; margin: 0 auto; width: 100%; padding: 0px 2px 1cm 2px;font-family: 'Khmer Battambang';">
+						<tr>
+		                	<td align="center" width="16%" valign="top"><img  height="95px" src="<?php echo $this->baseUrl();?>/images/logosbona.jpg"></td>		                	
+		                		<td  align="center">
+		                			<strong style="text-align:center; font-size:18px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important"><?php echo $tr->translate("COMPANY_CUSTOMER");?></strong><br>
+		                			<strong style="text-align:center; font-size:17px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important"><?php echo $tr->translate("របាយការណ៍កំរៃជើងសា");?></strong><br>
+		                			<strong style="text-align:center; font-size:14px; color: #F31A1A  !important"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+		                		</td>
+		                    <td width="20%"></td>
+		                </tr> 
+							
+						<?php 
+							$total_sale_comision=0;
+							$total_mong_comision=0;
+						?>
+						<tr>
+							<td colspan="3">
+							<?php if(!empty($this->SaleComision)){?>
+								<table width="100%" style="font-family:Khmer OS Battambang;font-size:18px;">
+									<tr align="left">
+										<td >ផ្នែកលក់</td>
+									</tr>
+								</table >
+								<table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;font-family: 'Khmer Battambang';margin-bottom:70px;" width="100%" cellspacing="0">
+			            			<tr style="font-size:14px; height: 20px;border: 1px solid #000;white-space: nowrap;background-color: #b0bdfd !important;line-height:30px;font-weight: bold;" align="center" >
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('NUM')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH_NAME')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('លេខវិក័យបត្រ')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('ឈ្មោះអតិថិជន')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('ទីតាំងបុណ្យ')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('មកតាមរយះ')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('កំរៃជើងសា')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('DATE')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('BY_USER')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('STATUS')?></td>
+									</tr>
+								 <style> td{padding:0 3px; }</style>
+								<?php $i=0;if(!empty($this->SaleComision)){foreach($this->SaleComision as $row){ $i++;?>
+									<tr class="hover" style="font-size:13px; height: 25px;border: 1px solid #000; white-space: nowrap;" align="center" >
+										<td style="border: 1px solid #000;"><?php echo $i;?></td>
+										<td style="border: 1px solid #000;"><?php echo $row['branch_name'];?></a></td>
+										<td style="border: 1px solid #000;"><?php echo $row['sale_no'];?></a></td>
+										<td style="border: 1px solid #000;"><?php echo $row['customer_name'];?></a></td>
+										<td style="border: 1px solid #000;"><?php echo $row['place_bun'];?></a></td>
+										<td style="border: 1px solid #000;"><?php echo $row['sale_name'];?></a></td>
+										<td style="border: 1px solid #000;background:#c6e2fb"><?php echo "$ ".number_format($row['comission'],2);?></a></td>
+										<td style="border: 1px solid #000;"><?php echo date('d-M-Y',strtotime($row['date_sold']));?></td>
+										<td style="border: 1px solid #000;"><?php echo $row['user_name'];?></td>
+										<td style="border: 1px solid #000;"><?php echo $row['status_name'];?></td>
+									</tr>
+									<?php 
+										if($row['status']==1){
+											$total_sale_comision = $total_sale_comision + $row['comission'];
+										}
+									?> 
+								 <?php } }?>
+								 
+								 	<tr class="hover" style="font-size:15px; height: 20px;border: 1px solid #000; white-space: nowrap;background-color: #f8f6f6;line-height:30px;font-weight: bold;" align="center" >
+										<td colspan="8" style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL');?></td>
+										<td colspan="2" style="border: 1px solid #000;"><?php echo "$ ".number_format($total_sale_comision,2);?></td>
+									</tr>
+								</table>
+							<?php }?>	
+							<?php if(!empty($this->MongComision)){?>
+								<table width="100%" style="font-family:Khmer OS Battambang;font-size:18px;">
+									<tr align="left">
+										<td >ផ្នែកម៉ុង</td>
+									</tr>
+								</table >
+								<table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;font-family: 'Khmer Battambang';" width="100%" cellspacing="0">
+			            			<tr style="font-size:14px; height: 20px;border: 1px solid #000;white-space: nowrap;background-color: #b0bdfd !important;line-height:30px;font-weight: bold;" align="center" >
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('NUM')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH_NAME')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('លេខវិក័យបត្រ')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('ឈ្មោះអតិថិជន')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('ទីតាំងបុណ្យ')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('មកតាមរយះ')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('កំរៃជើងសា')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('DATE')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('BY_USER')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('STATUS')?></td>
+									</tr>
+								 <style> td{padding:0 3px; }</style>
+								<?php $i=0;if(!empty($this->MongComision)){foreach($this->MongComision as $row){ $i++;?>
+									<tr class="hover" style="font-size:13px; height: 25px;border: 1px solid #000; white-space: nowrap;" align="center" >
+										<td style="border: 1px solid #000;"><?php echo $i;?></td>
+										<td style="border: 1px solid #000;"><?php echo $row['branch_name'];?></a></td>
+										<td style="border: 1px solid #000;"><?php echo $row['invoice_no'];?></a></td>
+										<td style="border: 1px solid #000;"><?php echo $row['customer_name'];?></a></td>
+										<td style="border: 1px solid #000;"><?php echo $row['place_bun'];?></a></td>
+										<td style="border: 1px solid #000;"><?php echo $row['sale_name'];?></a></td>
+										<td style="border: 1px solid #000;background:#c6e2fb"><?php echo "$ ".number_format($row['comission'],2);?></a></td>
+										<td style="border: 1px solid #000;"><?php echo date('d-M-Y',strtotime($row['create_date']));?></td>
+										<td style="border: 1px solid #000;"><?php echo $row['user_name'];?></td>
+										<td style="border: 1px solid #000;"><?php echo $row['status_name'];?></td>
+									</tr>
+									<?php 
+										if($row['status']==1){
+											$total_mong_comision = $total_mong_comision + $row['comission'];
+										}
+									?> 
+								 <?php } }?>
+								 
+								 	<tr class="hover" style="font-size:15px; height: 20px;border: 1px solid #000; white-space: nowrap;background-color: #f8f6f6;line-height:30px;font-weight: bold;" align="center" >
+										<td colspan="8" style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL');?></td>
+										<td colspan="2" style="border: 1px solid #000;"><?php echo "$ ".number_format($total_mong_comision,2);?></td>
+									</tr>
+								</table>
+							<?php }?>		
+							</td>
+						</tr>
+						<tr >
+							<td colspan="3">
+								&nbsp;
+							</td>
+						</tr>
+						<tr style="font-size: 13px;">
+							<th style="width:20%;text-align:center;  font-family:'Khmer MEF2'">យល់ព្រមដោយ</th>
+							<th style="width:60%;text-align:center; font-family:'Khmer MEF2'">ត្រួតពិនិត្យដោយ</th>
+							<th style="width:20%;text-align:center;font-family:'Khmer MEF2'">រៀបចំដោយ</th>
+					   </tr>
+					</table>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script type="text/javascript">
+function doPrint(){
+	var divToPrint = document.getElementById('divPrint');
+	var htmlToPrint = '' +'<style type="text/css">' +'</style>';
+	htmlToPrint += divToPrint.outerHTML;
+	window.document.write(htmlToPrint);
+	window.print();
+	window.close();
+}
+</script>

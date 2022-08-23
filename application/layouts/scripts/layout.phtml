@@ -1,0 +1,193 @@
+<?php 
+	//header('Cache-Control: no cache'); //no cache
+	//session_cache_limiter('private_no_expire'); // works
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$action=$request->getActionName();
+	$controller=$request->getControllerName();
+	$module=$request->getModuleName();
+	
+?>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
+<link type="text/css" href="<?php echo BASE_URL;?>/css/style.css" rel="stylesheet"/>
+<link rel="stylesheet" media="screen" href="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap/css/bootstrap.css" />
+<script type="text/javascript"  src="<?php echo BASE_URL;?>/js/other.js"></script>
+<script src="<?php echo $this->baseUrl()."/contextMenu/1.11.3/"?>jquery.min.js"></script>
+<link href="<?php echo $this->baseUrl()?>/css/style.css" rel="stylesheet" type="text/css"/>
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
+<link href="<?php echo $this->baseUrl()?>/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo $this->baseUrl()?>/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+
+<!-- END GLOBAL MANDATORY STYLES -->
+
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl()?>/assets/global/plugins/clockface/css/clockface.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap-datepicker/css/datepicker3.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<!-- BEGIN PAGE LEVEL STYLES -->
+
+<!-- END PAGE LEVEL STYLES -->
+
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl()?>/assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap-datepicker/css/datepicker.css"/>
+<!-- END PAGE LEVEL SCRIPTS -->
+<!-- just copy form borey -->
+<link href="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.css" rel="stylesheet" type="text/css" />
+	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.contextMenu.js" type="text/javascript"></script>
+	<script src="<?php echo $this->baseUrl()."/contextMenu/"?>jquery.ui.position.min.js" type="text/javascript"></script>
+	<link href="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo $this->baseUrl()."/datatable/"?>responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <script src="<?php echo $this->baseUrl()."/datatable/"?>datatables.min.js" type="text/javascript"></script>
+    <script src="<?php echo $this->baseUrl()."/datatable/"?>dataTables.responsive.min.js" type="text/javascript"></script>
+
+	<script>
+    $(document).ready(function() {
+        $('#datatable-responsive').DataTable( {
+       	 "dom": '<"top"i>rt<"bottom"flp><"clear">',
+        	searching: false,
+        } );
+    } );
+    </script>
+
+<!-- BEGIN THEME STYLES -->
+<link href="<?php echo $this->baseUrl()?>/assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
+<link href="<?php echo $this->baseUrl()?>/assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo $this->baseUrl()?>/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link id="style_color" href="<?php echo $this->baseUrl()?>/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
+<link href="<?php echo $this->baseUrl()?>/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<!-- END THEME STYLES -->
+
+<link rel="shortcut icon" type="image/x-icon" href="<?php echo $this->baseUrl();?>/images/icon.ico" />
+
+</head>
+<script src="<?php echo $this->baseUrl()?>/js/jquery.table2excel.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl()?>/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+
+<script src="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl()?>/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/jquery.tablesorter.js"> </script>
+<script type="text/javascript" src="<?php echo $this->baseUrl();?>/js/jquery.tablesorter.pager.js"> </script>			
+		
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript" src="<?php echo $this->baseUrl()?>/assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl()?>/assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl()?>/assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL STYLES -->
+<script src="<?php echo $this->baseUrl()?>/assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="<?php echo $this->baseUrl()?>/assets/admin/layout/scripts/layout.js" type="text/javascript"></script> 
+<script src="<?php echo $this->baseUrl()?>/assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo $this->baseUrl()?>/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+
+
+<script src="<?php echo $this->baseUrl()?>/assets/admin/pages/scripts/form-validation.js"></script>
+<style>
+	@media print {
+		body {-webkit-print-color-adjust: exact;}
+	}
+	.form-group {
+	    clear: both;
+	}
+</style>
+
+
+	<body class="page-header-fixed page-quick-sidebar-over-content soria ">
+		<div class="page-header navbar navbar-fixed-top">
+			<?php echo $this->render('head-toolbar.phtml')?>
+		</div>
+		<div class="clearfix">
+		</div>
+		<div class="page-container">
+			<?php echo $this->render('left-toolbar.phtml')?>
+			<div class="page-content-wrapper" >
+				<div class="page-content" style="height: auto;" >
+					<?php 
+						/*
+						if($module!='default'){
+				            $db = new Application_Model_DbTable_DbUsers();
+		            		$rs = $db->getAccessUrl($module,$controller,$action);
+		            		if(!empty($rs)){
+		             			echo $this->layout()->content;
+		            		}else{
+		            			echo $this->render('pagenotfund.phtml');
+		            		}
+						}else{
+							echo $this->layout()->content;
+						}
+						*/
+						echo $this->layout()->content;
+					?>
+				</div>
+			</div>
+		</div>
+	</body>
+
+
+<script>
+$(document).ready(function() { 
+    Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+	QuickSidebar.init(); // init quick sidebar
+    //TableManaged.init();
+    FormValidation.init();
+ }); 
+ 
+ function exports() {
+	title=document.title;
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+
+	var yyyy = today.getFullYear();
+	if(dd<10){
+		dd='0'+dd;
+	} 
+	if(mm<10){
+		mm='0'+mm;
+	} 
+	var today = dd+'-'+mm+'-'+yyyy;
+	$(".table2excel").table2excel({
+		exclude: ".noExl",
+		name: "Excel Document Name",
+		filename: title+"-"+today,
+		fileext: ".xls",
+		exclude_img: true,
+		exclude_links: true,
+		exclude_inputs: true
+	});
+}
+
+ jQuery(function () {
+		'use strict';
+		jQuery(".ptss__toggle-btn").click(function () {	
+			jQuery('.js-ptss-frame').toggleClass('is-opened');
+		});
+		jQuery('.ptss__layout-wrapper > div').click(function(){
+			jQuery(this).closest('.ptss__setting-control').find('.ptss__layout-wrapper').removeClass('is-selected');
+			jQuery(this).parent().addClass('is-selected');
+			if( jQuery(this).hasClass('ptss__layout-box--wide') ) {
+				jQuery('body').removeClass('boxed');
+				jQuery('#ptss__boxed-bg').hide();
+				jQuery('body').removeClass('bg1').removeClass('bg2').removeClass('bg3').removeClass('bg4');
+				jQuery('#ptss__boxed-backgrounds span').removeClass('is-selected');
+			} else {
+				jQuery('body').addClass('boxed');
+				jQuery('#ptss__boxed-bg').show();
+				
+			}
+			
+		});
+	})	
+</script>
+</body>
+</html>

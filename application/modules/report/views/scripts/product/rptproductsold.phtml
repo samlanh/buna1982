@@ -1,0 +1,194 @@
+<?php 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+$brach_name =  $this->branch;
+$formFilter = $this->formFilter;
+?>
+<title>របាយការណ៍លក់ផលិតផល</title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("របាយការណ៍លក់ផលិតផល");?>
+				</div>
+				<div class="btn-group pull-right">
+					 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+					   Actions <i class="fa fa-angle-down"></i>
+					 </button>
+					 <ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#" onclick="doPrint();">
+								<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+							</a>
+						</li>
+						<li>
+							<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+						</li>
+					 </ul>
+				</div>
+			</div>
+            <div class="portlet-body form frmfilter">
+				<form method="post" action="<?php //echo $formFilter->getAction(); ?>" autocomplete="off">
+					<div class="form-body">
+						<div class="form-group">
+							<label class="control-label col-md-3">
+								<?php echo $formFilter->getElement('ad_search');?>
+							</label>
+							<label class="control-label col-md-3">
+								<?php echo $formFilter->getElement('branch');?>
+							</label>
+							<label class="control-label col-md-3">
+								<?php echo $formFilter->getElement('category');?>
+							</label>
+							<label class="control-label col-md-3">
+								<?php echo $formFilter->getElement('type');?>
+							</label>
+						</div>
+						<div class="form-group">
+							
+							<label class="control-label col-md-3">
+								<div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('start_date');?></div>
+							</label>
+							<label class="control-label col-md-3">
+								<div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('end_date');?></div>
+							</label>
+							<label class="control-label col-md-3">
+								<button type="submit" class="btn btn-primary col-md-12"><?php echo $tr->translate("ស្វែងរក");?></button>
+							</label>
+						</div>
+					</div>
+					<div style="clear:both;"></div>	
+				</form> 
+			</div>	
+		</div>		
+<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm">
+	<div id="divPrint" style="width: 100%;">
+		<style>
+			.style{
+				line-height: 25px;font-size: 12x !important;
+				font-family: 'Khmer OS Battambang';
+			}
+			ul{margin: 0;padding:0;}
+			table tr td ul li{text-align: center;list-style: none;line-height: 29px; font-weight: bold;}
+			th{padding: 5px;}
+			.hover:hover{background: #ccc;}
+			table { page-break-inside:auto }
+			tr{ page-break-inside:avoid; page-break-after:auto; }
+			#header {
+			  display: table-header-group;
+			  page-break-inside:avoid; page-break-after:auto;
+			}
+		</style>
+		<table style="font-family: 'Khmer OS Content'; width:100%;">
+			<tbody>
+			<tr>
+		    	<td align="center">
+		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
+		            	<tbody>
+		            		<tr>
+			                	<td width="20%" valign="top"><img src="<?php echo $this->baseUrl();?>/images/logosbona.jpg" height="95px" ></td>
+			                	<td width="60%" >
+			                		<ul>
+			                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
+			                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important">របាយការណ៏លក់ផលិតផល</li>
+			                			<li style="font-size:17px; text-align:center; font-size:14px; font-family:'Times New Roman','Khmer OS Muol Light'; color: #F31A1A  !important;">
+						                	<span id="projectName"></span>
+						                </li>
+			                			<li style="text-align:center; font-size:14px; color: #F31A1A  !important"><?php if(!empty($this->search['start_date'])){?><?php echo date("d/m/Y",strtotime($this->search['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->search['end_date']));}?></li>
+			                		</ul>
+			                	</td>
+			                    <td width="20%"></td>
+			                </tr> 
+			            </tbody>
+		            </table>
+		        </td>
+		    </tr>
+		    <tr>
+		    	<td id="exportExcel">
+		            <table class="table2excel" border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
+		                <thead>
+		                 <tr align="center" style="background: #b0bdfd !important;font-weight:bold; line-height: 25px; font-size:14px; padding:1px 0px; white-space: nowrap; ">
+		                    <td>&nbsp;<?php echo $tr->translate("NUM");?></td>
+							<td><?php echo $tr->translate("ITEM_CODE");?></ts>
+							<td><?php echo $tr->translate("ITEM_NAME");?></td>
+							<td><?php echo $tr->translate("PRODUCT_CATEGORY");?></td>
+							<td><?php echo $tr->translate("MEASURE");?></td>
+							<td><?php echo $tr->translate("From Sale");?></td>
+							<td><?php echo $tr->translate("From Mong");?></td>
+							<td><?php echo $tr->translate("Total Qty Sold");?></td>
+							<td><?php echo $tr->translate("TOTAL");?></td>
+		                </tr>
+		                </thead>
+		                 <tbody>
+		                <?php $num=1; 
+		                $r_netotal = 0;$r_paid = 0; $r_balance = 0;
+		                $d_netotal = 0;$d_paid = 0; $d_balance = 0;
+		                $b_netotal = 0;$b_paid = 0; $b_balance = 0;
+						$i=0;
+						$cost_price=0;
+		                if(!empty($this->product))foreach ($this->product AS $index => $row){
+		                	$i++;
+						?>
+							<tr class='hover row-format<?php echo $num; ?>' style="font-size:13px; " id="item_<?php echo $index; ?>">
+								<td align="center" style="white-space: nowrap;"><?php echo $index+1; ?></td>
+								<td style="white-space: nowrap;">&nbsp;&nbsp;<?php echo $row["item_code"]?></td>
+								<td style="">&nbsp;&nbsp;<?php echo $row["item_name"]?></td>
+								<td >&nbsp;&nbsp;<?php echo $row["cat"];?></td>
+								<td >&nbsp;&nbsp;<?php echo $row["measure"];?></td>
+								<td align="center"><?php echo $row["from_sale"];?></td>
+								<td align="center"><?php echo $row["from_mong"];?></td>
+								<td style="background: #dfffecc4" align="center"><?php echo $row["from_sale"]+$row["from_mong"];?></td>
+								<td style="background: #dfffecc4" align="center"><?php echo "$ ".number_format($row["total_from_sale"]+$row["total_from_mong"],2);?></td>
+							</tr>
+						  <?php }?> 
+		                </tbody>
+		            </table>
+		            <br>
+		              <br>
+		              <table align="center" width="100%">
+						   <tbody>
+						   <tr style="font-size: 14px;">
+						        <th style="width:20%;text-align:center;  font-family:'Khmer MEF2'">យល់ព្រមដោយ</th>
+						        <th></th>
+						        <th style="width:20%;text-align:center; font-family:'Khmer MEF2'">ត្រួតពិនិត្យដោយ</th>
+						        <th></th>
+						        <th style="width:20%;text-align:center;font-family:'Khmer MEF2'">រៀបចំដោយ</th>
+						   </tr>
+						   <tr style="font-size: 11px;">
+						        <th style="width:20%;text-align:center;  font-family:'Khmer MEF2'"></th>
+						        <th></th>
+						        <th style="width:20%;text-align:center; font-family:'Khmer MEF2'"></th>
+						        <th></th>
+						        <th style="width:20%;text-align:center;font-family:'Khmer MEF2'"></th>
+						   </tr>
+						</tbody>
+					</table>	
+		    		</td>
+		    	</tr>
+			</tbody>
+		</table>
+		</div>
+		<?php /*?>
+		<center>
+			<button dojoType="dijit.form.Button" id="printselected" iconClass="dijitEditorIcon dijitEditorIconPrint"
+					type="button" onclick="printSelected();">Print Barcode
+			</button>
+		</center>
+		<?php */?>
+	 </div>
+   </div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script>
+$(document).ready(function(){
+	branch_id = $("#branch").val();
+	 if(branch_id!=-1 && branch_id!=0){
+		 var bbr = $("#branch option:selected").text();
+		 document.getElementById('projectName').innerHTML = bbr+"<br />";
+	 }
+});
+function doPrint() {
+	var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();
+}
+
+</script>

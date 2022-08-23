@@ -1,0 +1,127 @@
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$url_save=$this->url(array("module"=>"sales","controller"=>"saleagent","action"=>"add"));
+	$frm_agent = $this->form_agent;
+?>
+<title><?php echo $tr->translate("ព័ត៌មាន ភ្នាក់ងារលក់");?></title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo $tr->translate("ព័ត៌មាន ភ្នាក់ងារលក់");?>
+				</div>
+				<div class="tools">
+					<label>
+						<a href="<?php echo $this->baseUrl();?>/sales/saleagent"><button type="button" class="btn red"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
+					</label>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<form id="frm" action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+					<div class="form-body">
+							<div class="row">
+							<div class="col-md-3">
+							</div>
+							<div class="col-md-6" style="border:1px solid #ccc;">
+								<div class="form-group">
+									<h4 style="border-bottom: 1px solid #ccc;" class="center">កែប្រែព័ត៌មាន ភ្នាក់ងារលក់</h4>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4">
+									<?php echo $tr->translate("LOCATION_NAME");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $frm_agent->getElement("branch_id");?>
+											<?php echo $frm_agent->getElement("id");?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4"><strong>អ្នកណែនាំ</strong><span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $frm_agent->getElement("name");?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4">
+									<?php echo $tr->translate("CON_NUM");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $frm_agent->getElement("phone");?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4">
+									<?php echo $tr->translate("CURRENT_ADD");?><span class="required"></span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i><?php echo $frm_agent->getElement("address");?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4"><?php echo $tr->translate("EMAIL_ADD");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $frm_agent->getElement("email");?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4"><?php echo $tr->translate("DESC");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $frm_agent->getElement("description");?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4">ស្ថានការណ៍<span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $frm_agent->getElement("status");?>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+							</div>
+							</div>
+							<div class="row">
+								<div class="form-group">
+									<br />
+									<label  class="col-md-3"></label>
+									<label  class="col-md-3"><a href="<?php echo $this->baseUrl();?>/sales/saleagent"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a></label>
+									<label  class="col-md-3"><button type="submit" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("GO_EDIT")?> </button></label>
+									<label  class="col-md-3"></label>
+								</div>
+							</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

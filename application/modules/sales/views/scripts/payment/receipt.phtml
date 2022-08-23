@@ -1,0 +1,261 @@
+<title>បង្កាន់ដៃបង់ប្រាក់</title>
+<center>
+<?php 
+	$rs = $this->rs;
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>
+<style>
+	#print-footer{display: none !important;}
+</style>
+<div id="PrintReceipt" style="border:1px dashed #ccc;width:22cm !important; padding: 0px; margin-bottom:30px; ">
+		<style>
+			.hearder_table{height:32px !important;}
+			.defaulheight{line-height: 22px !important;}
+			#PrintReceipt{display: table;}
+		</style>
+	<table class="print" cellspacing="0" cellpadding="0" style="width:98%;font-family: 'Khmer OS Battambang'; margin-top: 10px;white-space:nowrap;">
+		<tbody>
+			<tr height="40px;">
+			    <td colspan="10" style="" align="center" valign="top">
+					<table width="100%" border="0" style="font-size: 14px;margin-bottom: 0px; white-space: nowrap;"   >
+						<tr>
+							<td width="30%" valign="top">
+								&nbsp;
+							</td>
+							<td width="40%" align="center" valign="top" style="line-height: 35px;">
+								<div style="font-size: 32px;font-family:'Khmer OS Muol Light'; color:red !important;"><?php echo $tr->translate("JAV_BONA");?></div>
+								<div style="font-size: 23px;font-family:'Khmer OS Muol Light'; color:black;"><?php echo $tr->translate("NAME_COMPANT_BUNA");?></div>
+								<div style="font-size: 23px;font-family:'Khmer OS Muol Light';font-weight: bold; color:red !important;"><?php echo $tr->translate("NAME_CHINESE");?></div>
+								<div style="font-size: 23px;font-family:'Khmer OS Muol Light';font-weight: bold; color:blue !important;"><span class="iconprint"><i class="fa fa-facebook-square" style="font-size: 32px;"></i></span> <?php echo $tr->translate("JAV_NOA_FUNERAL");?></div>
+								<div style="font-size:15px; color:blue !important;line-height:22px;"><?php echo $tr->translate("FOOTER_BUNA");?></div>
+								<div style="font-size: 22px;font-family:'Khmer OS Muol Light'; color: red !important;">បង្កាន់ដៃបង់ប្រាក់</div>
+								<div style="font-size: 20px;font-family:Times New Roman;font-weight: bold; color: red !important;">OFFICIAL RECEIPT</div>
+							</td>
+							<td width="30%" valign="top" align="center">
+								<img style="height:115px; width:150px; alt="<?php ?>" src="<?php echo $this->baseUrl()?>/images/logosbona.jpg"><br />
+								<div style="font-size: 17px;font-family:'Khmer OS Battambang';text-align: center;width:90%;"><?php echo $tr->translate("PHONE_BUNA");?></div>
+							</td>
+						</tr>
+					</table>                
+			    </td>
+			</tr>
+			<style>
+				.bold{
+					font-weight:bold;
+					}
+				.tablesorter td{font-family:'khmer os battambang';}
+				.one{line-height: 15px;font-weight: bold;font-size: 16px;}
+				table { page-break-inside:auto }
+				  tr{ page-break-inside:avoid; page-break-after:auto; }
+				#header {
+				  display: table-header-group;
+				  page-break-inside:avoid; page-break-after:auto;
+				}
+				footer {
+				  font-size: 9px;
+				  color: black !important;
+				  text-align:center;
+				}
+				#print-footer {
+					display: block;
+					position: fixed;
+					bottom:0;
+					left:13%;
+				}
+				
+				@page {
+				  size: A4;
+				  margin: 11mm 17mm 17mm 17mm;				
+					
+				}
+			</style>	
+			<tr height="80px">
+				<td colspan="6" width="65%" valign="top">
+					<table width="100%" style=" ;font-size: 17px;border: 1px solid #000;margin-top:10px;white-space: nowrap;">
+						<tr>
+							<td>&nbsp;ទីតាំងបុណ្យ</td>
+							<td> :</td>
+							<td><label class="one">&nbsp;&nbsp;<?php echo $rs['place_bun']?></label></td>
+						</tr>
+						<tr>
+							<td>&nbsp;ទីតាំង<?php echo $rs['type_pjos_name']?></td>
+							<td> :</td>
+							<td><label class="one">&nbsp;&nbsp;<?php echo $rs['place_pjos']?></label></td>
+						</tr>
+						<tr>
+							<td width="110px;">&nbsp;ឈ្មោះអតិថិជន</td>
+							<td width="1px"> :&nbsp;</td>
+							<td style="padding-top:5px;">
+								<label id="lbl_customer" class="one" style="font-size: 14px;"><?php echo $rs['customer_name']?></label>
+							</td>
+						</tr>
+						<tr>
+							<td>&nbsp;ទូរស័ព្ទ</td>
+							<td colspan="1"> :&nbsp;</td>
+							<td><label id="lbl_phone" class="one"><?php echo $rs['contact_phone']?></label></td>
+						</tr>
+						<tr>
+							<td>&nbsp;មកតាមរយះ </td>
+							<td> :&nbsp;</td>
+							<td><label id="lbl_address" class="one"><?php echo $rs['sale_agent']?></label></td>
+						</tr>
+					</table>
+				</td>
+				<td colspan="4" width="33%" valign="top">
+					<table width="100%" style="margin-left:5px;font-size: 17px;border: 1px solid #000;white-space: nowrap;margin-top:10px;">
+						<tr>
+							<td width="95px;">&nbsp;លេខបង្កាន់ដៃ</td>
+							<td width="1px" style=""> :&nbsp;</td>
+							<td style="font-weight: bold;">
+								<label id="lb_invoice" >
+									<strong><?php echo $rs['receipt_no'];?></strong>
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td>&nbsp;ថ្ងៃបង់ប្រាក់</td>
+							<td> :&nbsp;</td>
+							<td><label class="one"><?php echo date("d-M-Y",strtotime($rs['receipt_date']));?></label></td>
+						</tr>
+						<tr>
+							<td>&nbsp;អ្នកលក់</td>
+							<td colspan="1"> :&nbsp;</td>
+							<td>
+								<label class="one"><?php echo $rs['user_name']?></label>
+							</td>
+						</tr>
+						<tr>
+							<td>&nbsp;<img style="height:33px; width:38px;margin-top: -5px;" src="<?php echo $this->baseUrl()?>/images/aba_logo.png"> </img>គណនី</td>
+							<td colspan="1"> :</td>
+							<td>
+								<label class="one">&nbsp;<?php echo ABA_ACC;?></label>
+							</td>
+						</tr>
+						<tr>
+							<td>&nbsp;សាខា</td>
+							<td colspan="1"> :</td>
+							<td>
+								<label class="one">&nbsp;&nbsp;<?php echo $rs['branch_name']?></label>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="50">
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td colspan="10" valign="top">
+					<table class="defaulheight" width="100%" border="0" style="font-family: Khmer OS Battambang , Times New Roman;font-size:14px;white-space:nowrap;margin-top:-5px;line-height: 14px;">
+						<tr>
+							<td colspan="6" valign="top">
+								<table class="tablesorter" style=" width: 100%; padding: 0px; margin-top: 3px !important; border-collapse: collapse; border: 1px solid #000; font-size:14px;font-family:Khmer OS Battambang !important;  " id="table">
+									<thead>
+										<tr class="hearder_table" style="font-size:16px;font-family:khmer os battambang;text-align:center;background:#b0bdfd !important;font-weight:bold;">
+											<td style="border:1px solid #000; color:#000;">លរ</td>
+											<td style="border:1px solid #000;"><strong style="color:#000;">ពណ៌នា</strong></td>
+											<td style="border:1px solid #000;"><strong style="color:#000;">ប្រាក់សរុប</strong></td>
+											<td style="border:1px solid #000;"><strong style="color:#000;">ប្រាក់បានបង់</strong></td>
+											<td style="border:1px solid #000;"><strong style="color:#000;">ប្រាក់ជំពាក់</strong></td>
+										</tr>
+									</thead>
+									<tbody>
+										<?php 
+										$index=1;
+										$all_total=0;
+										$all_paid = 0;
+										$all_balance = 0;
+										if(!empty($this->rs)){ ?>
+										<tr style=" font-size:16px !important; text-align:center;font-weight:bold;">
+											<td style="border:1px solid #000;"><?php echo $index;?></td>
+											<td style="border:1px solid #000;text-align:left;"><strong style="color:#000;">&nbsp;<?php echo "បង់លើ វិក្កយបត្រលេខ  # ".$this->rs['invoice'];?> </strong></td>
+											<td style="border:1px solid #000;"><strong style="color:#000;">$ <?php echo number_format($this->rs['total'],2);?></strong></td>
+											<td style="border:1px solid #000;"><strong style="color:#000;">$ <?php echo number_format($this->rs['paid'],2);?></strong></td>
+											<td style="border:1px solid #000;"><strong style="color:#000;">$ <?php echo number_format($this->rs['balance'],2);?></strong></td>
+										</tr>
+										<?php }
+										for($index;$index<=4;$index++){
+										?>
+										<tr style=" font-size:16px !important; text-align:center;font-weight:bold;height: 30px;">
+											<td style="border:1px solid #000;"><?php echo $index+1;?></td>
+											<td style="border:1px solid #000;text-align:left;"><strong style="color:#000;">&nbsp;</strong></td>
+											<td style="border:1px solid #000;"><strong style="color:#000;"></strong></td>
+											<td style="border:1px solid #000;"><strong style="color:#000;"></strong></td>
+											<td style="border:1px solid #000;"><strong style="color:#000;"></strong></td>
+										</tr>
+										<?php }?>
+										<tr style=" font-size:17px; text-align:right;font-weight:bold;height: 30px;">
+											<td style="border:1px solid #fff;border-right:1px solid #000" colspan="2"></td>
+											<td style="border:1px solid #000;" colspan="2"><strong style=" color:#000;">ប្រាក់សរុប</strong>&nbsp;</td>
+											<td style="border:1px solid #000;"><strong style="color:#000;font-family:arial;font-weight:bold;">$ <?php echo number_format($this->rs['total'],2)?></strong>&nbsp;</td>
+										</tr>
+										<tr style=" font-size:17px; text-align:right;font-weight:bold;height: 30px;">
+											<td style="border:1px solid #fff;border-right:1px solid #000" colspan="2"></td>
+											<td style="border:1px solid #000;" colspan="2"><strong style=" color:#000;">ប្រាក់បានបង់</strong>&nbsp;</td>
+											<td style="border:1px solid #000;"><strong style="color:#000;font-family:arial;font-weight:bold;">$ <?php echo number_format($this->rs['paid'],2)?></strong>&nbsp;</td>
+										</tr>
+										<tr style=" font-size:17px; text-align:right;font-weight:bold;">
+											<td style="border:1px solid #fff;border-right:1px solid #000" colspan="2"></td>
+											<td style="border:1px solid #000;" colspan="2"><strong style="color:#000;">នៅខ្វះ&nbsp;</strong></td>
+											<td style="border:1px solid #000;"><strong style="color:#000;font-family:arial;font-weight:bold;">$ <?php echo number_format($this->rs['balance'],2)?></strong>&nbsp;</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="6">
+								&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td colspan="6">
+								&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td colspan="6">
+								&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td colspan="6">
+								<table border="0" width="100%" style="font-size:15px;font-weight: bold;">
+									<tr>
+										<td width="30%" align="center">អតិថិជន</td>
+										<td width="40%"></td>
+										<td width="30%" align="center">អ្នកទទួល</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>			
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+    <div style="text-align: center;margin: 0 auto;clear:both;"> 
+    <lable class="col-md-4" style=""></lable>
+    <div class="col-md-2">
+		<a href="<?php echo $this->baseUrl();?>/sales/payment/"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a>
+	</div>
+    <lable class="col-md-2" style="">
+    	<button type="button" onclick="printinvoice();" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i>បោះ ពុម្ភ </button>
+	</lable>
+	<lable class="col-md-4" style=""></lable>
+	</div>
+</center>
+<script>
+function printinvoice(){
+	var printContents = document.getElementById('PrintReceipt').innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+	//document.getElementById("office_receipt").submit();
+}
+</script>
+   

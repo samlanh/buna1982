@@ -1,0 +1,126 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+?>						 
+<title>ជាងសាងសង់</title>
+<body>
+	<form class="form-horizontal" id="frm" method="post" action="" autocomplete="off">				
+		
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>ជាងសាងសង់</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-md-1">
+								</div>
+								<div class="col-md-5" style="text-align: left !important;border:1px solid #ccc;">
+										<h3 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មាន អំពីជាងសាងសង់</h3>
+									<div class="form-group" >
+										<label class="col-md-4 control-label">ឈ្មោះអ្នកម៉ៅការ</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control validate[required]" name="name" id="name"/>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">ភេទ</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="sex" id="sex" >
+												<option value="1">ប្រុស</option>
+												<option value="2">ស្រី</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											លេខទូរស័ព្ទ
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control validate[required]" name="phone" id="phone"/>
+										</div>
+									</div>
+									<div class="form-group" >
+										<label class="col-md-4 control-label">អ៊ីម៉ែល</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control " name="email" id="email"/>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											អាស័យដ្ឋាន
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control " name="address" id="address"/>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ប្រភេទជាង
+										</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="constructor_type" id="constructor_type" >
+												<option value="1">ម៉ុង</option>
+												<option value="2">ចេតិយ</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-5" style="text-align: left !important;">
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											កំណត់សម្គាល់
+										</label>
+										<div class="col-md-8">
+											<textarea class="form-control " name="note" id="note" style="height: 300px;" > </textarea>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-1" style="text-align: left !important;">
+								</div>
+							</div>
+							<div class="form-group">
+								<br />
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>
+
+<script>
+	$('#frm').submit(function() {
+		name=$("#name").val();
+		if(name==""){
+			$('#name').focus();
+			return false;	
+		}
+		phone=$("#phone").val();
+		if(phone==""){
+			$('#phone').focus();
+			return false;	
+		}
+		$("#save_close").attr("disabled", true);
+	});
+</script>

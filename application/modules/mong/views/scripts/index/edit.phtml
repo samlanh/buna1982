@@ -1,0 +1,1802 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	//print_r($this->row_detail); exit();
+?>						 
+<title>កែប្រែលក់ម៉ុងចេតិយ</title>
+<style>
+	.aligncenter{text-align: center;background:#4b8df8;color:#ececec;}
+</style>
+
+<body>
+	<form class="form-horizontal" id="frm" method="post" action="" autocomplete="off" enctype="multipart/form-data" >				
+		
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>កែប្រែលក់ម៉ុងចេតិយ</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-md-12">
+									<ul class="nav nav-tabs">
+										<li class="active">
+											<a href="#tab_1" data-toggle="tab">
+											<strong>ការលក់</strong></a>
+										</li>
+										<li>
+											<a href="#tab_2" data-toggle="tab"><strong>ព័ត៌មានលម្អិតអំពីម៉ុង/ចេតិយ + ជាង </strong></a>
+										</li>
+										<li>
+											<a href="#tab_3" data-toggle="tab"><strong>ព័ត៌មានលម្អិតសព</strong></a>
+										</li>
+									</ul>
+								</div>
+								<div class="tab-content" >
+									<div class="tab-pane active" id="tab_1">
+										<div class="form-body">
+										
+											<div class="row">
+												<div class="col-md-4" style="text-align: left !important;">
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															<?php echo $tr->translate("BRANCH_NAME");?>
+														</label>
+														<div class="col-md-8">
+															<select name="branch" id="branch" class="form-control select2me" onchange="getAllBranchFunction();" >
+																<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+																<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+																<option value="<?php echo $branch['id']?>" ><?php echo $branch['name'];?></option>
+																<?php }}?>
+															</select>
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															ទីតាំងបុណ្យ
+														</label>
+														<div class="col-md-8">
+															<input name="place_bun" id="place_bun" class="form-control" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-3 control-label">
+															ទីតាំង
+														</label>
+														<div class="col-md-3">
+															<select class="form-control select2me" id="type_pjos" name="type_pjos" onchange="popupProgram();">
+																<option value="1">បញ្ចុះ</option>
+																<option value="2">បូជា</option>
+															</select>
+														</div>
+														<div class="col-md-6">
+															<input name="place_pjos" id="place_pjos" class="form-control" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															<strong>ឈ្មោះអតិថិជន</strong>
+														</label>
+														<div class="col-md-8">
+															<select class="form-control select2me" id="customer_id" name="customer_id" onChange="getPopupCustomer();">
+																<option value="0">អតិថិជនទូទៅ</option>
+																<option value="-1">បន្ថែមអតិថិជន</option>
+																<?php if(!empty($this->customer_id)){foreach($this->customer_id as $rs){?>
+																	<option value="<?php echo $rs['id'];?>"><?php echo $rs['name']." - ".$rs['phone'];?></option>
+																<?php }}?>
+															</select>
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															ទូរស័ព្ទ
+														</label>
+														<div class="col-md-8">
+															<input name="phone" id="phone" class="form-control" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															អាស័យដ្ឋាន
+														</label>
+														<div class="col-md-8">
+															<input name="address" id="address" class="form-control" />
+														</div>
+													</div>
+												</div>
+												<!-- end blog1 -->
+												<div class="col-md-4" style="text-align: left !important;">
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															លេខវិក័យបត្រ
+														</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control" readOnly name="invoice_no" id="invoice_no" value="" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															ថ្ងៃលក់
+														</label>
+														<div class="col-md-8">
+															<div class="input-icon right">
+																<i class="fa fa-calendar"></i>
+																<input type="text" class="form-control date-picker" name="sale_date" id="sale_date" value="<?php echo date("d-m-Y")?>" data-date-format="dd-mm-yyyy" />
+															</div>
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															<strong>មកតាមរយះ</strong>
+														</label>
+														<div class="col-md-8">
+															<select class="form-control select2me" id="sale_agent" name="sale_agent" onchange="getPopupSaleagent();">
+																<option value="0">ជ្រើសរើស</option>
+																<option value="-1">បន្ថែមថ្មី</option>
+																<?php if(!empty($this->sale_agent)){foreach($this->sale_agent as $rs){?>
+																	<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
+																<?php }}?>													
+															</select>
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															កំរៃជើងសា
+														</label>
+														<div class="col-md-8">
+															<input type="text" class="form-control validate[required,custom[number]]" name="comission" id="comission" value="0" />
+														</div>
+													</div>
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															អ្នកទទួលប្រាក់
+														</label>
+														<div class="col-md-8">
+															<select class="form-control select2me" id="receiver_name" name="receiver_name" onchange="getPopupReceiver()" >
+																<option value="">ជ្រើសរើសអ្នកទទួលប្រាក់</option>
+																<option value="-1">បន្ថែមថ្មី</option>
+																<?php if(!empty($this->receiver_name)){foreach($this->receiver_name as $rs){?>
+																	<option value="<?php echo $rs['name'];?>" ><?php echo $rs['name'];?></option>
+																<?php }}?>
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4" style="text-align: left !important;">
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															សម្គាល់ផ្សេងៗ
+														</label>
+														<div class="col-md-7">
+															<textarea name="other_note" id="other_note" class="form-control" rows="5"></textarea>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4" style="text-align: left !important;">
+													<div class="form-group" style="">
+														<label class="col-md-4 control-label">
+															ស្ថានការណ៍
+														</label>
+														<div class="col-md-7">
+															<select class="form-control select2me" id="status" name="status" >
+																<option value="1">ប្រើប្រាស់</option>
+																<option value="0">មិនប្រើប្រាស់</option>
+															</select>
+														</div>
+													</div>										
+												</div>		
+											</div>											
+											<div class="row">
+												<div class="form-group">
+													<div class="col-md-1" style="text-align: left !important;">
+														<input type="hidden" name="identity_sale" id="identity_sale" />
+										    			<input type="hidden" name="branch" id="branch" value="<?php echo $this->branch_id;?>" />
+										    			<input type="hidden" name="invoice" id="invoice" value="<?php echo $this->invoice;?>" /> 
+													</div>
+													<div class="col-md-2" style="text-align: left !important;">										  
+														  <select class="form-control select2me" id="category" name="category" onchange="getProductByCategory();" >
+																<option value="-1">ជ្រើសរើសប្រភេទ</option>
+																<?php if(!empty($this->category)){foreach ($this->category as $rs){?>
+																<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+																<?php }}?>
+														  </select>
+													</div>	
+													<div class="col-md-5" style="text-align: left !important;">
+														<select class="form-control select2me" id="product_id" name="product_id" onchange="getType();" >
+															<option value="-1">ជ្រើសរើសមុខទំនិញ</option>
+															<?php if(!empty($this->rsproduct)){foreach ($this->rsproduct as $rs){?>
+															<option value="<?php echo $rs['id']?>"><?php echo $rs['item_name']." - ".$rs['item_code'];?></option>
+															<?php }}?>
+														</select>
+													</div>
+													<div class="col-md-2" style="text-align: left !important;">
+														<button type="button" name="calcel" class="btn blue col-md-12" onclick="popupProduct();" >
+															<i class="fa fa-plus"></i>&nbsp;&nbsp;បន្ថែមមុខទំនិញថ្មី
+														</button>
+													</div>
+													
+													<div class="col-md-1" style="text-align: left !important;">
+														<button type="button" class="btn red delete col-md-12" onclick="getRefreshProduct();" >
+															<i class="fa fa-refresh"></i>Refresh
+														</button>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-12">
+													<table width="100%" id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+														<thead>
+															<tr id="head-title" class="table table-bordered" align="right" style="border:1px solid #4c6184 !important;white-space: nowrap;">
+																<th class="aligncenter">#</th>
+																<th class="aligncenter">មុខទំនិញ/សេវាកម្ម</th>
+																<th class="aligncenter">ស្តុក</th>
+																<th class="aligncenter">បរិ.ដុំ</th>
+																<th class="aligncenter">បរិ.រាយ</th>
+																<th class="aligncenter">បរិមាណសរុប</th>
+																<th class="aligncenter">តម្លៃលក់(៛)</th>
+																<th class="aligncenter">តម្លៃលក់($)</th>
+																<th class="aligncenter">សរុប</th>
+																<th class="aligncenter">ប.តម្លៃ($)</th>
+																<th class="aligncenter">តម្លៃសរុប</th>
+																<th class="aligncenter">លុប</th>
+															</tr>
+														</thead>
+														<tbody id="lbl_product_item">
+														</tbody>
+													</table>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="col-md-12">
+													&nbsp;
+												</div>
+												<div class="col-md-12">
+													&nbsp;
+												</div>
+												<div class="form-group">
+													<label class="col-md-4 control-label"><?php echo $tr->translate("អត្រាប្តូរប្រាក់");?></label>
+													<div class="col-md-8">
+														<input name="label_exchange" id="label_exchange" readOnly value="<?php echo "1 ដុល្លា = ".$this->exchange_rate." រៀល";?>" class="form-control" />
+														<input type="hidden" name="exchange_rate" id="exchange_rate"  value="<?php echo $this->exchange_rate;?>" class="form-control" />
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+											</div>
+											<div class="col-md-4" style="text-align: left !important;font-weight: bold;">
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+													</label>
+													<div class="col-md-8">
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														<strong style="font-size: 16px;">តម្លៃសរុប</strong>
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control" name="sub_total" id="sub_total" readOnly />
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														<strong style="font-size: 16px;color: red;">បានបង់សរុប</strong>
+													</label>
+													<div class="col-md-8">
+														<input style="font-size: 16px;" type="text" class="form-control" name="paid" readOnly id="paid" onkeyup="calCualtepaid();" />
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														<strong>នៅខ្វះ</strong>
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control" name="balance" id="balance" readOnly />
+													</div>
+												</div>
+											</div>
+										</div>
+										
+									</div><!-- end tab1 -->
+									<div class="tab-pane " id="tab_2">
+										<div class="col-md-4">
+											<h4 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មានលម្អិតរបស់ម៉ុង/ចេតិយ</h4>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ប្រភេទ ម៉ុង-ចេតិយ
+												</label>
+												<div class="col-md-8">
+													<select class="form-control select2me" name="construct_type" id="construct_type" >
+														<option value="1">ម៉ុង</option>
+														<option value="2">ចេតិយ</option>
+													</select>
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ប្រភេទម៉ុង
+												</label>
+												<div class="col-md-8">
+													<select class="form-control select2me" name="mong_type" id="mong_type" >
+														<option value="-1">ប្រភេទម៉ុង</option>
+														<?php if(!empty($this->mong_type)){foreach ($this->mong_type as $rs){?>
+														<option value="<?php echo $rs['id']?>"><?php echo $rs['title']?></option>
+														<?php }}?>
+													</select>
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													អ្នកកសាង
+												</label>
+												<div class="col-md-8">
+													<input type="text" class="form-control " name="builder" id="builder" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													លេខកូដម៉ុង
+												</label>
+												<div class="col-md-8">
+													<input type="text" class="form-control " name="mong_code" id="mong_code" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													លេខម៉ុង/ឡូតិ៍
+												</label>
+												<div class="col-md-8">
+													<input type="text" class="form-control " name="mong_number" id="mong_number" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													អាស័យដ្ឋានម៉ុង
+												</label>
+												<div class="col-md-8">
+													<input type="text" class="form-control " name="mong_address" id="mong_address" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													អ្នកទទួលខុសត្រូរ
+												</label>
+												<div class="col-md-8">
+													<select class="form-control select2me" name="person_in_charge" id="person_in_charge">
+														<option value="-1">អ្នកទទួលខុសត្រូរការងារ</option>
+														<?php if(!empty($this->person_in_charge)){foreach ($this->person_in_charge as $rs){?>
+														<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+														<?php }}?>
+													</select>
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ជាងសាងសង
+												</label>
+												<div class="col-md-8">
+													<select class="form-control select2me" name="constructor" id="constructor" onChange="getConstructorDetail();">
+														<option value="0">ជ្រើសរើស</option>
+														<?php if(!empty($this->constructor)){foreach ($this->constructor as $rs){?>
+														<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+														<?php }}?>
+													</select>
+												</div>
+											</div>
+											
+										</div>
+											
+										<!-- blog2 -->
+											
+										<div class="col-md-4">
+											<h4 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មានលម្អិតទំហំម៉ុង និងពេលវេលា</h4>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ទំហំដី(បxទ)
+												</label>
+												<div class="col-md-3">
+													<input type="text" class="form-control " name="land_longitude" id="land_longitude" />
+												</div>
+												<label class="col-md-2 control-label" style="text-align:center;">
+													X
+												</label>
+												<div class="col-md-3">
+													<input type="text" class="form-control " name="land_width" id="land_width" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ទំហំម៉ុង(បxទ)
+												</label>
+												<div class="col-md-3">
+													<input type="text" class="form-control " name="mong_longitude" id="mong_longitude" />
+												</div>
+												<label class="col-md-2 control-label" style="text-align:center;">
+													X
+												</label>
+												<div class="col-md-3">
+													<input type="text" class="form-control " name="mong_width" id="mong_width" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ថ្ងៃបញ្ចាប់សាងសង់
+												</label>
+												<div class="col-md-8 right">
+													<div class="input-icon right">
+														<i class="fa fa-calendar"></i>
+														<input type="text" class="form-control date-picker" name="date_finish" id="date_finish" value="<?php echo date("d-m-Y")?>" data-date-format="dd-mm-yyyy" />
+													</div>
+												</div>
+											</div>
+											
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ថ្ងៃសែនបើកឆាក
+												</label>
+												<div class="col-md-8 right">
+													<div class="input-icon right">
+														<i class="fa fa-calendar"></i>
+														<input type="text" class="form-control date-picker" name="date_sen" id="date_sen" value="<?php echo date("d-m-Y")?>" data-date-format="dd-mm-yyyy" />
+													</div>
+												</div>
+											</div>
+											
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label"><label>ម៉ោងសែន</label></label>
+												<div class="col-md-2">
+													<select id="time_sen" name="time_sen" class="form-control">
+														<option value="">ម៉ោង</option>
+														<option value="១">១</option>
+														<option value="២">២</option>
+														<option value="៣">៣</option>
+														<option value="៤">៤</option>
+														<option value="៥">៥</option>
+														<option value="៦">៦</option>
+														<option value="៧">៧</option>
+														<option value="៨">៨</option>
+														<option value="៩">៩</option>
+														<option value="១០">១០</option>
+														<option value="១១">១១</option>
+														<option value="១២">១២</option>
+													</select>
+												</div>
+												<label class="col-md-1 control-label"><label>ដល់</label></label>
+												<div class="col-md-2">
+													<select id="time_sen_to" name="time_sen_to" class="form-control">
+														<option value="">ម៉ោង</option>
+														<option value="១">១</option>
+														<option value="២">២</option>
+														<option value="៣">៣</option>
+														<option value="៤">៤</option>
+														<option value="៥">៥</option>
+														<option value="៦">៦</option>
+														<option value="៧">៧</option>
+														<option value="៨">៨</option>
+														<option value="៩">៩</option>
+														<option value="១០">១០</option>
+														<option value="១១">១១</option>
+														<option value="១២">១២</option>
+													</select>
+												</div>
+												<div class="col-md-3">
+													<select class="form-control" id="time_mas" name="time_mas" onchange="popupProgram();">
+														<option value="">ពេល</option>
+														<option value="ព្រឹក">ព្រឹក</option>
+														<option value="ថ្ងៃត្រង់">ថ្ងៃត្រង់</option>
+														<option value="រសៀល">រសៀល</option>
+														<option value="ល្ងាច">ល្ងាច</option>
+														<option value="យប់">យប់</option>
+													</select>
+												</div>																						
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ថ្ងៃឆ្លងម៉ុង
+												</label>
+												<div class="col-md-8 right">
+													<div class="input-icon right">
+														<i class="fa fa-calendar"></i>
+														<input type="text" class="form-control date-picker" name="date_chlong_mong" id="date_chlong_mong" data-date-format="dd-mm-yyyy" />
+													</div>
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label"><label>ម៉ោងឆ្លង</label></label>
+												<div class="col-md-2">
+													<select id="time_chlong_mong" name="time_chlong_mong" class="form-control">
+														<option value="">ម៉ោង</option>
+														<option value="១">១</option>
+														<option value="២">២</option>
+														<option value="៣">៣</option>
+														<option value="៤">៤</option>
+														<option value="៥">៥</option>
+														<option value="៦">៦</option>
+														<option value="៧">៧</option>
+														<option value="៨">៨</option>
+														<option value="៩">៩</option>
+														<option value="១០">១០</option>
+														<option value="១១">១១</option>
+														<option value="១២">១២</option>
+													</select>
+												</div>
+												<label class="col-md-1 control-label"><label>ដល់</label></label>
+												<div class="col-md-2">
+													<select id="time_chlong_mong_to" name="time_chlong_mong_to" class="form-control">
+														<option value="">ម៉ោង</option>
+														<option value="១">១</option>
+														<option value="២">២</option>
+														<option value="៣">៣</option>
+														<option value="៤">៤</option>
+														<option value="៥">៥</option>
+														<option value="៦">៦</option>
+														<option value="៧">៧</option>
+														<option value="៨">៨</option>
+														<option value="៩">៩</option>
+														<option value="១០">១០</option>
+														<option value="១១">១១</option>
+														<option value="១២">១២</option>
+													</select>
+												</div>
+												<div class="col-md-3">
+													<select class="form-control" id="time_mole" name="time_mole" onchange="popupProgram();">
+														<option value="">ពេល</option>
+														<option value="ព្រឹក">ព្រឹក</option>
+														<option value="ថ្ងៃត្រង់">ថ្ងៃត្រង់</option>
+														<option value="រសៀល">រសៀល</option>
+														<option value="ល្ងាច">ល្ងាច</option>
+														<option value="យប់">យប់</option>
+													</select>
+												</div>																						
+											</div>	
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													សម្គាល់
+												</label>
+												<div class="col-md-8">
+													<input type="text" class="form-control " name="mong_note" id="mong_note" />
+												</div>
+											</div>											
+										</div>
+										<div class="col-md-4">
+											<h4 style="border-bottom: 1px solid #ccc;" class="center">រូបភាពផ្សេងៗ</h4>
+											<div class="form-group" style="">
+												<div class="row">
+													<label class="col-md-12 control-label center">
+														Select Photo (one or multiple):
+													</label>
+												</div>
+												<div class="row">
+													<label class="col-md-12 control-label center">
+														&nbsp;
+													</label>
+												</div>
+												<div class="row">
+													<div class="col-md-3 center" >
+													</div>
+													<div class="col-md-6 center" >
+														<input type="file" name="photo[]" id="photo" multiple />
+													</div>
+													<div class="col-md-3 center" >
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane " id="tab_3">
+										<div class="row">
+											<div class="col-md-12 form-group" style="">
+												<label class="col-md-1 control-label">
+													
+												</label>
+												<div class="col-md-6">
+													<select class="form-control select2me" name="dead_id" id="dead_id" onChange="getDeadPersonDetail();">
+														<option value="0">ជ្រើសរើសសព-កម្មវិធីបុណ្យ</option>
+														<?php if(!empty($this->all_dead)){foreach($this->all_dead as $rs){?>
+															<option value="<?php echo $rs['id'];?>"><?php echo $rs['dead_name'].'-'.$rs['dead_name_chinese'].' - '.$rs['membersone']; ?></option>
+														<?php }}?>
+													</select>
+												</div>
+												<div class="col-md-2" style="text-align: left !important;">
+													<button type="button" name="calcel" class="btn blue col-md-12" onclick="saleProgram();" >
+														<i class="fa fa-plus"></i>&nbsp;&nbsp;ឈ្មោះអ្នកស្លាប់
+													</button>
+												</div>
+												<div class="col-md-2" style="text-align: left !important;">
+													<button type="button" class="btn red delete col-md-12" onclick="getRefreshProgram();" >
+														<i class="fa fa-refresh"></i>&nbsp;&nbsp;Refresh
+													</button>
+												</div>
+											</div>	
+											<div class="col-md-4">
+												<h4 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មានលម្អិតរបស់សព</h4>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ឈ្មោះអ្នកស្លាប់
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control" name="dead_ids" id="dead_ids"​ onchange="set" readonly/>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ឈ្មោះ(ចិន)
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control " name="dead_name_chinese" id="dead_name_chinese" readonly/>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ភេទ
+													</label>
+													<div class="col-md-8">
+														<select class="form-control select2me" name="dead_sex" id="dead_sex" disabled="true">
+															<option value="1">ប្រុស</option>
+															<option value="2">ស្រី</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ឆ្នាំ
+													</label>
+													<div class="col-md-8">
+														<select class="validate[required] form-control select2me" name="dead_khmer_year" id="dead_khmer_year" disabled="true">
+															<option value="">ជ្រើសរើស</option>
+															<?php if(!empty($this->khmer_year)){foreach ($this->khmer_year as $rs){?>
+															<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+															<?php }}?>
+														</select>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														អាយុ
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control " name="dead_age" id="dead_age" readonly/>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ថ្ងៃកំណើត
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control " name="dead_dob" id="dead_dob" readonly/>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ទីកន្លែងកំណើត
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control " name="dead_pob" id="dead_pob" readonly/>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ស្លាប់-រស់
+													</label>
+													<div class="col-md-8">
+														<select class="form-control select2me" name="dead_status" id="dead_status" disabled="true">
+															<option value="1">រស់</option>
+															<option value="0">ស្លាប់</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ស្លាប់នៅថ្ងៃទី
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control " name="date_time_dead" id="date_time_dead" readonly/>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4" style="text-align: left !important;">
+													<h4 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មានលម្អិតរបស់ដៃគូសព</h4>
+												<div class="form-group" >
+													<label class="col-md-4 control-label">
+														ដែគូឈ្មោះ
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control "  name="partner_name" id="partner_name" readonly />
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ឈ្មោះ(ចិន)
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control " name="partner_name_chinese" id="partner_name_chinese" readonly />
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ភេទ
+													</label>
+													<div class="col-md-8">
+														<select class="form-control select2me" name="partner_sex" id="partner_sex" disabled="true">
+															<option value="1">ប្រុស</option>
+															<option value="2">ស្រី</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ឆ្នាំ
+													</label>
+													<div class="col-md-8">
+														<select class="form-control select2me" name="partner_khmer_year" id="partner_khmer_year" disabled="true">
+															<option value="">ជ្រើសរើស</option>
+															<?php if(!empty($this->khmer_year)){foreach ($this->khmer_year as $rs){?>
+															<option value="<?php echo $rs['id']?>"><?php echo $rs['name']?></option>
+															<?php }}?>
+														</select>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														អាយុ
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control " name="partner_age" id="partner_age" readonly />
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ថ្ងៃកំណើត
+													</label>
+													<div class="col-md-8 right">
+														<input type="text" class="form-control " name="partner_dob" id="partner_dob" readonly />
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ទីកន្លែងកំណើត
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control " name="partner_pob" id="partner_pob" readonly />
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ស្លាប់-រស់
+													</label>
+													<div class="col-md-8">
+														<select class="form-control select2me" name="partner_status" id="partner_status" disabled="true">
+															<option value="1">រស់</option>
+															<option value="0">ស្លាប់</option>
+														</select>
+													</div>
+												</div>
+												
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ស្លាប់នៅថ្ងៃទី
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control " name="partner_date_time_dead" id="partner_date_time_dead" readonly/>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4" style="text-align: left !important;">
+												<h4 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មានទីតាំង</h4>
+												<div class="form-group" >
+													<label class="col-md-4 control-label">
+														ទីតាំងបុណ្យ
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control " name="place_of_program" id="place_of_program" readonly />
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ប្រភេទរំលាយសព
+													</label>
+													<div class="col-md-8">
+														<select class="form-control select2me" name="type_romleay_sop" id="type_romleay_sop" disabled="true">
+															<option value="1">បញ្ចុះ</option>
+															<option value="2">បូជា</option>
+														</select>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ទីតាំងបញ្ចុះ/បូជា
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control "  name="place_pjos_sop" id="place_pjos_sop" readonly />
+													</div>
+												</div>		
+
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														ទូរស័ព្ទសមាជិក
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control" name="membersone" id="membersone" readonly>
+													</div>
+												</div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														សម្គាល់
+													</label>
+													<div class="col-md-8">
+														<input type="text" class="form-control" name="dead_note" id="dead_note" readonly>
+													</div>
+												</div>
+											</div>																				
+										</div>
+									</div>
+								</div>
+							</div>
+
+							
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>
+<script>
+
+	function getAllBranchFunction(){
+	}
+	$('#frm').submit(function() {
+		branch_id=$("#branch").val();
+		if(branch_id==0 || branch_id=="" || branch_id=="-1"){
+			alert("<?php echo $tr->translate("Please select branch");?> !!!");
+			$('#branch').select2('open');
+			return false;	
+		}
+		
+		customer_id=$("#customer_id").val();
+		if(customer_id<0){
+			alert("Please select customer !!!");
+			$('#customer_id').select2('open');
+			return false;	
+		}
+		
+		identity_sale=$("#identity_sale").val();
+		if(identity_sale==""){
+			alert("Please select service or product !!!");
+			$('#product_id').select2('open');
+			return false;	
+		}
+		
+		var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+		if (r == true) {
+			$("#save_close").attr("disabled", true);
+			return true;
+		} else {
+		   return false;	    
+		}
+	});
+	
+	function getDeadPersonDetail(){		
+		var dead_id  = $("#dead_id").val();
+
+		if(dead_id>0){
+			$.ajax({
+				url: "<?php echo $this->baseUrl()?>/mong/index/get-dead-detail",
+				type: "post",
+				data: {dead_id:dead_id},
+				success: function(data){
+					rs = $.parseJSON(data);
+					if(data){
+						$("#dead_ids").val(rs.dead_name);
+						$('#dead_name_chinese').val(rs.dead_name_chinese);
+						$('#dead_sex').val(rs.dead_sex).select2();
+						$('#dead_khmer_year').val(rs.dead_khmer_year).select2();
+						$('#dead_age').val(rs.dead_age);
+						$('#dead_dob').val(rs.dead_dob);
+						$('#date_time_dead').val(rs.date_time_dead);
+						$('#dead_status').val(rs.dead_status).select2();
+						$('#dead_pob').val(rs.dead_pob);
+						
+						$('#partner_name').val(rs.partner_name);
+						$('#partner_name_chinese').val(rs.partner_name_chinese);
+						$('#partner_sex').val(rs.partner_sex).select2();
+						$('#partner_khmer_year').val(rs.partner_khmer_year).select2();
+						$('#partner_age').val(rs.partner_age);
+						$('#partner_dob').val(rs.partner_dob);
+						$('#partner_status').val(rs.partner_status).select2();
+						$('#partner_pob').val(rs.partner_pob);
+						$('#partner_date_time_dead').val(rs.date_time_female);
+						
+						$('#place_of_program').val(rs.place_of_program);
+						$('#type_romleay_sop').val(rs.type_romleay_sop).select2();
+						$('#place_pjos_sop').val(rs.place_pjos_sop);
+						$('#membersone').val(rs.membersone);
+						$('#dead_note').val(rs.note);
+					}
+				},
+				error:function(err){
+					alert("failed");
+				}
+			});
+		}
+		
+	}
+	
+/////////////////////////////////////////// get product package /////////////////////////////////////////////////
+
+	var url_gettype = '<?php echo $this->url(array('module'=>'sales','controller'=>'possale','action'=>'get-type')); ?>';
+	function getType(){
+		
+		var product_name = $("#product_id");
+		var txt_product_name = $("option:selected",product_name).text();
+		var product_id = $("#product_id").val();
+		if(product_id>0){
+			$.ajax({
+				url: url_gettype,
+				type: "post",
+				data: {'product_id':product_id},
+				success: function(data){
+					data = $.parseJSON(data);
+					if(data){
+						if(data.is_package==1){// product package
+							addProductRow(product_id,txt_product_name,1,1,0,data.is_package_cost); // (pro_id,pro_name,qty,is_package,package_id,is_package_cost)
+							getPackageProduct(product_id,data.is_package_cost);
+						}else{
+							addProductRow(product_id,txt_product_name,1,0,0,0); // (pro_id,pro_name,qty,is_package,package_id,is_package_cost)
+							// if(data.is_service==1){
+								// $("#service_id").val(product_id).select2();
+								// addServicePartner(1);
+							// }
+						}
+					}
+				},
+				error:function(err){
+					alert("failed");
+				}
+			});
+		}
+	}
+
+	var url_getpackage = '<?php echo $this->url(array('module'=>'sales','controller'=>'possale','action'=>'get-packageproduct')); ?>';
+	function getPackageProduct(product_id,is_package_cost){
+		$.ajax({
+			url: url_getpackage,
+			type: "post",
+			data: {'product_id':product_id},
+			success: function(data){
+				data = $.parseJSON(data);
+				if(data){
+					for(i=0;i<data.length;i++){
+						addProductRow(data[i]['product_id'],data[i]['name']+" - "+data[i]['code'],data[i]['qty'],0,product_id,is_package_cost);// (pro_id,pro_name,qty,is_package,package_id,is_package_cost)
+					}
+				}
+			},
+			error:function(err){
+				alert("failed");
+			}
+		});
+	}
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+	
+	function initializeProduct(){
+		index_sale=0;
+		<?php if(!empty($this->row_detail)){foreach ($this->row_detail as $rs){?>
+			product_name = "<?php echo $rs['pro_name']." - ".$rs['item_code']?>";
+			product_id = "<?php echo $rs['pro_id']?>";
+			if(product_id>0){
+				index_sale++;
+				template='<tr style="white-space:nowrap;" align="center" id="row'+index_sale+'">';
+				template+='<td>&nbsp;&nbsp;'+index_sale+'&nbsp;&nbsp;</td>';
+				template+='<td style="font-size:13px;">&nbsp;&nbsp;&nbsp;'+product_name+'&nbsp;&nbsp;&nbsp;<input type="hidden" id="pro_'+index_sale+'" name="pro_'+index_sale+'" value="'+product_id+'" /> </td>';
+				template+='<td><input style="text-align:center;" id="lblcurrent_qty_'+index_sale+'" name="lblcurrent_qty_'+index_sale+'" readonly class="form-control " /><input type="hidden" id="current_qty_'+index_sale+'" name="current_qty_'+index_sale+'" value="" class="form-control "></td>';
+				template+='<td><input style="text-align:center;" type="number" step="any" id="qtyunit_'+index_sale+'" name="qtyunit_'+index_sale+'" value="" onkeyup="calCualteSalePrice('+index_sale+');" onClick="calCualteSalePrice('+index_sale+');" onkeypress="return isNumberKey(event);" class="form-control"><input type="hidden" id="qty_perunit_'+index_sale+'" name="qty_perunit'+index_sale+'" onkeyup="" class="form-control"><input type="hidden" id="measur_name_'+index_sale+'" name="measur_name_'+index_sale+'" onkeyup="" class="form-control"><input type="hidden" id="unit_label_'+index_sale+'" name="unit_label_'+index_sale+'" onkeyup="" class="form-control"><input type="hidden" name="is_package_cost_'+index_sale+'" id="is_package_cost_'+index_sale+'" class="form-control" /><input type="hidden" name="is_package_'+index_sale+'" id="is_package_'+index_sale+'" class="form-control" /><input type="hidden" name="packageid_'+index_sale+'" id="packageid_'+index_sale+'" class="form-control" /></td>';
+				template+='<td><input style="text-align:center;" type="number" step="any" id="qtydetail_'+index_sale+'" name="qtydetail_'+index_sale+'" onkeyup="calCualteSalePrice('+index_sale+');" onClick="calCualteSalePrice('+index_sale+');" onkeypress="return isNumberKey(event);" class="form-control"></td>';
+				template+='<td><input style="text-align:center;" type="text" id="qty_sold_'+index_sale+'" name="qty_sold_'+index_sale+'" value="" readonly class="form-control"></td>';
+				template+='<td style="min-width:50px"><input style="text-align:center;" type="text" onkeyup="convertToDollar('+index_sale+');" name="price_reil_'+index_sale+'" id="price_reil_'+index_sale+'" class="form-control" onkeypress="return isNumberKey(event);" placeholder=""/></td>';
+				template+='<td><input style="text-align:center;" type="text" id="selling_price_'+index_sale+'" name="selling_price_'+index_sale+'" onkeyup="calCualteSalePrice('+index_sale+');" onkeypress="return isNumberKey(event);" class="form-control"><input style="text-align:center;" type="hidden" id="cost_price_'+index_sale+'" name="cost_price_'+index_sale+'" readonly class="form-control"></td>';
+				template+='<td><input style="text-align:center;" type="text" id="total_'+index_sale+'" name="total_'+index_sale+'" readonly class="form-control"></td>';
+				template+='<td><input style="text-align:center;" type="text" id="discount_'+index_sale+'" name="discount_'+index_sale+'" onkeyup="calCualteSalePrice('+index_sale+');" class="form-control"></td>';
+				template+='<td><input style="text-align:center;" type="text" id="sale_total_'+index_sale+'" name="sale_total_'+index_sale+'" readonly class="form-control"></td>';
+				template+='<td><button type="button" onClick="deleteSaleRecord('+index_sale+')" name="deleteSale" class="btn default red">លុប</button></td>';
+				template+='</tr>';				
+				$('#lbl_product_item').append(template);
+
+				if($("#identity_sale").val()!="") {
+					var identity = $("#identity_sale").val();
+					$("#identity_sale").val(identity+','+index_sale);
+				}
+				 else {$("#identity_sale").val(index_sale);}
+				 				
+				getProductinfo(index_sale,product_id,1,<?php echo $rs['is_package'];?>,<?php echo $rs['package_id'];?>,<?php echo $rs['is_package_cost'];?>);
+				
+				$("#is_package_cost_"+index_sale).val("<?php echo $rs['is_package_cost'];?>");
+				$("#is_package_"+index_sale).val("<?php echo $rs['is_package'];?>");
+				$("#packageid_"+index_sale).val("<?php echo $rs['package_id'];?>");
+		
+				$("#qtyunit_"+index_sale).val("<?php echo $rs['qty_unit'];?>");
+				$("#qtydetail_"+index_sale).val("<?php echo $rs['qty_detail'];?>");
+				$("#qty_sold_"+index_sale).val("<?php echo $rs['qty_order'];?>");
+				$("#cost_price_"+index_sale).val("<?php echo $rs['cost_price'];?>");
+				$("#price_reil_"+index_sale).val("<?php echo $rs['price_riel'];?>");
+				$("#selling_price_"+index_sale).val("<?php echo $rs['price'];?>");
+				$("#total_"+index_sale).val("<?php echo $rs['total'];?>");
+				$("#discount_"+index_sale).val("<?php echo $rs['discount'];?>");
+				$("#sale_total_"+index_sale).val("<?php echo $rs['sub_total'];?>");
+			}
+		<?php }}?>		
+	}
+	index_sale=0;
+	function addProductRow(product_id=null,txt_product_name=null,qty=1,is_package=0,package_id=0,is_package_cost=0){ // (pro_id,pro_name,qty,is_package,package_id)
+		if(product_id==null){
+			var product_name = $("#product_id");
+			var txt_product_name = $("option:selected",product_name).text();
+			var product_id = $("#product_id").val();
+		}
+		if(product_id>0)
+			index_sale++;
+			template='<tr style="white-space:nowrap;" align="center" id="row'+index_sale+'">';
+			template+='<td>&nbsp;&nbsp;'+index_sale+'&nbsp;&nbsp;</td>';
+			template+='<td style="font-size:13px;">&nbsp;&nbsp;&nbsp;'+txt_product_name+'&nbsp;&nbsp;&nbsp;<input type="hidden" id="pro_'+index_sale+'" name="pro_'+index_sale+'" value="'+product_id+'" </td>';
+			template+='<td><input style="text-align:center;" id="lblcurrent_qty_'+index_sale+'" name="lblcurrent_qty_'+index_sale+'" readonly class="form-control " /><input type="hidden" id="current_qty_'+index_sale+'" name="current_qty_'+index_sale+'" value="" class="form-control "></td>';
+			template+='<td><input style="text-align:center;" type="number" step="any" id="qtyunit_'+index_sale+'" name="qtyunit_'+index_sale+'" value="'+qty+'" onkeyup="calCualteSalePrice('+index_sale+');" onClick="calCualteSalePrice('+index_sale+');" onkeypress="return isNumberKey(event);" class="form-control"><input type="hidden" id="qty_perunit_'+index_sale+'" name="qty_perunit'+index_sale+'" onkeyup="" class="form-control"><input type="hidden" id="measur_name_'+index_sale+'" name="measur_name_'+index_sale+'" onkeyup="" class="form-control"><input type="hidden" id="unit_label_'+index_sale+'" name="unit_label_'+index_sale+'" onkeyup="" class="form-control"><input type="hidden" name="is_package_cost_'+index_sale+'" id="is_package_cost_'+index_sale+'" value="'+is_package_cost+'" class="form-control" /><input type="hidden" name="is_package_'+index_sale+'" id="is_package_'+index_sale+'" value="'+is_package+'" class="form-control" /><input type="hidden" name="packageid_'+index_sale+'" id="packageid_'+index_sale+'" value="'+package_id+'" class="form-control" /></td>';
+			template+='<td><input style="text-align:center;" type="number" step="any" id="qtydetail_'+index_sale+'" name="qtydetail_'+index_sale+'" onkeyup="calCualteSalePrice('+index_sale+');" onClick="calCualteSalePrice('+index_sale+');" onkeypress="return isNumberKey(event);" class="form-control"></td>';
+			template+='<td><input style="text-align:center;" type="text" id="qty_sold_'+index_sale+'" name="qty_sold_'+index_sale+'" value="'+qty+'" readonly class="form-control"></td>';
+			template+='<td style="min-width:50px"><input style="text-align:center;" type="text" onkeyup="convertToDollar('+index_sale+');" name="price_reil_'+index_sale+'" id="price_reil_'+index_sale+'" class="form-control" onkeypress="return isNumberKey(event);" placeholder=""/></td>';
+			template+='<td><input style="text-align:center;" type="text" id="selling_price_'+index_sale+'" name="selling_price_'+index_sale+'" onkeyup="calCualteSalePrice('+index_sale+');" onkeypress="return isNumberKey(event);" class="form-control"><input style="text-align:center;" type="hidden" id="cost_price_'+index_sale+'" name="cost_price_'+index_sale+'" readonly class="form-control"></td>';
+			template+='<td><input style="text-align:center;" type="text" id="total_'+index_sale+'" name="total_'+index_sale+'" readonly class="form-control"></td>';
+			template+='<td><input style="text-align:center;" type="text" id="discount_'+index_sale+'" name="discount_'+index_sale+'" onkeyup="calCualteSalePrice('+index_sale+');" class="form-control"></td>';
+			template+='<td><input style="text-align:center;" type="text" id="sale_total_'+index_sale+'" name="sale_total_'+index_sale+'" readonly class="form-control"></td>';
+			template+='<td><button type="button" onClick="deleteSaleRecord('+index_sale+')" name="deleteSale" class="btn default red">លុប</button></td>';
+			template+='</tr>';
+			
+			$('#lbl_product_item').append(template);
+
+			if($("#identity_sale").val()!="") {
+				var identity = $("#identity_sale").val();
+				$("#identity_sale").val(identity+','+index_sale);
+			} else {$("#identity_sale").val(index_sale);}
+			
+			getProductinfo(index_sale,product_id,0,is_package,package_id,is_package_cost);
+			
+			//calCualteSalePrice(index_sale);				
+	}
+	
+	function convertToDollar(index){
+		var price_reil= $("#price_reil_"+index).val();
+		var exchange_rate  = $("#exchange_rate").val();
+		dollar = (price_reil / exchange_rate).toFixed(3);
+		$("#selling_price_"+index).val(dollar);
+		calCualteSalePrice(index);
+	}
+	
+	function deleteSaleRecord(index_sale) {
+		var identity = $('#identity_sale').val();
+		var arrays = identity.split(',');
+		
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index_sale) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity_sale').val(strings);
+		$("#row"+index_sale).remove();
+		netTotal();
+	}
+
+	function getProductinfo(index,product_id,old_price,is_package=0,package_id=0,is_package_cost=0){
+		if(product_id>0){
+			branch_id = $('#branch').val();
+			$.ajax({
+				url: "<?php echo $this->baseUrl()?>/sales/possale/getproduct",
+				type: "post",
+				data: {product_id:product_id,'branch_id':branch_id},
+				success: function(data){
+					data = $.parseJSON(data);
+					if(data){
+						$('#current_qty_'+index).val(data.qty);
+						$('#measur_name_'+index).val(data.measue_name);
+						$('#unit_label_'+index).val(data.unit_label);
+
+						if(is_package==1 && package_id==0 && is_package_cost==1){
+							//alert(1);
+							$('#cost_price_'+index).val(data.price);
+							$('#selling_price_'+index).val(data.selling_price);
+							$('#price_reil_'+index).val(data.selling_price_khmer);
+						}else if(is_package==1 && package_id==0 && is_package_cost==0){
+							//alert(2);
+							$('#selling_price_'+index).prop('readonly', true);
+							$('#price_reil_'+index).prop('readonly', true);
+						}else{
+							//alert(3);
+							if(package_id>0 && is_package_cost==1){
+								$('#selling_price_'+index).prop('readonly', true);
+								$('#price_reil_'+index).prop('readonly', true);
+							}else{
+								$('#cost_price_'+index).val(data.price);
+								$('#selling_price_'+index).val(data.selling_price);
+								$('#price_reil_'+index).val(data.selling_price_khmer);
+							}
+						}
+						
+
+						qty = data.qty;
+						if(qty==null){qty=0;}
+						qtyall_detail = qty*(data.qty_perunit);//eg;qty 1.5 and 1unit =24cans; =>1.5*24 =36cans.
+						qty_unitlable = (qtyall_detail % (data.qty_perunit)).toFixed(0);//រកចំនួនរាយ
+						if(qty_unitlable>0){qty_unitlable=qty_unitlable+""+data.unit_label;}else{qty_unitlable=""; }
+						qty=parseInt(qty);
+			            measure_name = data.measue_name;
+						if(data.measue_name==null){measure_name='';}
+						
+						// if(qty_unitlable==''){
+							// qty_unitlable = "";
+						// }else{
+							// qty_unitlable = "និង"+qty_unitlable;
+						// }
+						
+						current_stock = qty+""+measure_name;//data.unit_label;
+						if(qty<=0){
+							current_stock = '';
+						}else if(qty>0 && qty_unitlable!=''){
+							current_stock = current_stock + " និង ";
+						}
+						$("#lblcurrent_qty_"+index).val(current_stock+""+qty_unitlable);
+						
+						$("#qty_perunit_"+index).val(data.qty_perunit);
+						if(old_price<=0 ){
+							calCualteSalePrice(index);
+						}
+					}
+				},
+				error:function(err){
+					alert("failed");
+				}
+			});
+		}
+	}
+	
+	function calCualteSalePrice(index_sale){
+		main_qty= $("#qtyunit_"+index_sale).val();
+		if(main_qty==''){main_qty=0;}
+		detail_qty= $("#qtydetail_"+index_sale).val();//ចំនួនរាយ
+		if(detail_qty==''){detail_qty=0;}
+		qty_perunit= $("#qty_perunit_"+index_sale).val();//ចំនួនក្នុង១ឯកកតា
+		if(qty_perunit==''){qty_perunit=0;}
+		
+		qty_sold = parseFloat(main_qty) + parseFloat(detail_qty/(qty_perunit));
+		$('#qty_sold_'+index_sale).val(qty_sold.toFixed(3));
+		
+		price = $("#selling_price_"+index_sale).val();
+
+		total = (price*qty_sold);
+		$("#total_"+index_sale).val(total.toFixed(3));
+		
+		discount = $('#discount_'+index_sale).val();
+		sub_total = total - discount;
+		$('#sale_total_'+index_sale).val(sub_total);
+		
+		netTotal();
+	}
+	
+	function netTotal() {//use
+		var netTotal=0;
+		var rowId = $('#identity_sale').val();
+		var rowIDArray = rowId.split(',');
+		for(var n = 0; n < rowIDArray.length; n++) {
+			netTotal += Number($("#sale_total_"+rowIDArray[n]).val());
+		}
+		$("#sub_total").val(netTotal.toFixed(0));
+		//$("#paid").val(netTotal.toFixed(0));
+		
+		calCualtepaid();
+	}
+	function calCualtepaid(){
+		paid = $('#paid').val();
+		total_received = isNaN(paid)?0:paid;
+		total_dollar = $('#sub_total').val();
+		
+		balance = total_dollar - total_received;
+		if(balance<0){
+			alert("can not pay more than total payment !!! ");
+			$('#paid').val(total_dollar);
+			$('#balance').val(0);
+		}else{
+			$('#balance').val(balance.toFixed(2));
+		}
+	}
+	
+	function popupProduct(){
+		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/product/index/add";?>','_blank');
+	}
+	function saleProgram(){
+		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/sales/program/add";?>','_blank');
+	}
+													
+	var url_getprogram = '<?php echo $this->url(array("module"=>"mong","controller"=>"index","action"=>"refresh-program"));?>';
+	function getRefreshProgram(){
+		loading();
+		$.ajax({
+			url: url_getprogram,
+			type: "post",
+			success: function(data){
+				rs = $.parseJSON(data);
+				/*if(rs){
+					$('#dead_id').empty();
+					for(i=0;i<rs.length;i++){
+						$('#dead_id').append($("<option></option>").attr("value",rs[i]['id']).text(rs[i]['dead_name']+"-"+rs[i]['dead_name_chinese']));
+					}
+				}*/
+				$('#dead_id').empty();
+				$('#dead_id').append(rs);
+				document.getElementsByClassName("overlay")[0].style.display="none";
+			},
+			error:function(err){
+				document.getElementsByClassName("overlay")[0].style.display="none";
+				alert("failed");
+			}
+		});
+	}
+	
+	var url_getproduct = '<?php echo $this->url(array("module"=>"mong","controller"=>"index","action"=>"refresh-product"));?>';
+	function getRefreshProduct(){
+		loading();
+		$.ajax({
+			url: url_getproduct,
+			type: "post",
+			success: function(data){
+				rs = $.parseJSON(data);
+				if(rs){
+					$('#product_id').empty();
+					for(i=0;i<rs.length;i++){
+						$('#product_id').append($("<option></option>").attr("value",rs[i]['id']).text(rs[i]['item_name']+" - "+rs[i]['item_code']));
+					}
+				}
+				document.getElementsByClassName("overlay")[0].style.display="none";
+			},
+			error:function(err){
+				document.getElementsByClassName("overlay")[0].style.display="none";
+				alert("failed");
+			}
+		});
+	}
+	
+	function loading(){
+		document.getElementsByClassName("overlay")[0].style.display="block";
+	}
+	
+	function getPopupCustomer(){
+		val = $('#customer_id').val();
+		if(val==-1){
+			$('#customerpopup').modal('show');
+		}else{
+			getCustomerInfo();
+		}
+	}
+	
+	<?php $url_add_customer =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'add-customer')); ?>
+	function addNewCustomer(){
+		txt_name = $("#txt_name").val();
+		if(txt_name==''){
+			alert("សូមបញ្ជូលឈ្មោះអតិថិជន!");
+			$("#txt_name").focus();
+			return false;
+		} 
+		txt_name = $("#txt_name").val() + " - " + $("#txt_phone").val();
+		
+		$('#save_customer').attr("disabled", true);
+		
+		$.ajax({
+			url: "<?php echo $url_add_customer;?>",
+			type: "post",
+			data: $('#frmcustomer').serialize(),
+			success: function(data){
+				rs = $.parseJSON(data);
+				$('#customer_id').append($("<option></option>").attr("value",rs['cus_id']).attr("selected",true).text(txt_name));                       
+				$("#customer_id").select2();
+				
+				$("#phone").val($('#txt_phone').val());
+				$("#address").val($('#txt_address').val());
+				
+				$('#customerpopup').modal('hide');
+				$('#save_customer').attr("disabled", false);
+			},
+			error:function(err){
+				alert("faile insert");
+			}
+		});
+	}
+
+	function getProductByCategory(){
+		$('#product_id').empty();
+		category = $("#category").val();
+		$.ajax({
+			url: "<?php echo $this->baseUrl()?>/sales/possale/get-productbycategory",
+			type: "post",
+			data: {
+					'category':category,
+					'type':1 // get only product 
+				},
+			success: function(data){
+				data = $.parseJSON(data);
+				$('#product_id').append(data);
+			},
+			error:function(err){
+				alert("failed");
+			}
+		});
+	}
+	
+	
+	function getPopupReceiver(){
+		val = $('#receiver_name').val();
+		if(val==-1){
+			$('#receiverpopup').modal('show');
+		}
+	}
+	function addNewReceiver(){
+		name = $("#name_receiver").val();
+		if(name==''){
+			$("#name_receiver").focus();
+			return false;
+		} 
+		$('#save_receiver').attr("disabled", true);
+		$('#receiver_name').append($("<option></option>").attr("value",name).attr("selected",true).text(name));  
+		$("#receiver_name").select2();	
+		$('#receiverpopup').modal('hide');
+		$('#save_receiver').attr("disabled", false);
+	}
+	
+	function getPopupSaleagent(){
+		val = $('#sale_agent').val();
+		if(val==-1){
+			$('#saleagentpopup').modal('show');
+		}
+	}
+	<?php $url_sale_agent =  $this->url(array('module'=>'mong','controller'=>'index','action'=>'add-mong')); ?>
+	function addNewSaleagent(){
+		name = $("#name").val();
+		if(name==''){
+			$("#name").focus();
+			return false;
+		}  		
+		$('#save_saleagent').attr("disabled", true);
+		
+		$.ajax({
+			url: "<?php echo $url_sale_agent;?>",
+			type: "post",
+			data: $('#frmsaleagent').serialize(),
+			success: function(data){
+				rs = $.parseJSON(data);
+				$('#sale_agent').append($("<option></option>").attr("value",rs['name']).attr("selected",true).text(name));                       
+				$("#sale_agent").select2();
+				$('#saleagentpopup').modal('hide');
+				$('#save_saleagent').attr("disabled", false);
+				//$("#frmcustomer")[0].reset();
+			},
+			error:function(err){
+				alert("faile insert");
+			}
+		});
+	}
+
+	function getPopupSaleagent(){
+		val = $('#sale_agent').val();
+		if(val==-1){
+			$('#saleagentpopup').modal('show');
+		}
+	}
+	<?php $url_sale_agent =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-saleagent')); ?>
+	function addNewsaleagent(){	
+		name_saleagent = $("#name_saleagent").val();
+		if(name_saleagent==''){
+			$("#name_saleagent").focus();
+			return false;
+		} 
+	//	alert(1);		
+		$('#save_saleagent').attr("disabled", true);		
+		$.ajax({			
+			url: "<?php echo $url_sale_agent;?>",
+			type: "post",
+			data: $('#frmsaleagent').serialize(),
+			success: function(data){
+				rs = $.parseJSON(data);
+				$('#sale_agent').append($("<option></option>").attr("value",rs['saleagent_id']).attr("selected",true).text(name_saleagent));                       
+				$("#sale_agent").select2();
+				$('#saleagentpopup').modal('hide');
+				$('#save_saleagent').attr("disabled", false);
+			},
+			error:function(err){
+				alert("faile insert");
+			}
+		});
+	}
+
+function isNumberKey(evt)
+{
+	var charCode = (evt.which) ? evt.which : event.keyCode;
+	if (charCode != 46 && charCode != 45 && charCode > 31 && (charCode < 48 || charCode > 57)){
+		return false;
+	}else{
+		return true;
+	}
+}
+
+
+$(document).ready(function() {
+  setValue();
+  initializeProduct();
+  getDeadPersonDetail();
+});
+
+function setValue(){
+
+	$('#branch').prop('readonly', true);
+	$('#branch').val('<?php echo $this->row['branch_id']?>').select2();
+	
+	$('#customer_id').val('<?php echo $this->row['customer_id']?>');
+	$('#sale_agent').val('<?php echo $this->row['sale_agent']?>');
+	$('#receiver_name').val('<?php echo $this->row['receiver_name']?>');
+	$('#sale_date').val('<?php echo date("d-m-Y",strtotime($this->row['sale_date']))?>');
+	$('#comission').val('<?php echo $this->row['comission']?>');
+	$('#other_note').val('<?php echo preg_replace( "/\r|\n/", "", strip_tags(htmlspecialchars($this->row['other_note'])));?>');
+	$('#status').val('<?php echo $this->row['status']?>');
+
+	$('#invoice_no').val('<?php echo $this->row['invoice_no']?>');
+	$('#place_bun').val('<?php echo $this->row['place_bun']?>');
+	$('#type_pjos').val('<?php echo $this->row['type_pjos']?>');
+	$('#place_pjos').val('<?php echo $this->row['place_pjos']?>');
+	$('#phone').val('<?php echo $this->row['phone']?>');
+	$('#address').val('<?php echo $this->row['address']?>');
+	
+	$('#construct_type').val('<?php echo $this->row['construct_type']?>');
+	$('#mong_type').val('<?php echo $this->row['mong_type']?>');
+	$('#builder').val('<?php echo $this->row['builder']?>');
+	$('#mong_code').val('<?php echo $this->row['mong_code']?>');
+	$('#mong_number').val('<?php echo $this->row['mong_number']?>');
+	$('#mong_address').val('<?php echo $this->row['mong_address']?>');
+	$('#person_in_charge').val('<?php echo $this->row['person_in_charge']?>');
+	$('#mong_note').val('<?php echo $this->row['mong_note']?>');
+	$('#land_longitude').val('<?php echo $this->row['land_longitude']?>');
+	$('#land_width').val('<?php echo $this->row['land_width']?>');
+	$('#mong_longitude').val('<?php echo $this->row['mong_longitude']?>');
+	$('#mong_width').val('<?php echo $this->row['mong_width']?>');
+	$('#date_finish').val('<?php echo date("d-m-Y",strtotime($this->row['date_finish']))?>');
+	$('#date_sen').val('<?php echo date("d-m-Y",strtotime($this->row['date_sen']))?>');
+	$('#time_sen').val('<?php echo $this->row['time_sen']?>');
+	$('#date_chlong_mong').val('<?php echo date("d-m-Y",strtotime($this->row['date_chlong_mong']))?>');
+	$('#time_chlong_mong').val('<?php echo $this->row['time_chlong_mong']?>');
+	$('#dead_id').val('<?php echo $this->row['dead_id']?>');
+	
+	$('#constructor').val('<?php echo $this->row['constructor']?>');
+	
+
+	$('#time_mole').val('<?php echo $this->row['time_mole']?>');
+	$('#time_chlong_mong_to').val('<?php echo $this->row['time_chlong_mong_to']?>');
+	$('#time_mas').val('<?php echo $this->row['time_mas']?>');
+	$('#time_sen_to').val('<?php echo $this->row['time_sen_to']?>');
+	
+	$('#sub_total').val('<?php echo $this->row['sub_total']?>');
+	$('#paid').val('<?php echo $this->row['paid']?>');
+	$('#balance').val('<?php echo $this->row['balance_after']?>');
+}
+	
+<?php $url_getcustomerinfo =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'get-customerinfo')); ?>
+function getCustomerInfo(){
+	customer_id = $("#customer_id").val();
+	if(customer_id==-1){
+	}else{
+		$.ajax({
+		    url: "<?php echo $url_getcustomerinfo;?>",
+		    type: "post",
+			data: { 
+		    	'customer_id':customer_id,
+			},				    
+		   handleAs:"json", 
+		   success: function(data) {
+			   rs = $.parseJSON(data);
+			   $("#phone").val(rs.phone);
+			   $("#address").val(rs.address);
+		   },		
+		    error: function(err) {
+				   alert(err);
+			}
+		});
+	}
+}
+	
+</script>	
+	
+<?php $form = $this->form_customer; ?>
+<div id="customerpopup" class="modal fade" tabindex="-1" data-width="1200">
+       <div class="modal-dialog">
+		      <div class="modal-content">
+		      <div class="modal-header">   
+				<div class="row">
+				<div class="col-md-12">
+					<div class="portlet box blue">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-home"></i><?php echo $tr->translate("ADD_NEW_CUSTOMER");?>
+						</div>
+						<div class="caption pull-right">
+							<a href="<?php //echo $url_new;?>" >
+								 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							</a>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form id="frmcustomer" name="frmcustomer" dojoType="dijit.form.Form" autoComplete="off" enctype="application/x-www-form-urlencoded" class="form-horizontal" enctype="multipart/form-data" method="post">
+							<div class="form-body">
+								<div class="form-group">
+									<label class="control-label col-md-3"><?php echo $tr->translate("សាខា");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement("branch_id");?>
+										</div>
+									</div>
+									
+								</div>
+								
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("លេខកូដអតិថិជន");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('cu_code'); ?>
+										</div>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="control-label col-md-3"><?php echo $tr->translate("ឈ្មោះអតិថិជន");?><span class="required"></span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('txt_name'); ?>
+										</div>
+									</div>
+								</div>
+								
+								
+								<div class="form-group">
+									<label class="control-label col-md-3">
+									<?php echo $tr->translate("លេខទំនាក់ទំនង");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('txt_phone'); ?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("អាសយដ្ឋាន");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement("txt_address");?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("អ៊ីម៉ែល");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('txt_mail'); ?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("សម្គាល់");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('remark'); ?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-md-12 center">
+										<button type="button" id="save_customer" name="btnsavenew" onclick="addNewCustomer();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("រក្សាទុក")?> </button>
+									</label>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+          </div>
+        </div>
+    </div>
+ </div>
+ 
+  <div id="saleagentpopup" class="modal fade" tabindex="-1" data-width="1200">
+       <div class="modal-dialog">
+		      <div class="modal-content">
+		      <div class="modal-header">   
+				<div class="row">
+				<div class="col-md-12">
+					<div class="portlet box blue">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-home"></i><?php echo $tr->translate("បន្ថែមអ្នកណែនាំ");?>
+						</div>
+						<div class="caption pull-right">
+							<a href="<?php //echo $url_new;?>" >
+								 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							</a>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form id="frmsaleagent" name="frmsaleagent" dojoType="dijit.form.Form" autoComplete="off" enctype="application/x-www-form-urlencoded" class="form-horizontal" enctype="multipart/form-data" method="post">
+							<div class="form-body">								
+								<div class="form-group">
+									<label class="control-label col-md-3"><?php echo $tr->translate("NAME");?><span class="required"></span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<input name="name_saleagent" id="name_saleagent" class="form-control" placeholder="Add name customer"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+									<?php echo $tr->translate("PHONE_NUMBER");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<input name="phone" id="phone" class="form-control" placeholder="Phone customer" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("ADDRESS");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<input name="address" id="address" class="form-control"  placeholder="Address customer"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("EMAIL");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<input name="email" id="email" class="form-control" placeholder="Email"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("NOTE");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<input name="note" id="note" class="form-control" placeholder="Notes"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-md-12 center">
+										<button type="button" id="save_saleagent" name="save_saleagent" onclick="addNewsaleagent();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("រក្សាទុក")?> </button>
+									</label>
+								</div>
+							</div>
+						 </form>
+					  </div>
+					</div>
+			   	 </div>
+			  </div>
+           </div>
+        </div>
+     </div>
+ </div>
+ 
+
+<div id="receiverpopup" class="modal fade" tabindex="-1" data-width="1000">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">   
+				<div class="row">
+					<div class="col-md-12">
+						<div class="portlet box blue">
+							<div class="portlet-title">
+								<div class="caption">
+									<i class="icon-home"></i><?php echo $tr->translate("បន្ថែមអ្នកទទួលប្រាក់");?>
+								</div>
+								<div class="caption pull-right">
+									<a href="<?php //echo $url_new;?>" >
+										 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+									</a>
+								</div>
+							</div>
+							<div class="portlet-body form">
+								<form id="frmreceiver" name="frmreceiver" dojoType="dijit.form.Form" autoComplete="off" enctype="application/x-www-form-urlencoded" class="form-horizontal" enctype="multipart/form-data" method="post">
+									<div class="form-body">
+										<div class="form-group">
+											<label class="control-label col-md-3">
+												<?php echo $tr->translate("ឈ្មោះអ្នកទទួលប្រាក់");?>
+											</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<input name="name_receiver" id="name_receiver" class="form-control" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-md-12 center">
+												<button type="button" id="save_receiver" name="save_receiver" onclick="addNewReceiver();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("រក្សាទុក")?> </button>
+											</label>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+ </div>
+
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

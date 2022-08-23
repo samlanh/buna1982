@@ -1,0 +1,205 @@
+<?php 
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$formFilter = $this->form_salemong;
+?>
+<title><?php echo $tr->translate("របាយការណ៍លក់ម៉ុង-ចេតិយ");?></title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i>របាយការណ៍លក់ម៉ុង-ចេតិយ
+				</div>
+				<div class="btn-group pull-right">
+					 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+					   Actions <i class="fa fa-angle-down"></i>
+					 </button>
+						<ul class="dropdown-menu" role="menu">
+							<li>
+								<a href="#" onclick="doPrint();">
+									<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+								</a>
+							</li>
+							<li>
+								<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+							</li>								
+						</ul>
+					</div>
+				</div>
+            <div class="portlet-body form frmfilter">
+				<form method="post" action="<?php //echo $formFilter->getAction(); ?>" autocomplete="off">
+					<?php $formFilter = $this->form_salemong; ?>
+					<div class="form-group" style="padding-top: -6px;">
+						<label class="control-label col-md-2"><?php echo $formFilter->getElement('ad_search');?></label>
+						<label class="control-label col-md-2"><?php echo $formFilter->getElement('customer_id');?></label>
+						<label class="control-label col-md-2">
+							<select name="is_complete" id="is_complete" class="form-control select2me">
+								<option value="">ស្ថានភាព</option>
+								<option value="1" <?php if($this->rssearch['is_complete']==1){echo "selected='selected'";}?>>បង់ដាច់</option>
+								<option value="2" <?php if($this->rssearch['is_complete']==2){echo "selected='selected'";}?>>មិនទាន់បង់ដាច់</option>
+							</select>
+						</label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('start_date');?></div></label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i><?php echo $formFilter->getElement('end_date');?></div></label>
+					</div>
+					<div class="form-group" style="padding-top: -6px;">
+						<label class="control-label col-md-2">
+							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+						</label>
+					</div>
+					<div style="clear:both;"></div>	
+				</form> 
+	
+	<style>
+		.displaynone{display:table-cell !important;}
+	</style>
+				
+	<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; ">
+	<div id="divPrint" style="width: 100%;">
+	<style>
+		.style{
+			line-height: 25px;font-size: 14px !important;
+			font-family: 'Khmer OS Battambang';
+		}
+		ul{margin: 0;padding:0;}
+		table tr td ul li{text-align: center;list-style: none;line-height: 29px; font-weight: bold;}
+		th{padding: 5px;}
+		.hover:hover{background: #ccc;}
+		table { page-break-inside:auto }
+		tr{ page-break-inside:avoid; page-break-after:auto; }
+		#header {
+		  display: table-header-group;
+		  page-break-inside:avoid; page-break-after:auto;
+		}
+		.displaynone{display:none;}
+		
+		
+	</style>
+		<table style="font-family: 'Khmer OS Content'; width:100%;">
+			<tbody>
+			<tr>
+		    	<td align="center">
+		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
+		            	<tbody><tr>
+		                	<td align="center" width="16%" valign="top"><img  height="95px" src="<?php echo $this->baseUrl();?>/images/logosbona.jpg"></td>
+		                	<td width="70%" >
+		                		<ul>
+		                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
+		                			<li style="text-align:center; font-size:16px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important"><?php echo $tr->translate("របាយការណ៍លក់ម៉ុង-ចេតិយ");?></li>
+		                			<li style="text-align:center; font-size:14px; color: #F31A1A  !important"><?php if(!empty($this->rssearch['start_date'])){?><?php echo date("d/m/Y",strtotime($this->rssearch['start_date']));?> ដល់ <?php echo date("d/m/Y",strtotime($this->rssearch['end_date']));}?></li>
+		                		</ul>
+		                	</td>
+		                    <td width="20%"></td>
+		                </tr> 
+		                <tr>
+		                	<td colspan="3" valign="top">
+		                		<table width="100%" cellpadding="0" cellspacing="0">
+		                			<tbody><tr>
+		                				<td style="font-size: 11px;"></td>
+		                				<td width="65%"></td>
+		                			</tr>
+				                	</tbody>
+				                </table>
+				              </td>
+				           </tr>   
+		            </tbody></table>
+		        </td>
+		    </tr>
+		    <tr>
+		    	<td class="table2excel" id="exportExcel">
+		            <table  border="1" style="border-collapse:collapse; border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
+		                 <thead>
+							<tr bgcolor="#b0bdfd" class="style" align="center" style="font-weight:bold; line-height: 30px; font-size:11px; padding:1px 0px; white-space: nowrap; ">
+								<td rowspan="2" style="border:1px solid #000;"><?php echo $tr->translate("NUM");?></td>
+								<td rowspan="2" style="border:1px solid #000;">វិក័យបត្រ</td>
+								<td rowspan="2" style="border:1px solid #000;">អតិថិជន</td>
+								<td rowspan="2" style="border:1px solid #000;">លេខទូរស័ព្ទ</td>
+								<td rowspan="2" style="border:1px solid #000;">តម្លៃសរុប</td>
+								<td rowspan="2" style="border:1px solid #000;">បានបង់</td>
+								<td rowspan="2" style="border:1px solid #000;">នៅខ្វះ</td>
+								<td rowspan="2" style="border:1px solid #000;">សម្គាល់</td>	
+								<td rowspan="2" style="border:1px solid #000;">ថ្ងៃលក់</td>
+								<td rowspan="2">អ្នកប្រើប្រាស់</td>	
+								<td rowspan="2">ស្ថានភាព</td>						
+								<td class="displaynone" style="text-align: center;" colspan="4">បោះពុម្ភ</td>
+								
+							</tr>
+						</thead>
+		                <?php $num=1;
+		                $d_netotal = 0;$d_paid = 0; $d_balance = 0;
+	               
+		                if(!empty($this->other))foreach ($this->other AS $index => $rs){?>     
+						<tr align="center" class='row-format hover' style="border:1px solid #000;white-space: nowrap;">
+						   <td style="white-space: nowrap;border:1px solid #000;">&nbsp;<?php echo $index+1?></td>
+						   <td style="border:1px solid #000;">&nbsp;<?php echo $rs["invoice_no"];?></td>
+						   <td style="border:1px solid #000;">&nbsp;<?php echo $rs["customer_name"];?></td>					  
+						   <td style="border:1px solid #000;">&nbsp;<?php echo $rs["customer_phone"];?></td>
+					       <td align="left" style="font-family: 'Open Sans', sans-serif;font-weight: bold;">&nbsp;&nbsp;<?php echo "$ ".number_format($rs["sub_total"],2);?></td>
+				           <td align="left" style="font-family: 'Open Sans', sans-serif;font-weight: bold;">&nbsp;&nbsp;<?php echo "$ ".number_format($rs["paid"],2);?></td>
+						   <td align="left" style="font-family: 'Open Sans', sans-serif;font-weight: bold;">&nbsp;&nbsp;<?php echo "$ ".number_format($rs["balance_after"],2);?></td>
+						   <td style="border:1px solid #000;">&nbsp;<?php echo $rs["other_note"];?></td>
+						   <td style="border:1px solid #000;">&nbsp;<?php echo date("d-m-Y",strtotime($rs["sale_date"]));?></td>
+						   <td>&nbsp;<?php echo $rs["user_name"];?></td>
+						   <td>&nbsp;<?php echo $rs["status_name"];?></td>
+						   <td class="displaynone" style="border:1px solid #000;"><a style="color:blue;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/mong/index/invoice/id/".$rs["id"];?>">វិក័យបត្រ</a></td>
+						   <td class="displaynone" style="border:1px solid #000;"><a style="color:blue;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/index/rpt-mong-payment/id/".$rs["id"];?>">ប្រវត្តិបង់ប្រាក់</a></td>
+						   <td class="displaynone" style="border:1px solid #000;"><a style="color:red;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/mong/index/goodtime/id/".$rs["id"];?>">សែនបើកឆាក</a></td>
+						   <td class="displaynone" style="border:1px solid #000;"><a style="color:red;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/mong/index/timemol/id/".$rs["id"];?>">សែនឆ្លងម៉ុង</a></td>
+						   
+						   
+						</tr>
+						   <?php 
+							   if($rs["status"]==1){
+								   $d_netotal = $d_netotal+$rs["sub_total"];
+								   $d_paid = $d_paid+$rs["paid"];
+								   $d_balance = $d_balance+$rs["balance_after"];
+							   }
+		                }?>
+                		
+		                </tbody>
+		           </table>
+		           <table width="40%" align="right" style="margin-top: 10px;white-space:nowrap;border-collapse:collapse">
+		           		<tr style="font-size:14px; height: 30px;border:1px solid #fff;background: #b0bdfd;font-weight: bold;" align="center" >
+							<td style="border: 1px solid #000;white-space: nowrap;">សរុបរួម</td>
+							<td style="border: 1px solid #000;white-space: nowrap;">បានបង់សរុប</td>
+							<td style="border: 1px solid #000;white-space: nowrap;">នៅខ្វះសរុប</td>
+						</tr>
+						<tr style="font-size:14px; height: 30px;border:1px solid #fff;font-weight: bold;" align="center" >
+							<td style="font-family: 'Open Sans', sans-serif;font-weight: bold;border: 1px solid #000;"><?php echo "$ ".number_format($d_netotal,2);?></td>
+							<td style="font-family: 'Open Sans', sans-serif;font-weight: bold;border: 1px solid #000;"><?php echo "$ ".number_format($d_paid,2);?></td>
+							<td style="font-family: 'Open Sans', sans-serif;font-weight: bold;border: 1px solid #000;"><?php echo "$ ".number_format($d_balance,2);?></td>
+						</tr>
+		           </table>
+		              <br>
+		              <table align="center" width="100%">
+						   <tbody>
+						   	<tr style="font-size: 14px;">
+						        <th style="width:20%;text-align:center;  font-family:'Khmer MEF2'">យល់ព្រមដោយ</th>
+						        <th></th>
+						        <th style="width:20%;text-align:center; font-family:'Khmer MEF2'">ត្រួតពិនិត្យដោយ</th>
+						        <th></th>
+						        <th style="width:20%;text-align:center;font-family:'Khmer MEF2'">រៀបចំដោយ</th>
+						   </tr>
+						</tbody>
+					</table>	
+		    		</td>
+		    	</tr>
+			</tbody>
+		</table>
+		</div>
+	  </div>		
+	</div>
+	 </div>
+   </div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script>
+	function doPrint(){
+		var divToPrint = document.getElementById('divPrint');
+		var htmlToPrint = '' +'<style type="text/css">' +'</style>';
+		htmlToPrint += divToPrint.outerHTML;
+		window.document.write(htmlToPrint);
+		window.print();
+		window.close();
+	}
+</script>

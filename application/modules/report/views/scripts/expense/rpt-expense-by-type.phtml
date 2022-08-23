@@ -1,0 +1,188 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	
+	$session_user=new Zend_Session_Namespace('auth');
+	$user_id=$session_user->user_id;
+?>
+<title><?php echo $tr->translate("RPT_EXPENSE_TYPE");?></title>
+<style>
+.hover:hover{ background: #ddd;}
+</style>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("RPT_EXPENSE_TYPE");?>
+				</div>
+				<div class="btn-group pull-right">
+					<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+						Actions <i class="fa fa-angle-down"></i>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#" onclick="doPrint();">
+								<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+							</a>
+						</li>
+						<li>
+							<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="portlet-body form frmfilter">
+				<form method="post" action="<?php //echo $formFilter->getAction(); ?>" autocomplete="off">
+					<div bgcolor="#b0bdfd" class="form-group" style="padding-top: 6px;">
+						<?php $formFilter = $this->formFilter; ?>
+						<label class="control-label col-md-2"><?php echo $formFilter->getElement('text_search');?></label>
+						<label class="control-label col-md-2"><?php echo $formFilter->getElement('branch_id');?></label>
+						<label class="control-label col-md-2"><?php echo $formFilter->getElement('title');?></label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="icon-calendar"></i><?php echo $formFilter->getElement('start_date');?></div></label>
+						<label class="control-label col-md-2"><div class="input-icon right"><i class="icon-calendar"></i><?php echo $formFilter->getElement('end_date');?></div></label>
+						<label class="control-label col-md-2">
+							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+						</label>
+					</div><div style="clear:both;"></div>	
+				</form> 
+			</div>
+			<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+				<div id="divPrint"  >
+					<table style="background:#fff; margin: 0 auto; width: 100%; padding: 0px 10px 1cm 10px;font-family: 'Hanuman';">
+						<tr>
+		                	<td align="center" width="16%" valign="top"><img  height="95px" src="<?php echo $this->baseUrl();?>/images/logosbona.jpg"></td>		                	
+		                		<td  align="center">
+		                			<strong style="text-align:center; font-size:18px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important"><?php echo $tr->translate("COMPANY_CUSTOMER");?></strong><br>
+		                			<strong style="text-align:center; font-size:17px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important"><?php echo $tr->translate("RPT_EXPENSE_TYPE");?></strong><br>
+		                			<strong style="text-align:center; font-size:17px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important">
+					                	<span id="projectName"></span>
+					                </strong>
+		                			<strong style="text-align:center; font-size:14px; color: #F31A1A  !important"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+		                		</td>
+		                    <td width="20%"></td>
+		                </tr> 
+						<tr>
+							<td colspan="3">
+								&nbsp;
+							</td>
+						</tr>
+						<?php 
+							$total_income_kh=0;
+							$total_income_dollar=0;
+							$total =0;
+							$total_paid =0;
+							$total_expense_kh=0;
+							$total_expense_dollar=0;
+						?>
+						
+						<style> td{padding:0 3px; }</style>
+						
+						<tr>
+							<td colspan="3">
+								<table class="table2excel" border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;" width="100%" cellspacing="0">
+									 
+									<?php $i=0;$expense_type_id=0;$total=0;if(!empty($this->expense_type)){foreach($this->expense_type as $key => $row){
+											$i++;
+											if($expense_type_id != $row['expense_type_id']){
+												if($key>0){
+									?>
+												</table>
+												<table border="1" align="right" style="font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang'; margin-top: 5px;">
+													  <tr style="font-size:13px; color:#000; height: 18px;"​ align="center">
+														<td style=" border-bottom: 1px #000 solid; background-color: #ccd9ff; width:146px; font-weight:bold; ">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+														<td style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; width:112px; ">$ <?php echo number_format($total,2);?></td>
+													  </tr>
+												</table>
+												
+												<table class="padd" width="99%" border="1" align="center" style="white-space:nowrap;">
+											<?php 
+													$i=1;
+												}
+											?>
+										
+													<tr style="font-size:10px; color:#000; height: 23px; border-left:1px solid #fff; border-right:1px solid #fff; border-top: 1px solid #fff;"​ align="center">
+													    <th colspan="16" style="text-align:left">
+													    	<strong style="color:#000; font-size: 14px;font-family:'Khmer Battambang';" ><?php echo $tr->translate('TYPE').' : '.$row['expense_type']; ?></strong>
+													    </th>
+													</tr>
+													<tr style="font-family:'khmer os battambang';font-size:14px; height: 20px;border: 1px solid #000;white-space: nowrap;background-color: #b0bdfd !important;line-height:30px;font-weight: bold;" align="center" >
+														<td style="border: 1px solid #000;"><?php echo $tr->translate('NUM')?></td>
+														<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH_NAME')?></td>
+														<td style="border: 1px solid #000;"><?php echo $tr->translate('លេខបង្កាន់ដៃ')?></td>
+														<td style="border: 1px solid #000;"><?php echo $tr->translate('សរុប')?></td>
+														<td style="border: 1px solid #000;"><?php echo $tr->translate('NOTE')?></td>
+														<td style="border: 1px solid #000;"><?php echo $tr->translate('DATE')?></td>
+														<td style="border: 1px solid #000;"><?php echo $tr->translate('STATUS')?></td>
+													</tr>
+												<?php 
+												$total = 0;
+											}
+													$expense_type_id = $row['expense_type_id'];
+													if($row['status']==1){
+														$total = $total + $row['price'];
+													}
+												?>	
+													<tr class="hover" style="font-size:13px; height: 25px;border: 1px solid #000; white-space: nowrap;<?php if($row['status']==0){echo "color:red;";}?>" align="center" >
+														<td style="border: 1px solid #000;"><?php echo $i;?></td>
+														<td style="border: 1px solid #000;"><?php echo $row['branch_name'];?></td>
+														<td style="border: 1px solid #000;"><?php echo $row['receipt'];?></td>
+														<td style="border: 1px solid #000;background: #c6e2fb;"><?php echo "$ ".number_format($row['price'],2);?></td>
+														<td align="center" style="border: 1px solid #000;"><?php echo $row['note'];?></td>
+														<td align="center" style="border: 1px solid #000;"><?php echo date("d-m-Y",strtotime($row['for_date']));?></td>
+														<td align="center" style="border: 1px solid #000;"><?php echo $row['status_title'];?></td>
+													</tr>
+									<?php		
+										}}
+									?>
+									<?php if(!empty($total)){?>
+									   </table>
+									   <table border="1" width="30%" align="right" style="margin-right: 6px; font-family: 'Open Sans', sans-serif,'Kh Battambang','Khmer Battambang';margin-top: 5px;">
+										  <tr style="font-size:14px; color:#000; height: 30px;"​ align="center">
+											<td width="50%" style=" border-bottom: 1px #000 solid; background-color: #ccd9ff;font-weight:bold;">&nbsp;<?php echo $tr->translate('TOTAL');?>&nbsp;</td>
+											<td width="50%" style=" border-bottom: 1px #000 solid; color:#F00; font-weight:bold; ">$ <?php echo number_format($total,2);?></td>
+										  </tr>
+									 <?php }?>
+								</table>
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="3">
+								&nbsp;
+							</td>
+						</tr>
+						<tr >
+							<td align="center" width="25%">
+								<span style=" font-size: 14px;"><?php echo $tr->translate("VERIFIED_BY"); ?></span>
+							</td>
+							<td  width="50%">
+								&nbsp;
+							</td>
+							<td align="center"  width="25%">
+								<span style=" font-size: 14px;text-align: right;"><?php echo $tr->translate("PREPARED_BY"); ?></span>
+							</td>
+						</tr>
+					</table>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script type="text/javascript">
+	$(document).ready(function(){
+		branch_id = $("#branch_id").val();
+		 if(branch_id!=-1 && branch_id!=0){
+			 var bbr = $("#branch_id option:selected").text();
+			 document.getElementById('projectName').innerHTML = bbr+"<br />";
+		 }
+	});
+	function doPrint(){
+		var divToPrint = document.getElementById('divPrint');
+		var htmlToPrint = '' +'<style type="text/css">' +'</style>';
+		htmlToPrint += divToPrint.outerHTML;
+		window.document.write(htmlToPrint);
+		window.print();
+		window.close();
+	}
+</script>

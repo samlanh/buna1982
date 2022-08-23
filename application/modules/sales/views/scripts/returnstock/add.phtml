@@ -1,0 +1,272 @@
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+?>						 
+<title>បន្ថែមផ្ទេរទំនិញចូលស្តុក</title>
+<body>
+	<form class="form-horizontal" id="frm" method="post" action="" autocomplete="off">				
+		
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>បន្ថែមផ្ទេរទំនិញចូលស្តុក</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="form-body">
+									<div class="row">
+										<div class="col-md-3" style="text-align: left !important;">
+										</div>
+										<div class="col-md-6" style="text-align: left !important;">
+											<div class="form-group" >
+												<label class="col-md-4 control-label"><?php echo $tr->translate("BRANCH_NAME");?></label>
+												<div class="col-md-8">
+													<select name="branch" id="branch" class="form-control select2me" onchange="getAllBranchFunction();" >
+														<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+														<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+														<option value="<?php echo $branch['id']?>"><?php echo $branch['name'];?></option>
+														<?php }}?>
+													</select>
+												</div>
+											</div>
+											<div class="form-group" >
+												<label class="col-md-4 control-label">លេខកូដ</label>
+												<div class="col-md-8">
+													<input type="text" class="form-control" readonly name="return_code" id="return_code" value="<?php echo $this->return_code ;?>" />
+												</div>
+											</div>
+											<div class="form-group" >
+												<label class="col-md-4 control-label">ចំណងជើង</label>
+												<div class="col-md-8">
+													<input type="text" class="form-control"  name="title" id="title" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													តម្លៃសរុប
+												</label>
+												<div class="col-md-8">
+													<input type="text" readonly="readonly" class="form-control" name="total_amount" id="total_amount" />
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													សម្គាល់
+												</label>
+												<div class="col-md-8">
+													<textarea rows="2" name="note" id="note" class="form-control" ></textarea>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3" style="text-align: left !important;">
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-3"></div>
+										<div class="col-md-6">
+											<div class="form-group" style=""></div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													<strong>មុខទំនិញ</strong>
+												</label>
+												<div class="col-md-8">
+													<select name="product_id" id="product_id" onchange="addProductRow();" class="form-control select2me">
+														<option value="-1">សូមជ្រើសរើសទំនិញ</option>
+														<?php if(!empty($this->rsproduct)){ foreach($this->rsproduct as $rs){?>
+														<option value="<?php echo $rs['id']?>"><?php echo $rs['name'].'-'.$rs['item_code']?></option>
+														<?php }}?>
+									    			</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3"></div>
+									</div>
+									
+									<div class="row">
+										<div class="col-md-1"></div>
+										<div class="col-md-10">
+											 <div class="portlet box blue">
+												<div class="portlet-title">
+													<div class="caption">
+														<i class="fa fa-cogs"></i>ទំនិញ
+													</div>
+												</div>
+												 <div class="portlet-body">
+													<div class="table-responsive">
+														 <table id="table_row" class="table table-bordered" style="font-size:12px !important;">
+															<thead>
+																<tr style="text-align: center !important;font-size:13px !important;font-weight: bold">
+																	<td class="aligncenter">#</td>
+																	<td class="aligncenter" style="min-width:200px;white-space: nowrap;">ឈ្មោះទំនិញ</td>
+																	<td class="aligncenter">ចំនួន</td>
+																	<td class="aligncenter">តម្លៃ</td>
+																	<td class="aligncenter">សរុប</td>
+																	<td class="aligncenter">សម្គាល់</td>
+																	<td class="aligncenter">លុប</td>
+																</tr>
+															</thead>
+															<tbody id="lbl_noproduct">
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<input id="identity" name="identity" type="hidden" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>
+<script>
+
+$('#frm').submit(function() {	
+	branch_id=$("#branch").val();
+	if(branch_id==0 || branch_id=="" || branch_id=="-1"){
+		alert("<?php echo $tr->translate("Please select branch");?> !!!");
+		$('#branch').select2('open');
+		return false;	
+	}
+	
+	title = $("#title").val();
+	if(title==''){
+		$('#title').focus();
+		return false;
+	}
+	identity = $("#identity").val();
+	if(identity==''){
+		alert("សូមជ្រើសរើស ផលិតផល/សេវាកម្ម! ");
+		$('#product_id').select2('open');
+		return false;
+	}
+	var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+	if (r == true) {
+		$("#save_close").attr("disabled", true);
+		return true;
+	} else {
+	   return false;
+	}
+});
+
+function getAllBranchFunction(){
+	
+}
+
+index=0;
+title=0;
+temp='';
+function addProductRow(){
+	index++;
+	var branch_text = $("#product_id");
+	var txt_br = $("option:selected",branch_text).text();
+	var pro_id = $("#product_id").val();
+	
+	if(pro_id<=0){return false;}
+	template='<tr id="row_location_'+index+'">';
+	template+='<td>'+index+'</td>';
+	template+='<td>'+txt_br+'<input type="hidden" id="product_id'+index+'" name="product_id'+index+'" value="'+pro_id+'" </td>';
+	template+='<td><input type="text" onkeypress="return isNumberKey(event);" onkeyup="totalQty('+index+');" id="qty_'+index+'"  name="qty_'+index+'" value="" class="validate[required,custom[number]] form-control"></td>'; 
+	template+='<td><input type="text" onkeypress="return isNumberKey(event);" onkeyup="totalQty('+index+');" id="price_'+index+'" name="price_'+index+'" value="0" class="validate[required,custom[number]] form-control"></td>'; 
+	template+='<td><input readonly="readonly" type="text" id="total_'+index+'" name="total_'+index+'"  class="form-control"></td>'; 
+	template+='<td><input type="text" id="note_'+index+'" name="note_'+index+'" value="" class="form-control"></td>';
+	template+='<td><button type="button" onClick="deleteRecord('+index+')" name="save_close" class="btn default red">លុប</button></td>';
+	template+='</tr>';
+	
+	$('#lbl_noproduct').append(template);
+	if($('#identity').val()!="") {
+		var identity = $('#identity').val();
+		$('#identity').val(identity+','+index);
+	} else {$('#identity').val(index);}
+	
+	//$('#product_id').val(-1).select2();
+	getProductPrice(index,pro_id);
+}
+var url_getproduct = '<?php echo $this->url(array('module'=>'product','controller'=>'package','action'=>'getproduct')); ?>';
+function getProductPrice(index,product_id){
+	$.ajax({
+		url: url_getproduct,
+		type: "post",
+		data: {product_id:product_id},	
+		success: function(data){
+			rs = $.parseJSON(data);
+			$('#price_'+index).val(rs);
+		},
+		error:function(err){
+			alert("failed");
+		   
+		}
+	});
+}
+function totalQty(index){
+	qty=$("#qty_"+index).val();
+	price=$("#price_"+index).val();
+	total = qty*price;
+	$("#total_"+index).val(total);
+	netTotal();
+}
+function netTotal(){//use
+	var netTotal=0;
+	$('#total_amount').val(0);
+	var rowId = $('#identity').val();
+	var rowIDArray = rowId.split(',');
+	for(var n = 0; n < rowIDArray.length; n++) {
+		netTotal += Number($('#total_'+rowIDArray[n]).val());
+	}
+	if(isNaN(netTotal)){
+		netTotal=0;
+	}
+	$('#total_amount').val(netTotal.toFixed(2));
+}
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	$("#row_location_"+index).remove();
+	netTotal();
+}
+
+function isNumberKey(evt)
+{
+  	var charCode = (evt.which) ? evt.which : event.keyCode;
+  	if (charCode != 46 && charCode != 45 && charCode > 31 && (charCode < 48 || charCode > 57)){
+		return false;
+  	}else{
+		return true;
+  	}
+}
+
+</script>

@@ -1,0 +1,114 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+?>						 
+<title>បន្ថែមអ្នកទទួលខុសត្រូវការងារ</title>
+<body>
+	<form class="form-horizontal" id="frm" method="post" action="" autocomplete="off">				
+		
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>បន្ថែមអ្នកទទួលខុសត្រូវការងារ</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-md-3">
+								</div>
+								<div class="col-md-6" style="text-align: left !important;border:1px solid #ccc;">
+										<h3 style="border-bottom: 1px solid #ccc;" class="center">អ្នកទទួលខុសត្រូវការងារ</h3>
+									<div class="form-group" >
+										<label class="col-md-4 control-label">
+											<strong>ឈ្មោះ*</strong>
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="responsible_name" name="responsible_name" class="validate[required] form-control" />	
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ភេទ
+										</label>
+										<div class="col-md-8">
+											<select name="gender" id="gender" class="form-control">
+										    <option value="1" label="Active">ប្រុស</option>
+										    <option value="2" label="Deactive">ស្រី</option>
+										</select>	
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											លេខទូរស័ព្ទ
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="tel_phone" name="tel_phone"  class="validate[required] form-control" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											សម្គាល់
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="note" name="note"  class="form-control" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ស្ថានការ
+										</label>
+										<div class="col-md-8">
+											<select name="status" id="status" class="form-control">
+											    <option value="1" label="Active">ប្រើប្រាស់</option>
+											    <option value="0" label="Deactive">មិនប្រើសប្រាស់</option>
+											</select>	
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" style="text-align: left !important;">
+								</div>
+							</div>
+							<div class="form-group">
+								<br />
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>
+
+<script>
+	$('#frm').submit(function() {
+		responsible_name=$("#responsible_name").val();
+		if(responsible_name==""){
+			$('#responsible_name').focus();
+			return false;	
+		}
+		tel_phone=$("#tel_phone").val();
+		if(tel_phone==""){
+			$('#tel_phone').focus();
+			return false;	
+		}
+		$("#save_close").attr("disabled", true);
+	});
+</script>

@@ -1,0 +1,69 @@
+<?php 
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>
+<title><?php echo $tr->translate("ផ្ទេរទំនិញ");?></title>
+<?php 
+	$url_new = $this->url(array('module'=>'product','controller'=>'transferstock','action'=>'add',));
+	$formFilter = $this->formFilter;
+?>
+<div class="portlet box blue">
+		<div class="portlet-title">
+			<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("ផ្ទេរទំនិញ");?>
+			</div>
+			<div class="tools">
+				<label><a href="<?php echo $url_new;?>"><button type="button" name="calcel" class="btn blue"><i class="fa fa-plus"></i>&nbsp;<?php echo $tr->translate("ADD_NEW");?></button></a></label>
+			</div>
+		</div>
+		
+		<div class="portlet-body form">
+			<form class="form-horizontal" method="post" action="" autocomplete="off">
+				<div class="form-body">
+					<div class="form-group">
+						<div class="col-md-3">
+							<?php echo $formFilter->getElement('ad_search');?>
+						</div>
+						<div class=" col-md-3">
+							<select name="from_location" id="from_location" class="form-control select2me" >
+								<option value="">From location</option>
+								<?php if(!empty($this->branch)){foreach ($this->branch as $branch){?>
+								<option value="<?php echo $branch['id']?>" <?php if($branch['id']==$this->search['from_location']){echo "selected='selected'";}?>><?php echo $branch['name']?></option>
+								<?php }}?>
+							</select>
+						</div>
+						<div class=" col-md-3">
+							<select name="to_location" id="to_location" class="form-control select2me" >
+								<option value="">To location</option>
+								<?php if(!empty($this->branch)){foreach ($this->branch as $branch){?>
+								<option value="<?php echo $branch['id']?>" <?php if($branch['id']==$this->search['to_location']){echo "selected='selected'";}?>><?php echo $branch['name']?></option>
+								<?php }}?>
+							</select>
+						</div>
+						<div class=" col-md-2">
+							<?php echo $formFilter->getElement('status');?>
+						</div>
+						
+						<div class="col-md-1">
+							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+						</div>
+					</div>		
+					
+					<div class="form-group">
+						<div class="col-md-3"><div class="input-icon right"><i class="fa fa-calendar"></i>
+							<?php echo $formFilter->getElement('start_date');?></div>
+						</div>
+						<div class="col-md-3"><div class="input-icon right"><i class="fa fa-calendar"></i>
+							<?php echo $formFilter->getElement('end_date');?></div>
+						</div>
+					</div>
+					
+				</div>
+			</form>
+			
+		</div>
+	<div style="position: relative; clear: both;">
+		<div class="contain_form">
+			<?php echo $this->list; ?>
+		</div>
+	</div>
+</div><!-- end .right -->

@@ -1,0 +1,323 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$url_cancel =  $this->url(array('module'=>'product','controller'=>'transferstock','action'=>'index'),null,true);
+?>
+<title><?php echo $tr->translate("កែប្រែផ្ទេរទំនិញ");?></title>
+<br/>
+<div class="portlet box blue">
+	<div class="portlet-title">
+		<div class="caption">
+				<i class="fa fa-globe"></i><?php echo $tr->translate("កែប្រែផ្ទេរទំនិញ");?>
+		</div>
+		<div class="tools">
+			<a href="<?php echo $url_cancel;?>"><button type="button" name="calcel" class="btn red"><?php echo $tr->translate("GO_BACK");?></button></a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		<form id="frm" class="form-horizontal" method="post" action="" autocomplete="off">
+			<div class="form-body">	
+				<div class="form-group">
+					<label class="col-md-1 control-label"><?php echo $tr->translate("ពីសាខា");?></label>
+					<div class="col-md-3">
+						<select name="from_loc" id="from_loc" class="form-control select2me" onchange="getProductByBranch();" >
+							<option value="-1">ពីសាខា</option>
+							<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+							<option value="<?php echo $branch['id']?>" <?php if($branch['id']==$this->transfer['from_location']){echo "selected='selected'";}?>><?php echo $branch['name']?></option>
+							<?php }}?>
+						</select>
+					</div>
+					
+					<label class="col-md-1 control-label"><?php echo $tr->translate("ទៅសាខា");?></label>
+					<div class="col-md-3">
+						<select name="to_loc" id="to_loc" class="form-control select2me" >
+							<option value="-1">ទៅសាខា</option>
+							<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+							<option value="<?php echo $branch['id']?>" <?php if($branch['id']==$this->transfer['to_location']){echo "selected='selected'";}?>><?php echo $branch['name']?></option>
+							<?php }}?>
+						</select>
+					</div>
+					
+					<label class="col-md-1 control-label"><?php echo $tr->translate("សម្គាល់");?></label>
+					<div class="col-md-3">
+						<input name="note" id="note" class="form-control" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-1 control-label"><?php echo $tr->translate("ស្ថានភាព");?></label>
+					<div class="col-md-3">
+						<select name="status" id="status" class="form-control select2me" >
+							<option value="1" <?php if($this->transfer['status']==1){echo "selected='selected'";}?>>ប្រើប្រាស់</option>
+							<option value="0" <?php if($this->transfer['status']==0){echo "selected='selected'";}?>>មិនប្រើប្រាស់</option>
+						</select>
+					</div>
+				</div>
+				<div class="portlet box blue">
+					<div class="portlet-title">
+						<div class="caption" style="width:100%">
+							<select name="pro_name" id="pro_name" class="form-control select2me" onchange="addRow();">
+								<option value="-1">ជ្រើសរើសទំនិញ</option>
+							</select>
+						</div>
+					</div>
+				</div>
+												
+				<div class="portlet box blue">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="fa fa-cogs"></i><?php echo $tr->translate("PRODUCT_LIST");?>
+						</div>
+					</div>	
+					<div class="portlet-body">
+						<div class="table-responsive">
+							<table class="table table-bordered" width="100%">
+								<thead>
+									<tr align="center" style="font-weight:bold;background: #4b8df8;color: #333;">
+										<td width="5%">#</td>
+										<td width="20%"><?php echo $tr->translate("មុខទំនិញ");?></td>
+										<td width="20%"><?php echo $tr->translate("ស្តុក");?></td>
+										<td width="10%"><?php echo $tr->translate("បរិ.ដុំ");?></td>
+										<td width="10%"><?php echo $tr->translate("បរិ.រាយ");?></td>
+										<td width="15%"><?php echo $tr->translate("បរិមាណសរុប");?></td>
+										<td width="15%"><?php echo $tr->translate("សម្គាល់");?></td>
+										<td width="5%"><?php echo $tr->translate("លុប");?></td>
+									</tr>
+								</thead>
+								<tbody id="tr_location" style="font-size:12px;">
+								</tbody>
+							</table>
+						</div>
+						<input type="hidden" name="identity" id="identity"  >
+					</div>
+					<div class="form-group">
+						<div class="form-group">
+							<div class="col-md-4">
+							</div>
+							<div class="col-md-2">
+								<a href="<?php echo $this->baseUrl();?>/product/transferstock"><button type="button" class="btn blue btn-block btn-lg red"><i class="fa fa-times"></i> <?php echo $tr->translate("ត្រលប់ក្រោយ")?></button></a>
+							</div>
+							<div class="col-md-2">
+								<div class="input-icon right">
+									<button type="submit" name="save_close" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> <?php echo $tr->translate("រក្សាទុក")?></button>
+								</div>
+							</div>
+							<div class="col-md-4">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+
+$('#frm').submit(function() {
+	from_loc=$("#from_loc").val();
+	if(from_loc<0){
+		$('#from_loc').select2('open');
+		return false;	
+	}
+	to_loc=$("#to_loc").val();
+	if(to_loc<0){
+		$('#to_loc').select2('open');
+		return false;	
+	}
+	
+	identity=$("#identity").val();
+	if(identity==""){
+		alert("Please select product !!!");
+		$('#pro_name').select2('open');
+		return false;	
+	}
+	
+	var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+	if (r == true) {
+		$("#save_close").attr("disabled", true);
+		return true;
+	} else {
+	   return false;	    
+	}
+});
+
+jQuery(document).ready(function(){
+	getProductByBranch();
+	initialize();
+});
+var j=1;
+function getProductByBranch(){
+	branch_id = $("#from_loc").val();
+	if(branch_id>0){
+		$('#identity').val('');
+		$('#tr_location').empty();
+		$.ajax({
+			url: "<?php echo $this->baseUrl()?>/product/transferstock/get-productbybranch",
+			type: "post",
+			data: {'branch_id':branch_id},
+			success: function(data){
+				rs = $.parseJSON(data);
+				if(rs){
+					$('#pro_name').empty();
+					$('#pro_name').append(rs); 
+				}
+			},
+			error:function(err){
+				alert("failed");
+			}
+		});
+	}
+}
+
+template='';
+url_get_qty = '<?php echo $this->url(array('module'=>'product','controller'=>'damagedstock','action'=>'get-product'))?>';
+function initialize(){
+	index=0;
+	title=0;
+	temp='';
+	<?php if(!empty($this->transfer_detail)){foreach ($this->transfer_detail as $rs){?>
+		product_name = "<?php echo $rs['pro_name']." - ".$rs['pro_code']?>";
+		product_id = "<?php echo $rs['pro_id']?>";
+		if(product_name==''){return false;}
+		index++;
+
+		template='<tr align="center" id="row_location_'+index+'">';
+		template+='<td style="min-width:20px;text-align:center">'+index+'</td>';
+		//template+='<td style="white-space: nowrap;font-size:14px;">'+data.item_name+" - "+data.item_code+'<input type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+data.id+'" /><input type="hidden" id="current_qty_'+index+'"  name="current_qty_'+index+'" value="'+data.qty+'" class="form-control"/><input type="hidden" name="measure_'+index+'" id="measure_'+index+'" value="'+data.measure+'"/><input type="hidden" name="unit_label_'+index+'" id="unit_label_'+index+'" value="'+data.unit_label+'"/> <input type="hidden" id="qty_measure_'+index+'" name="qty_measure_'+index+'" onKeyup="" value="'+data.qty_perunit+'" class="form-control" /></td>';
+		template+='<td style="white-space: nowrap;font-size:14px;">'+product_name+'<input type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+product_id+'" /><input type="hidden" id="current_qty_'+index+'"  name="current_qty_'+index+'" class="form-control"/><input type="hidden" name="measure_'+index+'" id="measure_'+index+'" /><input type="hidden" name="unit_label_'+index+'" id="unit_label_'+index+'" /> <input type="hidden" id="qty_measure_'+index+'" name="qty_measure_'+index+'" class="form-control" /></td>';
+		template+='<td style="white-space: nowrap;"><input style="text-align:center;" id="lb_cu_qty_'+index+'" name="lb_cu_qty_'+index+'" readonly class="form-control " /></td>'; 
+		template+='<td><input type="text" style="text-align:center;" id="qty_'+index+'" name="qty_'+index+'" onKeyup="calCualteTotalQty('+index+')" onkeypress="return isNumberKey(event);" class="form-control"></td>'; 
+		template+='<td><input type="text" style="text-align:center;" id="qty_detail_'+index+'" name="qty_detail_'+index+'" onKeyup="calCualteTotalQty('+index+')" onkeypress="return isNumberKey(event);" class="form-control"></td>';
+		template+='<td><input type="text" id="total_qty_'+index+'" name="total_qty_'+index+'" readonly class="form-control"></td>';
+		template+='<td><input type="text" id="note_'+index+'" name="note_'+index+'" class="form-control"></td>';
+		template+='<td><button type="button" onClick="deleteRecord('+index+')" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
+		template+="</tr>";
+
+		$('#tr_location').append(template);
+
+		if($("#identity").val()!="") {
+			var identity = $("#identity").val();
+			$("#identity").val(identity+','+index);
+		} else {$("#identity").val(index);}
+		
+		
+	
+		$("#qty_"+index).val("<?php echo $rs['qty'];?>");
+		$("#qty_detail_"+index).val("<?php echo $rs['qty_detail'];?>");
+		$("#total_qty_"+index).val("<?php echo $rs['total_qty'];?>");
+		$("#note_"+index).val("<?php echo $rs['note'];?>");
+		
+		getProductinfo(index,product_id);
+		
+	<?php }}?>
+	
+}
+
+var index=0;
+url_get_qty = '<?php echo $this->url(array('module'=>'product','controller'=>'damagedstock','action'=>'get-product'))?>';
+function addRow(){
+	
+	var product_name = $("#pro_name");
+	var txt_product_name = $("option:selected",product_name).text();
+	var product_id = $("#pro_name").val();
+	index++;		
+	template='<tr align="center" id="row_location_'+index+'">';
+	template+='<td>'+index+'</td>';
+	template+='<td style="white-space: nowrap;font-size:14px;">'+txt_product_name+'<input type="hidden"  id="pro_id_'+index+'" name="pro_id_'+index+'" value="'+product_id+'" /><input type="hidden" id="current_qty_'+index+'"  name="current_qty_'+index+'" class="form-control"/><input type="hidden" name="measure_'+index+'" id="measure_'+index+'" /><input type="hidden" name="unit_label_'+index+'" id="unit_label_'+index+'" /> <input type="hidden" id="qty_measure_'+index+'" name="qty_measure_'+index+'" class="form-control" /></td>';     
+	template+='<td style="white-space: nowrap;"><input style="text-align:center;" id="lb_cu_qty_'+index+'" name="lb_cu_qty_'+index+'" readonly class="form-control " /></td>'; 
+	template+='<td><input type="text" style="text-align:center;" id="qty_'+index+'" name="qty_'+index+'" onKeyup="calCualteTotalQty('+index+')" onkeypress="return isNumberKey(event);" value="1" class="form-control"></td>'; 
+	template+='<td><input type="text" style="text-align:center;" id="qty_detail_'+index+'" name="qty_detail_'+index+'" onKeyup="calCualteTotalQty('+index+')" onkeypress="return isNumberKey(event);" value="0" class="form-control"></td>';
+	template+='<td><input type="text" id="total_qty_'+index+'" name="total_qty_'+index+'" readonly value="" class="form-control"></td>';
+	template+='<td><input type="text" id="note_'+index+'" name="note_'+index+'" class="form-control"></td>';
+	template+='<td><button type="button" onClick="deleteRecord('+index+')" name="save_close" class="btn default"><?php echo $tr->translate("DELETE");?></button></td>';
+	template+='</tr>';
+	
+	$('#tr_location').append(template);
+	if($('#identity').val()!="") {
+		var identity = $('#identity').val();
+		$('#identity').val(identity+','+index);
+	} else {$('#identity').val(index);}
+	
+	getProductinfo(index,product_id);
+	
+	
+	
+}
+
+function calCualteTotalQty(index){
+	//alert(index);
+	qty= $("#qty_"+index).val();//ចំនួនដុំ
+	if(qty==''){qty=0;}
+	
+	qty_detail= $("#qty_detail_"+index).val();//ចំនួនរាយ
+	if(qty_detail==''){qty_detail=0;}
+	
+	qty_perunit= $("#qty_measure_"+index).val();//ចំនួនក្នុង១ឯកកតា
+	if(qty_perunit==''){qty_perunit=0;}
+	
+	qty_sold = parseFloat(qty) + parseFloat(qty_detail/(qty_perunit));
+	$('#total_qty_'+index).val(qty_sold.toFixed(3));
+	
+}
+
+function getProductinfo(index,product_id){
+	if(product_id>0){
+		branch_id = $('#from_loc').val();
+		$.ajax({
+			url: "<?php echo $this->baseUrl()?>/sales/possale/getproduct",
+			type: "post",
+			data: {product_id:product_id,'branch_id':branch_id},
+			success: function(data){
+				data = $.parseJSON(data);
+				if(data){
+					
+					$('#current_qty_'+index).val(data.qty);
+					$('#measure_'+index).val(data.measue_name);
+					$('#unit_label_'+index).val(data.unit_label);
+					$('#qty_measure_'+index).val(data.qty_perunit);
+
+					qty = data.qty;
+					if(qty==null){qty=0;}
+					qtyall_detail = qty*(data.qty_perunit);//eg;qty 1.5 and 1unit =24cans; =>1.5*24 =36cans.
+					qty_unitlable = (qtyall_detail % (data.qty_perunit)).toFixed(0);//រកចំនួនរាយ
+					if(qty_unitlable>0){qty_unitlable=qty_unitlable+""+data.unit_label;}else{qty_unitlable=""; }
+					qty=parseInt(qty);
+					measure_name = data.measue_name;
+					if(data.measue_name==null){measure_name='';}
+					current_stock = qty+""+measure_name;//data.unit_label;
+					if(qty<=0){
+						current_stock = '';
+					}else if(qty>0 && qty_unitlable!=''){
+						current_stock = current_stock + " និង ";
+					}
+					$("#lb_cu_qty_"+index).val(current_stock+""+qty_unitlable);
+					
+					calCualteTotalQty(index);
+				}
+			},
+			error:function(err){
+				alert("failed");
+			}
+		});
+	}
+}
+
+	
+function deleteRecord(index) {
+	var identity = $('#identity').val();
+	var arrays = identity.split(',');
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity').val(strings);
+	$("#row_location_"+index).remove();
+}
+function isNumberKey(evt)
+{
+	var charCode = (evt.which) ? evt.which : event.keyCode;
+	if (charCode != 46 && charCode != 45 && charCode > 31 && (charCode < 48 || charCode > 57)){
+		return false;
+	}else{
+		return true;
+	}
+}
+</script>

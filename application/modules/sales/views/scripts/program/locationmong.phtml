@@ -1,0 +1,126 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$db_global = new Application_Model_DbTable_DbGlobal();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+	$row = $this->row;
+?>
+<title>ព័ត៌មានផ្លាកម៉ុង</title>
+<div id="Printtimemol" >
+<div class="wrapper" id="borderimg1" style="background: #fff;width:25cm;margin: 0 auto; min-height: 34cm;padding: 0.5cm;">
+		<style>
+	    	.wrapper{
+	    		width: 100%;
+	    		margin: 0px;
+	    		padding: 0px;
+	    	}
+	    	.contain{
+	    		width: 1024px;
+	    		margin: 0 auto;
+	    	}
+			table {
+	    		border-collapse: collapse;
+	    		width: 100%;
+			}
+			th, td {
+	    		padding: 4px;
+			}
+			#borderimg1 { 
+			    border: 80px dotted ;
+			    border-image: url("<?php echo $this->baseUrl()?>/images/ifrmas.jpg") 120 stretch;
+			}
+			td li .fa:before{color:#B22222 !important;}
+	    </style>
+		<table cellpadding="0" cellspacing="0" width="100%" style="margin-top: -26px;">
+			<tr class="no-boder">
+				<td>
+				<table width="100%" >
+					<tr>
+						<td width="17%" align="center">
+							<img style="width: 80%; height: 130px;" alt="<?php ?>" src="<?php echo $this->baseUrl()?>/images/logosbona.jpg"><br>
+							<span style="font-family: Freestyle Script;font-size: 20px;"></span>
+							
+						</td>
+						<td width="34%" valign="top" align="center">
+							<table   style="text-align:center;border:solid 1px #FFF;">
+								<tr style="list-style:12px; font-family:  Khmer OS Muol; font-size:48px;font-weight: bold;">
+									<td style="color:red !important;">ព័ត៌មានផ្លាកម៉ុង</td>
+								</tr>	
+							</table>
+						</td>
+						<td width="10%" >&nbsp;</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+		  	<tr>
+		  		<td>
+	  			<table style="font-size:15px;font-family: Khmer OS Battambang, Times New Roman;">  			
+	  				<tr style="list-style:25px; font-family:  Khmer OS Muol;line-height:68px; font-size:35px; font-weight: bold; list-style:none;">
+	  					<td>
+	  						<li style="color:#800080 !important;">ទីតាំង៖ &nbsp; <?php echo $this->row['place_of_program']?></li>
+	  						<li style="color:#800080 !important;">ទូរស័ទ្ទ៖ &nbsp; <?php echo $db_global->getNumberInkhmer($this->row['membersone'])?></li>
+	  					</td>
+	  				</tr>
+	  				<tr style="list-style:25px; font-family:  Khmer OS Muol;line-height:65px; font-size:30px;font-weight: bold; list-style:none;">
+	  					<td>
+	  						<li style="color:#009900 !important;">ព័ត៌មានរបស់សព (<?php echo $this->row['dead']?>)៖ </li>
+	  						<li style="color:#009900 !important;">&nbsp;&nbsp;ឈ្មោះ(ខ្មែរ)  <?php echo $this->row['dead_name']?></li>
+	  						<li style="color:#009900 !important;">&nbsp;&nbsp;ឈ្មោះ(ចិន)  <?php echo $this->row['dead_name_chinese']?></li>
+	  					</td>
+	  				</tr>
+	  				<tr style="list-style:25px; font-family:  Khmer OS Muol;line-height:65px; font-size:30px;font-weight: bold; list-style:none;">
+	  					<td>
+	  						<li style="color:#009900 !important;">ព័ត៌មានរបស់ដៃគូសព (<?php echo $this->row['partner']?>)៖ </li>
+	  						<li style="color:#009900 !important;">&nbsp;&nbsp;ឈ្មោះ(ខ្មែរ)  <?php echo $this->row['partner_name']?></li>
+	  						<li style="color:#009900 !important;">&nbsp;&nbsp;ឈ្មោះ(ចិន)  <?php echo $this->row['partner_name_chinese']?></li>
+	  					</td>
+	  				</tr>
+	  				<tr style="list-style:25px; font-family:  Khmer OS Muol;line-height:65px; font-size:30px;font-weight: bold; list-style:none; color:#B22222;">			
+	  					<td>
+	  						<li style="color:#B22222 !important;"><i class="fa fa-chevron-circle-right" style="font-size:30px;"></i>ថ្ងៃកើត៖   <?php echo $db_global->getNumberInkhmer($this->row['dead_dob'])?> </li>
+	  						<li style="color:#B22222 !important;"><i class="fa fa-chevron-circle-right" style="font-size:30px;"></i>ថ្ងៃស្លាប់៖   <?php echo $db_global->getNumberInkhmer($this->row['date_time_dead'])?></li>
+	  					<li style="color:#B22222 !important;"><i class="fa fa-chevron-circle-right" style="font-size:30px;"></i>ឆ្នាំកូនប្រុស៖
+	  					<?php     
+		              		  if(!empty($this->khmer_year_boy))foreach ($this->khmer_year_boy AS $index => $rs){?><?php if ($index>0)echo '-';?>
+	  					<?php echo $rs["khmer_year_name"];?>				  						
+	  					<?php }?></li>
+	  					<li style="color:#B22222 !important;"><i class="fa fa-chevron-circle-right" style="font-size:30px;"></i>ឆ្នាំកូនស្រី៖
+	  					<?php     
+		              		  if(!empty($this->khmer_year_girl))foreach ($this->khmer_year_girl AS $index => $rs){?><?php if ($index>0)echo '-';?>
+	  					<?php echo $rs["khmer_year_name"];?>				  						
+	  					<?php }?></li>
+	  					</td>		
+	  				</tr>
+	  				<tr align="center" style="list-style:25px; font-family:  Khmer OS Muol;line-height:65px; font-size:35px;font-weight: bold; list-style:none;">
+	  					<td style="color:blue !important;">
+	  						ស្រុកកំណើតសព៖ <?php echo $this->row['dead_pob']?>
+	  					</td>
+	  				</tr>
+	  			</table>
+		</table>
+	</div>
+</div>
+
+<div style="padding-left:14%; margin: 0 auto;"> 
+    	<lable class="col-md-3" style=""></lable>
+    	<div class="col-md-2">
+			<a href="<?php echo $this->baseUrl();?>/sales/program"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i>ចាកចេញ</button></a>
+		</div>
+    	<lable class="col-md-2" style="">
+             <button type="button" onclick="printinvoice();" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i> បោះពុម្ភ </button>
+		</lable>
+		<lable class="col-md-3" style=""></lable>
+</div>
+<script>
+function printinvoice(){
+	var printContents = document.getElementById('Printtimemol').innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+	document.getElementById("office_timemol").submit();
+}
+</script>
+
+

@@ -1,0 +1,198 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+?>						 
+<title>បន្ថែមដៃគូសេវាកម្មខាងក្រៅ</title>
+<body>
+	<form class="form-horizontal" id="frm" method="post" action="" autocomplete="off">				
+		
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>បន្ថែមដៃគូសេវាកម្មខាងក្រៅ</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-md-3">
+								</div>
+								<div class="col-md-7" style="text-align: left !important;border:1px solid #ccc;">
+										<h2 style="border-bottom: 1px solid #ccc;" class="center">ដៃគូសេវាកម្ម</h2>
+									<div style="margin-right: 34px;">
+									<div class="form-group" >
+										<label class="col-md-4 control-label">
+											<strong>ឈ្មោះដៃគូ*</strong>
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="partner_name" name="partner_name" class="validate[required] form-control" />	
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ភេទ
+										</label>
+										<div class="col-md-8">
+											<select name="gender" id="gender" class="form-control">
+										    <option value="1" label="Active">ប្រុស</option>
+										    <option value="2" label="Deactive">ស្រី</option>
+										</select>	
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											លេខទូរស័ព្ទ
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="tel" name="tel"  class="form-control" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											អាស័យដ្ឋាន
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="addresss" name="addresss"  class="form-control" />
+										</div>
+									</div>									
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ពណ៍នា
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="description" name="description"  class="form-control" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											សេវាកម្ម
+										</label>
+										<div class="col-md-8">
+											<select  name="service_id" id="service_id" onchange="addProductRow();"  class="form-control select2me" value="1">
+												<option value="-1">សូមជ្រើសរើសសេវាកម្ម</option>
+												<?php if(!empty($this->rsservice)){foreach ($this->rsservice as $rs){?>
+													<option value="<?php echo $rs["id"];?>"><?php echo $rs["item_name"].' - '.$rs["barcode"];?></option>
+												<?php }}?>
+											</select>
+										</div>
+									</div>
+									<div class="row" style="margin-left: -100px;">
+										<div class="col-md-2"></div>
+										<div class="col-md-10">
+											 <div class="portlet box blue">
+												<div class="portlet-title">
+													<div class="caption">
+														<i class="fa fa-cogs"></i>សេវាកម្មផ្តល់អោយ
+														
+													</div>
+												</div>
+												 <div class="portlet-body">
+													<div class="table-responsive">
+														 <table id="table_row" class="table table-bordered" style="font-size:12px !important;">
+															<thead>
+																<tr style="text-align: center !important;">
+																	<th class="aligncenter">#</th>
+																	<th class="aligncenter" style="min-width:200px;white-space: nowrap;">ឈ្មោះ/ទំនិញសេវាកម្ម</th>
+																	<th class="aligncenter">តម្លៃ</th>
+																	<th class="aligncenter">សម្គាល់</th>
+																	<th class="aligncenter">លុប</th>
+																</tr>
+															</thead>
+															<tbody id="lbl_noservice">
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-1">
+											<input id="identity" name="identity" type="hidden" />
+										</div>
+									</div>
+									
+								</div>
+								<div class="col-md-3" style="text-align: left !important;">
+								</div>
+							</div>
+							<div class="form-group">
+								<br />
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>
+<script>
+	$('#frm').submit(function() {
+		partner_name=$("#partner_name").val();
+		if(partner_name<=0){
+			alert("Please input partner name");
+			$('#partner_name').focus();
+			return false;	
+		}
+		var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+		if (r == true) {
+			$("#save_close").attr("disabled", true);
+			return true;
+		} else {
+		   return false;	    
+		}
+	});
+	
+	index=0;
+	title=0;
+	temp='';
+	function addProductRow(){
+		index++;
+		var branch_text = $("#service_id");
+		var txt_br = $("option:selected",branch_text).text();
+		var pro_id = $("#service_id").val();
+		
+		if(pro_id<=0){return false;}
+		template='<tr id="row_location_'+index+'">';
+		template+='<td>'+index+'</td>';
+		template+='<td>'+txt_br+'<input type="hidden" id="service_id'+index+'" name="service_id'+index+'" value="'+pro_id+'" </td>';		
+		template+='<td><input type="text" onkeyup="" id="prices_'+index+'" name="prices_'+index+'" class=" form-control"></td>'; 
+		template+='<td><input type="text" id="notes_'+index+'" name="notes_'+index+'" class="form-control"></td>';
+		template+='<td><button type="button" onClick="deleteRecord('+index+')" name="save_close" class="btn default red">លុប</button></td>';
+		template+='</tr>';
+		
+		$('#lbl_noservice').append(template);
+		if($('#identity').val()!="") {
+			var identity = $('#identity').val();
+			$('#identity').val(identity+','+index);
+		} else {$('#identity').val(index);}
+		
+	}
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		$("#row_location_"+index).remove();
+		netTotal();
+	}
+</script>

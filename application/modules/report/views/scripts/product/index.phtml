@@ -1,0 +1,256 @@
+<?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+  $rpt_product_list=$this->url(array('module'=>'report','controller'=>'product','action'=>'rptproductlist'), null, true);
+  $rpt_current=$this->url(array('module'=>'report','controller'=>'product','action'=>'rptcurrentstock'), null, true);
+  $rpt_current_all=$this->url(array('module'=>'report','controller'=>'product','action'=>'rptallcurrentstock'), null, true);
+  $rpt_ajust=$this->url(array('module'=>'report','controller'=>'product','action'=>'rptadjuststock'), null, true);
+  $rpt_ajust_detail=$this->url(array('module'=>'report','controller'=>'product','action'=>'rptadjuststockdetail'), null, true);
+  $rpt_transfer_stock=$this->url(array('module'=>'report','controller'=>'product','action'=>'rpt-transferstock'), null, true);
+  $rpt_transfer_stock_detail=$this->url(array('module'=>'report','controller'=>'product','action'=>'rpt-transferstockdetail'), null, true);
+  
+  
+  $user_info = new Application_Model_DbTable_DbGetUserInfo();
+	$result = $user_info->getUserInfo();
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage(); 
+	$session_user=new Zend_Session_Namespace('auth');
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	 $level = $result["level"];
+  
+  ?>
+<title>របាយការណ៍ ទំនិញ</title>  
+<div class="row">
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat purple-plum">
+			<a class="more" href="<?php echo $rpt_product_list;?>">
+			<div class="visual">
+				<i class="fa fa-comments"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					 របាយការណ៍បញ្ជីផលិតផល
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+				View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat blue-madison">
+			<a class="more" href="<?php echo $rpt_current_all;?>">
+			<div class="visual">
+				<i class="fa fa-bar-chart-o"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+					 
+				</div>
+				<div class="desc">
+					 របាយការណ៍ចំនួនស្តុក តាមសាខា
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat green-haze">
+			<a class="more" href="<?php echo $rpt_ajust;?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					 របាយការណ៍កែប្រែស្តុក
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat red-intense">
+			<a class="more" href="<?php echo $rpt_ajust_detail;?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					 របាយការណ៍កែប្រែស្តុកលម្អិត
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat green-haze">
+			<a class="more" href="<?php echo $rpt_transfer_stock;?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					 របាយការណ៍ផ្ទេរទំនិញ
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat red-intense">
+			<a class="more" href="<?php echo $rpt_transfer_stock_detail;?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					 របាយការណ៍ផ្ទេរទំនិញលម្អិត
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat blue-madison">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'product','action'=>'rpt-return-stock'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("របាយការណ៍ផ្ទេរទំនិញចូលស្តុកវិញ");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat purple-plum">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'product','action'=>'rpt-return-stock-detail'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("របាយការណ៍ផ្ទេរទំនិញចូលស្តុកលម្អិត");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat purple-plum">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'product','action'=>'rptproductsold'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("របាយការណ៏លក់ផលិតផល");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat green-haze">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'product','action'=>'product-barcode'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("បញ្ជី Barcode ផលិតផល");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat purple-plum">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'product','action'=>'all-barcode'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("បញ្ជី Barcode");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+		<div class="dashboard-stat green-haze">
+			<a class="more" href="<?php echo $this->url(array('module'=>'report','controller'=>'product','action'=>'one-barcode-row'), null, true);?>">
+			<div class="visual">
+				<i class="fa fa-shopping-cart"></i>
+			</div>
+			<div class="details">
+				<div class="number">
+				</div>
+				<div class="desc">
+					<?php echo $tr->translate("Barcode ផលិតផលតែមួយ");?>
+				</div>
+			</div>
+			</a>
+			<a class="more" href="javascript:;">
+			View more <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+		</div>
+	</div>
+</div>

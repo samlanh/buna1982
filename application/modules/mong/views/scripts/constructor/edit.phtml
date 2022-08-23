@@ -1,0 +1,120 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+?>						 
+<title>ជាងសាងសង់</title>
+<body>
+	<form class="form-horizontal" id="frm" method="post" action="" autocomplete="off">				
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>ជាងសាងសង់</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-md-1">
+								</div>
+								<div class="col-md-5" style="text-align: left !important;border:1px solid #ccc;">
+										<h4 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មាន អំពីជាងសាងសង់</h4>
+									<div class="form-group" >
+										<label class="col-md-4 control-label">ឈ្មោះអ្នកម៉ៅការ</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control " name="name" id="name" value="<?php echo $this->row['name']?>"/>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">ភេទ</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="sex" id="sex" >
+												<option value="1" <?php if($this->row['sex']==1){echo "selected='selected'";}?>>ប្រុស</option>
+												<option value="2" <?php if($this->row['sex']==2){echo "selected='selected'";}?>>ស្រី</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											លេខទូរស័ព្ទ
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control " name="phone" id="phone" value="<?php echo $this->row['phone']?>"/>
+										</div>
+									</div>
+									<div class="form-group" >
+										<label class="col-md-4 control-label">អ៊ីម៉ែល</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control " name="email" id="email" value="<?php echo $this->row['email']?>"/>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											អាស័យដ្ឋាន
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control " name="address" id="address" value="<?php echo $this->row['address']?>"/>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ប្រភេទជាង
+										</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="constructor_type" id="constructor_type" >
+												<option value="1" <?php if($this->row['constructor_type']==1){echo "selected='selected'";}?>>ម៉ុង</option>
+												<option value="2" <?php if($this->row['constructor_type']==2){echo "selected='selected'";}?>>ចេតិយ</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-5" style="text-align: left !important;">
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											កំណត់សម្គាល់
+										</label>
+										<div class="col-md-8">
+											<textarea class="form-control " name="note" id="note" style="height: 250px;" ><?php echo $this->row['note']?></textarea>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ស្ថានការ
+										</label>
+										<div class="col-md-8">
+											<select type="text" class="form-control select2me" name="status" id="status" >
+												<option value="1" <?php if($this->row['status']==1){echo "selected='selected'";}?>>Active</option>
+												<option value="0" <?php if($this->row['status']==0){echo "selected='selected'";}?>>Deactive</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-1" style="text-align: left !important;">
+								</div>
+							</div>
+							<div class="form-group">
+								<br />
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" name="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>

@@ -1,0 +1,150 @@
+
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$db_global = new Application_Model_DbTable_DbGlobal();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+	$row = $this->row
+?>	
+<title>ប្រគល់អោយសព</title>
+<div id="Printdonate">
+	<div  class="wrapper" id="borderimg1" style="background: #fff; width:25cm; margin: 0 auto;min-height: 36cm;padding: 0.5cm;">
+		<style>
+	    	.wrapper{
+	    		width: 100%;
+	    		margin: 0px;
+	    		padding: 0px;
+	    	}
+	    	.contain{
+	    		width: 1024px;
+	    		margin: 0 auto;
+	    	}
+			table {
+	    		border-collapse: collapse;
+	    		width: 100%;
+			}
+			th, td {
+	    		padding: 4px;
+			}
+			#borderimg1 { 
+			    border: 90px dotted ;
+			    border-image: url("<?php echo $this->baseUrl()?>/images/ifrmas.jpg") 125 stretch;
+			}
+	    </style>
+		<table cellpadding="0" cellspacing="0" width="100%">
+			<tr class="no-boder">
+				<table width="100%"  style="margin-top: -75px;">
+					<tr>
+						<td width="20%" align="center">
+							<img style="max-height:100px;" alt="<?php ?>" ><br>
+							<span style="font-family: Freestyle Script;font-size: 20px;"></span>
+							
+						</td>
+						<td width="60%">
+							<table   style="text-align:center; border:solid 1px #FFF; line-height:50px;">
+								<tr style="list-style:12px; font-family:  Khmer OS Muol; font-size:30px;font-weight: bold;">
+									<td>ព្រះរាជាណាចក្រកម្ពុជា</td>
+								</tr>
+								<tr style="list-style:12px; font-family:  Khmer OS Muol; font-size:30px;font-weight: bold;">
+									<td>ជាតិ សាសនា ព្រះមហាក្សត្រ</td>
+								</tr>
+								<tr style="list-style:12px;font-weight: bold;font-size:13px;" class="img-size">
+									<td>
+										<img style="width: 40%; height: 120px;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br>
+									</td>
+								</tr>
+								<tr style="list-style:15px;font-family: Times New Roman, cursive;font-size:25px;font-weight: bold;">
+									<td><?php echo $tr->translate("PHONE_BUNA");?></td>
+								</tr>	
+								</table>
+							</td>
+						<td width="20%" ></td>
+					</tr>				
+			</table>
+	  	<tr>
+	  		<td>
+	  			<table style="font-size:15px;font-family:  Khmer OS Muol;">	
+	  				<tr>
+  						<td colspan="3" align="left" style="list-style:25px; font-family:  Khmer OS Muol; font-size:27px;font-weight: bold; color:black;">
+  							热心者　(សប្បុរសជន):
+  							</td>
+  						</tr>
+			  			<tr>
+  							<td colspan="3" align="center" style="list-style:25px; font-family:   Khmer OS Muol; font-size:35px;font-weight: bold; color:red !important;">
+  									<?php echo $this->row['donor']?>
+  								</td> 											
+  						</tr>
+  						<tr>
+  							<td colspan="3" align="center" style="list-style:25px; font-family:  Khmer OS Muol; font-size:30px;font-weight: bold; color:#C70039 !important;">
+  								<?php echo $this->row['donor_phone']?>
+  							</td>
+  						</tr>
+		  				<tr>
+	  					<td align="center" style="list-style:23px; font-family:  Khmer OS Muol; font-size:30px;font-weight: bold; color:#22B424 !important;">
+	  						<?php echo $this->row['notes']?>
+						</td>
+	  				</tr>
+		  			<tr>
+	  					<td align="center" style="list-style:23px; font-family:  Khmer OS Muol; font-size:30px;font-weight: bold; color:#22B424 !important;">
+	  						<?php echo $this->row['note']?>
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td align="center" style="list-style:23px; font-family:  Khmer OS Muol; font-size:30px;font-weight: bold; color: #black !important;">
+	  						<span style="color: red !important;">លំនៅដ្ឋាន៖ </span>
+	  						<span style="color: #6A5ACD !important;"> <?php echo $this->row['donor_address']?></span>
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td align="left" style="list-style:23px; font-family:  Khmer OS Muol; font-size:34px;font-weight: bold; color:#22B424 !important;">
+	  						ព័ត៌មានសព៖
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td style="font-family:  Khmer OS Muol; font-size:30px;font-weight: bold;  line-height:50px; list-style:none;">
+	  						<li style="color: #6A5ACD !important;">ឈ្មោះសព ៖  <?php echo $this->row['dead_name']?></li>
+	  						<li  style="color: #6A5ACD !important;">ភេទ  ៖  <?php echo $this->row['dead_sex']?></li>
+	  						<li  style="color: #6A5ACD !important;">អាយុ ៖ <?php echo $db_global->getNumberInkhmer($this->row['dead_age'])?>&nbsp;ឆ្នាំ</li>	  			
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td align="center" style="list-style:23px; font-family:  Khmer OS Muol; font-size:30px;font-weight: bold; color:#black !important;">
+	  						 <span style="color: red !important;">លំនៅដ្ឋាន៖ </span>
+	  						<span style="color: #6A5ACD !important;"> <?php echo $this->row['dead_address']?></span>
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td align="center" style="list-style:23px; font-family:  Khmer OS Muol; font-size:27px;font-weight: bold; color:#6A5ACD !important;">
+	  						 ថ្ងៃ <?php echo $db_global->getNumberInkhmer(date("d",strtotime($row['date_jenh'])));?> ខែ <?php echo $db_global->getNumberInkhmer(date("m",strtotime($row['date_jenh'])));?> ឆ្នាំ ២០<?php echo $db_global->getNumberInkhmer(date("y",strtotime($row['date_jenh'])));?>
+	  					</td>
+	  				</tr>
+	  			</table>				
+	  			</td>
+	  		</tr>
+	`	</table>
+	</div>
+</div>
+</div>
+<div style="padding-left:32%; margin: 0 auto;"> 
+<lable class="col-md-3" style=""></lable>
+<div class="col-md-2">
+<a href="<?php echo $this->baseUrl();?>/mong/index"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i>ចាកចេញ</button></a>
+</div>
+<lable class="col-md-2" style="">
+<button type="button" onclick="printinvoice();" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i> បោះពុម្ភ </button>
+</lable>
+<lable class="col-md-3" style=""></lable>
+</div>
+
+<script>
+function printinvoice(){
+	var printContents = document.getElementById('Printdonate').innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+	document.getElementById("office_donate").submit();
+}
+</script>
+

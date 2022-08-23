@@ -1,0 +1,269 @@
+<title>Stock Management System</title>
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$db = new Application_Model_DbTable_DbGlobal();
+	$label="";
+	$data="";
+	foreach($this->product_type as $type){
+		$label = $label.",".'"'.$type['name'].'"';
+		$result = $db->getDataByProType($type['id'],$this->search['start_date'],$this->search['end_date']);
+		$data = $data.",".'"'.$result.'"';
+	}
+?>
+<form class="form-horizontal" id="frm" method="post" action="" enctype="multipart/form-data" autocomplete="off" >	
+	<div id="content-wrapper">
+		<div class="row">
+			<div class="col-sm-10 mb-3 center">
+				<span style="font-size: 40px;font-family: Times New Roman;margin-left: 12%;">Welcome to Stock Management System</span>
+			</div>
+			<div class="col-sm-2 mb-3">
+				<img style="width: 75%;margin-top: -25px;" src="<?php echo $this->baseUrl()."/images/logo.png"?>">
+			</div>
+		</div>	
+		
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xl-3 col-sm-3 mb-3">
+					<select name="branch" id="branch" class="form-control select2me"  >
+						<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+						<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+						<option value="<?php echo $branch['id']?>" <?php if ($this->search['branch']==$branch['id']){ echo 'selected="selected"';}?>><?php echo $branch['name'];?></option>
+						<?php }}?>
+					</select>
+				</div>
+				
+				<div class="col-xl-3 col-sm-3 mb-3">
+					<div class="input-icon right">
+						<i class="fa fa-calendar"></i>
+						<input type="text" class="form-control date-picker" name="start_date" id="start_date" value="<?php echo date("d-m-Y",strtotime($this->search['start_date']))?>" data-date-format="dd-mm-yyyy" />
+					</div>
+				</div>
+				
+				<div class="col-xl-3 col-sm-3 mb-3">
+					<div class="input-icon right">
+						<i class="fa fa-calendar"></i>
+						<input type="text" class="form-control date-picker" name="end_date" id="end_date" value="<?php echo date("d-m-Y",strtotime($this->search['end_date']))?>" data-date-format="dd-mm-yyyy" />
+					</div>
+				</div>
+				
+				<div class="col-md-1">
+					<button type="submit" id="save_close" class="btn btn-primary col-md-12" ><i class="fa fa-search"></i> ស្វែងរក</button>
+				</div>
+			</div>
+			<!-- Icon Cards-->
+			<div class="row dashboard-st">
+				<div class="col-xl-3 col-sm-3 mb-3">
+					<div class="card text-white bg-primary o-hidden h-100">
+						<div class="card-body">
+							<div class="card-body-icon">
+								<i class="fas fa fa-money"></i>
+							</div>
+							<div class="mr-5"><h4><?php echo $tr->translate("លក់បានសរុប")?> : <b><?php echo $this->amount_sale;?></b></h4></div>
+						</div>
+						<a class="card-footer text-white clearfix small z-1" href="<?php echo $this->baseUrl().'/sales/possale/add'?>" target="_blank"">
+						  <span class="float-left" style="font-size:12px;"><?php echo $tr->translate("បន្ថែមការលក់")?></span>
+						  <span class="float-right">
+							<i class="fas-arrow fa fa-angle-right"></i>
+						  </span>
+						</a>
+					</div>
+				</div>
+				<div class="col-xl-3 col-sm-3 mb-3">
+					<div class="card text-white bg-warning o-hidden h-100">
+						<div class="card-body">
+							<div class="card-body-icon">
+								<i class="fas fa fa-university"></i>
+							</div>
+							<div class="mr-5"><h4><?php echo $tr->translate("លក់ម៉ុងបានសរុប")?> : <b><?php echo $this->amount_mong;?></b></h4></div>
+						</div>
+						<a class="card-footer text-white clearfix small z-1" href="<?php echo $this->baseUrl().'/mong/index/add'?>" target="_blank">
+						  <span class="float-left" style="font-size:12px;"><?php echo $tr->translate("បន្ថែមការលក់ម៉ុង")?></span>
+						  <span class="float-right">
+							<i class="fas-arrow fa fa-angle-right"></i>
+						  </span>
+						</a>
+					</div>
+				</div>
+				<div class="col-xl-3 col-sm-3 mb-3">
+					<div class="card text-white bg-success o-hidden h-100">
+						<div class="card-body">
+							<div class="card-body-icon">
+								<i class="fas fa fa-user"></i>
+							</div>
+							<div class="mr-5"><h4><?php echo $tr->translate("កម្មវិធីបុណ្យ")?> : <b><?php echo $this->amount_program;?></b></h4></div>
+						</div>
+						<a class="card-footer text-white clearfix small z-1" href="<?php echo $this->baseUrl().'/sales/program/add'?>" target="_blank">
+						  <span class="float-left" style="font-size:12px;"><?php echo $tr->translate("បន្ថែមកម្មវិធីបុណ្យ")?></span>
+						  <span class="float-right">
+							<i class="fas-arrow fa fa-angle-right"></i>
+						  </span>
+						</a>
+					</div>
+				</div>
+				<div class="col-xl-3 col-sm-3 mb-3">
+					<div class="card text-white bg-danger o-hidden h-100">
+						<div class="card-body">
+							<div class="card-body-icon">
+								<i class="fas fa fa-users"></i>
+							</div>
+							<div class="mr-5"><h4><?php echo $tr->translate("សប្បុរសជន")?> : <b><?php echo $this->amount_donor;?></b></h4></div>
+						</div>
+						<a class="card-footer text-white clearfix small z-1" href="<?php echo $this->baseUrl().'/donors/index/add'?>" target="_blank">
+						  <span class="float-left" style="font-size:12px;"><?php echo $tr->translate("បន្ថែមសប្បុរសជន")?></span>
+						  <span class="float-right">
+							<i class="fas-arrow fa fa-angle-right"></i>
+						  </span>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			  <!-- Area Chart Example-->
+			<div class="card mb-3">
+				<div class="card-header">
+				  <i class="fa fa-area-chart"></i>
+				  ស្ថិតិការលក់
+				</div>
+				<div class="card-body">
+					<canvas id="bar-chart" width="100%" height="30"></canvas>
+				</div>
+				<div class="card-footer small text-muted">
+					<center style="font-size:14px;font-weight:bold;">From date &nbsp;<?php echo date("d-m-Y",strtotime($this->search['start_date']))?>&nbsp; to date &nbsp;<?php echo date("d-m-Y",strtotime($this->search['end_date']))?></center>
+				</div>
+			</div>
+		</div>
+	</div>    
+</form>          
+<script src="<?php echo $this->baseUrl()?>/assets/global/plugins/Chart.min.js" type="text/javascript"></script>          
+<style>
+.row.dashboard-st {
+    padding: 10px 0;
+}
+.row.dashboard-st div.card {
+    padding: 10px;
+    border: solid 1px #244456;
+    border-radius: 5px !important;
+}
+.row.dashboard-st div.card.bg-primary {
+    background: #0058a5;
+}
+.row.dashboard-st div.card.text-white.bg-warning {
+    background: #efdc7c;
+}
+.row.dashboard-st div.card.bg-success {
+    background: #7cefaa;
+}
+.row.dashboard-st div.card.text-white.bg-danger {
+    background: #f58d71;
+}
+.row.dashboard-st div.card a.card-footer {
+    color: #ffffff;
+}
+</style>   
+   
+<script>
+	/*/ Area Chart Example
+	var ctx = document.getElementById("myAreaChart");
+	var myLineChart = new Chart(ctx, {
+	  type: 'line',
+	  data: {
+	    labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 8", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13"],
+	    datasets: [{
+	      label: "Sessions",
+	      lineTension: 0.3,
+	      backgroundColor: "rgba(2,117,216,0.2)",
+	      borderColor: "rgba(2,117,216,1)",
+	      pointRadius: 5,
+	      pointBackgroundColor: "rgba(2,117,216,1)",
+	      pointBorderColor: "rgba(255,255,255,0.8)",
+	      pointHoverRadius: 5,
+	      pointHoverBackgroundColor: "rgba(2,117,216,1)",
+	      pointHitRadius: 50,
+	      pointBorderWidth: 2,
+	      data: [10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984, 38451],
+	    }],
+	  },
+	  options: {
+	    scales: {
+	      xAxes: [{
+	        time: {
+	          unit: 'date'
+	        },
+	        gridLines: {
+	          display: false
+	        },
+	        ticks: {
+	          maxTicksLimit: 7
+	        }
+	      }],
+	      yAxes: [{
+	        ticks: {
+	          min: 0,
+	          max: 40000,
+	          maxTicksLimit: 5
+	        },
+	        gridLines: {
+	          color: "rgba(0, 0, 0, .125)",
+	        }
+	      }],
+	    },
+	    legend: {
+	      display: false
+	    }
+	  }
+	});   
+	/*
+	new Chart(document.getElementById("pie-chart"), {
+	    type: 'pie',
+	    data: {
+	      labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+	      datasets: [{
+	        label: "Population (millions)",
+	        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+	        data: [2478,5267,734,784,433]
+	      }]
+	    },
+	    options: {
+	      title: {
+	        display: true,
+	        text: 'Predicted world population (millions) in 2050'
+	      }
+	    }
+	});
+   */
+
+
+	// Bar chart
+	var randomColor = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
+	new Chart(document.getElementById("bar-chart"), {
+	    type: 'bar',
+	    data: {
+	      labels: ["ប្រភេទផលិតផល"<?php echo $label?>],
+	      datasets: [
+	        {
+	          label: "ចំនួនលក់បាន",
+	          backgroundColor: ["#3e95cd","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850","#3e95cd","#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+	          data: [0<?php echo $data?>]
+	        }
+	      ]
+	    },
+	    options: {
+	      legend: { display: false },
+	      title: {
+	        display: true,
+	        text: 'ចំនួនផលិតផលលក់បាន តាមប្រភេទផលិតផល'
+	      }
+	    }
+	});
+
+
+
+
+	   
+</script>   
+   
+   
+   
+   
+   
+          

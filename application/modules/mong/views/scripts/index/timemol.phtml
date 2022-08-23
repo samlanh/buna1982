@@ -1,0 +1,103 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+	$db_global = new Application_Model_DbTable_DbGlobal();
+	$row = $this->row;
+?>
+<title>ព័ត៌មានសែនឆ្លងម៉ុង</title>
+<div id="Printtimemol" >
+<div class="wrapper" id="borderimg1" style="background: #fff;width:24cm;margin: 0 auto; min-height: 35cm;padding: 0.5cm;">
+		<style>
+	    	.wrapper{
+	    		width: 100%;
+	    		margin: 0px;
+	    		padding: 0px;
+	    	}
+	    	.contain{
+	    		width: 1024px;
+	    		margin: 0 auto;
+	    	}
+			table {
+	    		border-collapse: collapse;
+	    		width: 100%;
+			}
+			th, td {
+	    		padding: 4px;
+			}
+			th, td label{
+	    		font-size: 50px;
+			}
+			#borderimg1 { 
+			     border: 85px dotted ;
+			    border-image: url("<?php echo $this->baseUrl()?>/images/ifrmas.jpg") 125 stretch;
+			}
+	    </style>
+		<table cellpadding="0" cellspacing="0" width="100%">
+			<tr class="no-boder">
+				<td>
+				<table width="100%" >
+					<tr>
+						<td width="21%" align="center">
+							<img style="width: 78%; height: 130px;" alt="<?php ?>" src="<?php echo $this->baseUrl()?>/images/logosbona.jpg"><br>
+							<span style="font-family: Freestyle Script;font-size: 20px;"></span>
+							
+						</td>
+						<td width="24%" valign="top" align="center">
+							<table style="text-align:center;border:solid 1px #FFF;">
+								<tr>
+									<td style="list-style:12px; font-family:  Khmer OS Muol; font-size:79px;font-weight: bold;color:red !important;">វេលាល្អ</td>
+								</tr>	
+							</table>
+						</td>
+						<td width="10%" >&nbsp;</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+		  	<tr>
+		  		<td>
+	  			<table style="font-size:15px;font-family: Khmer OS Battambang, Times New Roman;">  			
+	  				<tr>
+	  					<td style="list-style:25px; font-family:  Khmer OS Muol; font-size:50px;font-weight: bold; list-style:none;">
+	  						<li style="color:#800080 !important;">សែនឆ្លងម៉ុង</li>
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td style="list-style:25px; font-family:  Khmer OS Muol;line-height:100px;; font-size:45px; font-weight: bold; list-style:none; ">
+	  						<li align="center" style="color:#009900 !important;">ទីតាំង៖ <?php echo $this->row['mong_address'];?></li>
+	  						<li align="center" style="color:#009900 !important;">​Tell: 012 455 660</li>
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td align="center" style="list-style:25px; font-family:  Khmer OS Muol;line-height:100px;; font-size:45px;font-weight: bold; list-style:none;">
+	  						<li style="color:#B22222 !important;">ថ្ងៃទី  <?php echo $db_global->getNumberInkhmer(date('d',strtotime($this->row['date_chlong_mong'])));?> ខែ <?php echo $db_global->getNumberInkhmer(date('m',strtotime($this->row['date_chlong_mong'])));?>ឆ្នាំ ២០<?php echo $db_global->getNumberInkhmer(date('y',strtotime($this->row['date_chlong_mong'])));?>
+	  						<li style="color:#B22222 !important;">ម៉ោងៈ <?php echo $this->row['time_chlong_mong'];?><?php if(!empty($this->row['time_chlong_mong_to'])){?> ដល់ <?php echo $this->row['time_chlong_mong_to']?><?php }?>&nbsp;<?php echo $this->row['time_mole'];?></li>	  						
+	  					</td>
+	  				</tr>
+	  			</table>
+		</table>
+	</div>
+</div>
+<div style="padding-left:14%; margin: 0 auto;"> 
+    	<lable class="col-md-3" style=""></lable>
+    	<div class="col-md-2">
+			<a href="<?php echo $this->baseUrl();?>/mong/index"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i>ចាកចេញ</button></a>
+		</div>
+    	<lable class="col-md-2" style="">
+             <button type="button" onclick="printinvoice();" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i> បោះពុម្ភ </button>
+		</lable>
+		<lable class="col-md-3" style=""></lable>
+</div>
+<script>
+function printinvoice(){
+	var printContents = document.getElementById('Printtimemol').innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+	document.getElementById("office_timemol").submit();
+}
+</script>
+
+

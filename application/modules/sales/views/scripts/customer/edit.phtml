@@ -1,0 +1,154 @@
+<?php 
+	$baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();//new
+	$url_new =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'index'));
+	$url_edit =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'index'));
+	$form=$this->form;
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>
+<title><?php echo $tr->translate("កែប្រែអតិថិជន");?></title>
+<div class="portlet box blue">
+		<div class="portlet-title">
+			<div class="caption">
+				<i class="icon-home"></i><?php echo $tr->translate("កែប្រែអតិថិជន");?>
+			</div>
+			<div class="caption pull-right">
+				<a href="<?php echo $url_new;?>" class="btn btn-bg red  ">
+					<i class="fa fa-undo"></i>&nbsp;<?php echo $tr->translate("GO_BACK");?>
+				</a>
+			</div>
+		</div>
+		<div class="portlet-body form">
+			<form id="frm" action="" class="form-horizontal" enctype="multipart/form-data" method="post">
+				<div class="form-body">
+					<div class="row">
+							<div class="col-md-3"></div>
+							<div class="col-md-6" style="text-align: left !important;border:1px solid #ccc;">
+								<h4 style="border-bottom: 1px solid #ccc;" class="center">កែប្រែអតិថិជន</h4>
+								<div class="form-group">
+									<label class="control-label col-md-4"><?php echo $tr->translate("Branch Name");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement("branch_id");?>
+											<?php echo $form->getElement("id");?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4">
+									<?php echo $tr->translate("CU_CODE");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('cu_code'); ?>
+										</div>
+									</div>
+									</div>
+								<div class="form-group">
+										<label class="control-label col-md-4">ឈ្មោះអតិថិជន
+										</label>
+										<div class="col-md-8">
+											<div class="input-icon right">
+												<i class="fa"></i>
+												<?php echo $form->getElement('txt_name'); ?>
+											</div>
+										</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4">
+									<?php echo $tr->translate("CON_NUMBER");?><span class="required"></span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i><?php echo $form->getElement('contact_phone'); ?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4"><?php echo $tr->translate("ADDRESS");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement("txt_address");?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4"><?php echo $tr->translate("EMAIL");?></label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('txt_mail'); ?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div>
+										<label class="control-label col-md-4">
+											<?php echo $tr->translate("REMARK");?>
+										</label>
+										<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement("remark");?>
+										</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-4"><?php echo $tr->translate("STATUS");?></label>
+									<div class="col-md-8">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('status'); ?>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group">
+									<div class="col-md-5"></div>
+									<div class="col-md-2">
+										<a href="<?php echo $this->baseUrl();?>/sales/customer"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
+									</div>
+									<div class="col-md-2">
+										<button type="submit" name="btnsavenew"  name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-save"></i> <?php echo $tr->translate("កែប្រែ")?> </button>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+						</div>
+				</div>
+			</form>
+	</div>
+</div>
+<script>
+$(document).ready(function() {
+});
+<?php $url_code =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'get-cu-code')); ?>
+function getCustomerCode(){
+	id=$("#branch_id").val();
+	$.ajax({
+		url:"<?php echo $url_code;?>",
+		type:"post",
+		data:{'id':id},
+		success: function(data){
+			value = $.parseJSON(data);
+				$("#cu_code").val(value);
+		},
+		error:function(e){
+			alert(e);
+		}
+	});
+}
+$(document).ready(function() {
+});
+</script>

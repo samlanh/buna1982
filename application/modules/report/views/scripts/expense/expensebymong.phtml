@@ -1,0 +1,122 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$session_user=new Zend_Session_Namespace('auth');
+	$user_id=$session_user->user_id;
+?>
+<title><?php echo $tr->translate("របាយការណ៍ចំណាយផ្នែកម៉ុង");?></title>
+
+	<style>
+		.hover:hover{ background: #ddd;}
+	</style>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("របាយការណ៍ចំណាយផ្នែកម៉ុង");?>
+				</div>
+				<div class="btn-group pull-right">
+				 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+				   Actions <i class="fa fa-angle-down"></i>
+				 </button>
+					<ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#" onclick="doPrint();">
+								<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+							</a>
+						</li>
+						<li>
+							<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;">
+				<div id="divPrint"  >
+					<table class="table2excel" style="background:#fff; margin: 0 auto; width: 100%; padding: 0px 2px 1cm 2px;font-family: 'Khmer Battambang';">
+						<tr>
+		                	<td align="center" width="16%" valign="top"><img  height="95px" src="<?php echo $this->baseUrl();?>/images/logosbona.jpg"></td>		                	
+		                		<td  align="center">
+		                			<strong style="text-align:center; font-size:18px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important"><?php echo $tr->translate("COMPANY_CUSTOMER");?></strong><br>
+		                			<strong style="text-align:center; font-size:17px; font-family:'Khmer OS Muol Light'; color: #F31A1A  !important"><?php echo $tr->translate("របាយការណ៍ចំណាយផ្នែកម៉ុង");?></strong><br>
+		                			<strong style="text-align:center; font-size:14px; color: #F31A1A  !important"><?php if(!empty($this->search['start_date'])){?><?php echo date("d-M-Y",strtotime($this->search["start_date"]))?> to <?php echo date("d-M-Y",strtotime($this->search["end_date"]));}?></strong>
+		                		</td>
+		                    <td width="20%"></td>
+		                </tr> 
+							
+						<?php 
+							$total_expense=0;
+						?>
+						<tr>
+							<td colspan="3">
+								<table border="1" style="border-collapse:collapse;border:1px solid #000; font-size:12px;font-family: 'Khmer Battambang';margin-bottom:70px;" width="100%" cellspacing="0">
+			            			<tr style="font-size:14px; height: 20px;border: 1px solid #000;white-space: nowrap;background-color: #b0bdfd !important;line-height:30px;font-weight: bold;" align="center" >
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('NUM')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('BRANCH_NAME')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('លេខចំណាយ')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('វិក័យបត្រលេខ')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('ឈ្មោះអតិថិជន')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('ទីតាំងបុណ្យ')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('ឈ្មោះជាង')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('ចំណាយសរុប')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('ថ្ងៃចំណាយ')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('BY_USER')?></td>
+										<td style="border: 1px solid #000;"><?php echo $tr->translate('STATUS')?></td>
+									</tr>
+								 <style> td{padding:0 3px; }</style>
+								<?php $i=0;if(!empty($this->expense_by_mong)){foreach($this->expense_by_mong as $row){ $i++;?>
+									<tr class="hover" style="font-size:13px; height: 25px;border: 1px solid #000; white-space: nowrap;" align="center" >
+										<td style="border: 1px solid #000;"><?php echo $i;?></td>
+										<td style="border: 1px solid #000;"><a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/expense/mongexpensedetail/id/".$row["id"];?>"><?php echo $row['branch_name'];?></a></td>
+										<td style="border: 1px solid #000;"><a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/expense/mongexpensedetail/id/".$row["id"];?>"><?php echo $row['expense_number'];?></a></td>
+										<td style="border: 1px solid #000;"><a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/expense/mongexpensedetail/id/".$row["id"];?>"><?php echo $row['invoice_no'];?></a></td>
+										<td style="border: 1px solid #000;"><a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/expense/mongexpensedetail/id/".$row["id"];?>"><?php echo $row['customer_name']."-".$row['phone'];?></a></td>
+										<td style="border: 1px solid #000;"><a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/expense/mongexpensedetail/id/".$row["id"];?>"><?php echo $row['place_bun'];?></a></td>
+										<td style="border: 1px solid #000;"><?php echo $row['constructor_name'];?></td>
+										<td style="border: 1px solid #000;background:#c6e2fb"><a style="color:#000;text-decoration: none;" target="_blank" href="<?php echo $this->baseUrl()."/report/expense/mongexpensedetail/id/".$row["id"];?>"><?php echo "$ ".number_format($row['total_payment'],2);?></a></td>
+										<td style="border: 1px solid #000;"><?php echo date('d-M-Y',strtotime($row['date_payment']));?></td>
+										<td style="border: 1px solid #000;"><?php echo $row['user_name'];?></td>
+										<td style="border: 1px solid #000;"><?php echo $row['status_name'];?></td>
+									</tr>
+									<?php 
+										if($row['status']==1){
+											$total_expense = $total_expense + $row['total_payment'];
+										}
+									?> 
+								 <?php } }?>
+								 
+								 	<tr class="hover" style="font-size:15px; height: 20px;border: 1px solid #000; white-space: nowrap;background-color: #f8f6f6;line-height:30px;font-weight: bold;" align="center" >
+										<td colspan="8" align="right" style="border: 1px solid #000;"><?php echo $tr->translate('TOTAL');?> &nbsp;</td>
+										<td colspan="2" style="border: 1px solid #000;"><?php echo "$ ".number_format($total_expense,2);?></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr >
+							<td colspan="3">
+								&nbsp;
+							</td>
+						</tr>
+						<tr style="font-size: 13px;">
+							<th style="width:20%;text-align:center;  font-family:'Khmer MEF2'">យល់ព្រមដោយ</th>
+							<th style="width:60%;text-align:center; font-family:'Khmer MEF2'">ត្រួតពិនិត្យដោយ</th>
+							<th style="width:20%;text-align:center;font-family:'Khmer MEF2'">រៀបចំដោយ</th>
+					   </tr>
+					</table>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script type="text/javascript">
+function doPrint(){
+	var divToPrint = document.getElementById('divPrint');
+	var htmlToPrint = '' +'<style type="text/css">' +'</style>';
+	htmlToPrint += divToPrint.outerHTML;
+	window.document.write(htmlToPrint);
+	window.print();
+	window.close();
+}
+</script>

@@ -1,0 +1,79 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+	$result=$this->category;
+?>						 
+<title>កែប្រែប្រភេទម៉ុង</title>
+<body>
+	<form class="form-horizontal" id="frm" method="post" action="" >				
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>កែប្រែប្រភេទម៉ុង</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-md-3">
+								</div>
+								<div class="col-md-6" style="text-align: left !important;border:1px solid #ccc;">
+										<h3 style="border-bottom: 1px solid #ccc;" class="center">ប្រភេទម៉ុង</h3>
+									<div class="form-group" >
+										<label class="col-md-4 control-label">
+											<strong>ឈ្មោះ*</strong>
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="category_title" name="category_title" value="<?php echo $result['title']?>" class="validate[required] form-control" />	
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											សម្គាល់
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="note" name="note" value="<?php echo $result['note']?>" class="form-control" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ស្ថានការ
+										</label>
+										<div class="col-md-8">
+											<select name="status" id="status" class="form-control">
+										    <option value="1" <?php if($result['status']==1){echo "selected='selected'";}?> label="Active">ប្រើប្រាស់</option>
+										    <option value="0" <?php if($result['status']==0){echo "selected='selected'";}?> label="Deactive">មិនប្រើសប្រាស់</option>
+										</select>	
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" style="text-align: left !important;">
+								</div>
+							</div>
+							<div class="form-group">
+								<br />
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" name="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>

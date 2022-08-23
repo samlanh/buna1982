@@ -1,0 +1,40 @@
+<?php 
+	$url_new = $this->url(array('module'=>'product','controller'=>'category','action'=>'add',));
+	$url_edit = $this->url(array('module'=>'product','controller'=>'category','action'=>'edit',));
+	$url_delete = $this->url(array('module'=>'product','controller'=>'category','action'=>'delete',));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$formFilter = $this->formFilter;	
+	$rs = $this->resulr;
+?>
+<title>បញ្ជីប្រភេទទំនិញ</title>
+	<div class="portlet box blue">
+		<div class="portlet-title">
+			<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("បញ្ជីប្រភេទទំនិញ");?>
+			</div>
+			<div class="caption" style="float:right">
+					<?php $formList = new Application_Form_Frmlist(); echo $formList->showAddBuntton($url_new);?>
+			</div>
+		</div>
+		<div class="portlet-body form">
+			<form class="form-horizontal" method="post" action="" >
+				<div class="form-body">
+							<div class="form-group">
+								<div class="col-md-3">
+									<?php echo $formFilter->getElement('ad_search');?>
+								</div>
+								<label class="col-md-1 control-label"><?php echo $tr->translate("STATUS");?></label>
+								<div class="col-md-3">
+									<?php echo $formFilter->getElement('status');?>
+								</div>
+								<div class="col-md-2">
+									<button type="submit" class="btn green"><?php echo $tr->translate("SEARCH");?></button>
+								</div>
+							</div>
+				</div>
+			</form>
+			<div class="contain_form" style="clear: both;">
+						<?php echo $this->list; ?>
+			    </div>	
+			</div>
+	</div>

@@ -1,0 +1,154 @@
+
+<?php 
+$baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();//new
+$url_submit =  $this->url(array('module'=>'purchase','controller'=>'vendor','action'=>'add'));
+$url_edit =  $this->url(array('module'=>'purchase','controller'=>'vendor','action'=>'index'));
+$form=$this->form;
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>
+<title><?php echo $tr->translate("អ្នកផ្គត់ផ្គង់");?></title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo $tr->translate("VENDOR_NAME");?>
+				</div>
+				<div class="caption pull-right" >
+					<a href="<?php echo $url_edit;?>" class="btn btn-sm " style="color:white;">
+					<i class="fa fa-undo"></i>	&nbsp;<?php echo $tr->translate("GO_BACK");?>
+					</a>
+				</div>
+			</div>
+			<div class="portlet-body form">
+			<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post" autocomplete="off" >
+				<script>
+					
+				</script>
+				<div class="form-body">
+					<div class="form-group">
+						<label class="control-label col-md-2"><?php echo $tr->translate("ជាអ្នកផ្គត់ផ្គង់ក្រៅប្រទេស");?> <span class="required"></span></label>
+						<div class="col-md-4" style="margin-top: 10px;">
+							<div class="input-icon right">
+								<i class="fa"></i>
+								<input type="checkbox" name="is_over_sea" id="is_over_sea" value="1" onClick="isOverSea()">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-2"><?php echo $tr->translate("ឈ្មោះក្រុមហ៊ុន");?> </label>
+						<div class="col-md-4">
+							<?php echo $form->getElement('v_name'); ?>
+						</div>
+						<label class="control-label col-md-2 hides">
+							<?php echo $tr->translate("ទូរស័ព្ទក្រុមហ៊ុន");?>
+						</label>
+						<div class="col-md-4 hides">
+							<?php echo $form->getElement('v_phone'); ?>
+						</div>
+					</div>
+					<div class="form-group hides">
+						<label class="control-label col-md-2"><?php echo $tr->translate("អ្នកទំនាក់ទំនង");?><span class="required">
+							</span>
+						</label>
+						<div class="col-md-4">
+							<div class="input-icon right">
+								<i class="fa"></i>
+								<?php echo $form->getElement('contact_person'); ?>
+							</div>
+						</div>
+						<label class="control-label col-md-2">
+						<?php echo $tr->translate("លេខអ្នកទំនាក់ទំនង");?><span class="required"></span>
+						</label>
+						<div class="col-md-4">
+							<div class="input-icon right">
+								<i class="fa"></i><?php echo $form->getElement('phone_person'); ?>
+							</div>
+						</div>
+					</div>
+					<div class="form-group hides">
+						<label class="control-label col-md-2"><?php echo $tr->translate("អាស័យដ្ឋាន");?><span class="required">
+							</span>
+						</label>
+						<div class="col-md-4">
+							<div class="input-icon right">
+								<i class="fa"></i>
+								<?php echo $form->getElement("address");?>
+							</div>
+						</div>
+						<label class="control-label col-md-2">
+						<?php echo $tr->translate("អ៊ីម៉ែល");?><span class="required">
+							</span>
+						</label>
+						<div class="col-md-4">
+							<div class="input-icon right">
+								<i class="fa"></i>
+								<?php echo $form->getElement('email'); ?>
+							</div>
+						</div>
+					</div>
+					<div class="form-group hides">
+						<label class="control-label col-md-2"><?php echo $tr->translate("គេហទំព័រ");?><span class="required">
+							</span>
+						</label>
+						<div class="col-md-4">
+							<div class="input-icon right">
+								<i class="fa"></i>
+								<?php echo $form->getElement('website'); ?>
+							</div>
+						</div>
+						<label class="control-label col-md-2">
+						<?php echo $tr->translate("សម្គាល់");?><span class="required">
+							</span>
+						</label>
+						<div class="col-md-4">
+							<div class="input-icon right">
+								<i class="fa"></i>
+								<?php echo $form->getElement("note");?>
+							</div>
+						</div>
+					</div>
+					<div class="form-group hides">
+						<label class="control-label col-md-12">
+						<br >
+						</label>
+					</div>
+					<div class="form-group">
+						<div class="col-md-4"></div>
+						<div class="col-md-2">
+							<a href="<?php echo $this->baseUrl();?>/purchase/vendor"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("ត្រលប់ក្រោយ")?></button></a>
+						</div>
+						<div class="col-md-2">
+							<div class="input-icon right">
+								<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
+							</div>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
+<script>
+	$('#frm').submit(function() {
+	    //$("#save_close").attr("disabled", true);
+	});
+
+	function isOverSea(){
+		/*
+		val = $('#is_over_sea');
+		if(val.is(':checked')){
+			$('.hides').hide();
+		}else{
+			$('.hides').show();
+		}
+		*/
+	}
+
+	
+</script>

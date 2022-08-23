@@ -1,0 +1,148 @@
+<?php 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+$brach_name =  $this->branch;
+$formFilter = $this->formFilter;
+?>
+<title>របាយការណ៍បញ្ជីផលិតផល</title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("របាយការណ៍បញ្ជីផលិតផល");?>
+				</div>
+				<div class="btn-group pull-right">
+					 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+					   Actions <i class="fa fa-angle-down"></i>
+					 </button>
+					 <ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#" onclick="doPrint();">
+								<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+							</a>
+						</li>
+						<li>
+							<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+						</li>
+					 </ul>
+				</div>
+			</div>
+            <div class="portlet-body form frmfilter">
+				<form method="post" action="<?php //echo $formFilter->getAction(); ?>" autocomplete="off">
+					<div class="form-body">
+						<div class="form-group">
+							<label class="control-label col-md-3">
+								<?php echo $formFilter->getElement('ad_search');?>
+							</label>
+							<label class="control-label col-md-3">
+								<?php echo $formFilter->getElement('brand');?>
+							</label>
+							<label class="control-label col-md-3">
+								<?php echo $formFilter->getElement('category');?>
+							</label>
+							<label class="control-label col-md-2">
+								<?php echo $formFilter->getElement('type');?>
+							</label>
+							<label class="control-label col-md-1">
+								<button type="submit" class="btn btn-primary col-md-12"><?php echo $tr->translate("ស្វែងរក");?></button>
+							</label>
+						</div>
+					</div>
+					<div style="clear:both;"></div>	
+				</form> 
+			</div>	
+		</div>	
+		<style>
+			.label_price{
+				margin-top: -14% !important;
+				margin-left: 72% !important;
+			}
+		</style>
+		<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm">
+			<div id="divPrint" style="width: 100%;">
+				
+				<style>
+					.col-md-3{
+						float: left;
+						width: 25%;
+						page-break-inside:avoid; 
+						page-break-after:auto;
+					}
+					.center {
+					    text-align: center !important;
+						width:150px; height:70px;
+						page-break-inside:avoid; page-break-after:auto;
+					}
+					.label_price{
+						text-align: right;
+						display: block;
+						width: 100%;
+					}
+					@media print {
+						 .center {
+							text-align: center !important;
+							display:block;
+							width:125px; 
+							margin-bottom: 50px;
+							page-break-inside:avoid; page-break-after:auto;
+						}
+						.productName{
+							text-align: center !important;
+							width:100%;
+							display: block;
+						}
+					 }
+					 @page {
+						  margin:1cm 1cm 1cm 1cm; '
+						   page-break-before: avoid;
+						}
+				</style>
+				
+				<div class="row">
+					<div class="col-md-12">
+						<div class="portlet-body form">
+							<div class="form-body">
+								<div class="form-group">
+									<?php if(!empty($this->product))foreach ($this->product AS $index => $row){?>
+									<div class="center" style="<?php if($index>0){?><?php }else{?> margin-bottom: 50px;<?php } ?>  white-space: nowrap;font-family: 'Times New Roman','Khmer OS Battambang'; ">
+										<?php $url_barcode = $this->url(array("module"=>"report","controller"=>"product","action"=>"generate-barcode","pro_code"=>$row['item_code']),null,true); ?>
+										
+										<?php if($index>0){?>
+										<div style="height:10px;">&nbsp;</div>
+										<?php }?>
+										
+										<div class="productName" style="font-size: 6px; line-height:12px;  text-align: center; display: block; width:100%;">
+											<span style="white-space: pre-wrap;"><?php echo $row['item_name']?></span> 
+											<?php echo $row['selling_price']."$"?>
+										</div> 
+										<img style="max-width: 135px;height:40px;" src="<?php echo $url_barcode;?>" />
+										
+									</div>
+									<?php }?>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>
+	 	</div>
+   	</div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script>
+
+function doPrint() {
+	var divToPrint=document.getElementById('divPrint');
+
+	  var newWin=window.open('','Print-Window');
+
+	  newWin.document.open();
+
+	  newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+	  newWin.document.close();
+
+	  //setTimeout(function(){newWin.close();},10);
+}
+
+</script>

@@ -1,0 +1,278 @@
+<?php 
+	$url_new = $this->url(array('module'=>'sales','controller'=>'index','action'=>'add',));
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+	
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>						 
+<title>បន្ថែមអ្នកសងប្រាក់</title>
+<body>
+	<form class="form-horizontal" id="frm" method="post" action="" autocomplete="off">				
+		
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>បន្ថែមអ្នកសងប្រាក់</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-md-3">
+								</div>
+								<div class="col-md-6" style="text-align: left !important;border:1px solid #ccc;">
+									<h2 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មានអ្នកសងប្រាក់</h2>
+									<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												<?php echo $tr->translate("BRANCH_NAME");?>
+											</label>
+											<div class="col-md-8">
+												<select name="branch" id="branch" class="form-control select2me" onchange="getAllBranchFunction();" >
+													<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+													<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+													<option value="<?php echo $branch['id']?>"><?php echo $branch['name'];?></option>
+													<?php }}?>
+												</select>
+											</div>
+									</div>
+									<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												ឈ្មោះអ្នកសង
+											</label>
+											<div class="col-md-8">
+												<select class="form-control select2me" id="name_borrow" name="name_borrow" onchange="getPopupRepays(); getRepayDetail()" value="1">
+													<option value="">ជ្រើសរើសឈ្មោះអ្នកសងប្រាក់</option>
+												</select>
+											</div>
+									</div>	
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ភេទ
+										</label>
+										<div class="col-md-8">
+											<select name="gender" id="gender" class="form-control">
+										    <option value="1" label="Active">ប្រុស</option>
+										    <option value="2" label="Deactive">ស្រី</option>
+										</select>	
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											លេខទូរស័ព្ទ
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="phone" name="phone"  class="form-control" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ថ្ងៃទី  ខែ ឆ្នាំ ខ្ចី
+										</label>
+										<div class="col-md-8">
+											<div class="input-icon right">
+												<i class="fa fa-calendar"></i>
+												<input type="text" class="form-control" name="date" id="date" value="<?php echo date("d-m-Y h:i")?>" data-date-format="dd-mm-yyyy  hh:ii" />
+											</div>
+										</div>
+									</div>																
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ចំនួនទឹកប្រាក់សង
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="qtys" name="qtys" class="validate[required] form-control" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											សម្គាល់
+										</label>
+										<div class="col-md-8">
+											<input type="text" id="notes" name="notes"  class="form-control" />
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" style="text-align: left !important;">
+								</div>
+							</div>
+							<div class="form-group">
+								<br />
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>
+<script>
+function getAllBranchFunction(){
+	getAllRepayByBranch();
+}
+<?php $urlGetposbybranch = $this->url(array('module'=>'sales','controller'=>'repay','action'=>'getborrowerbybranch'));?>
+function getAllRepayByBranch(){
+	branch_id = $("#branch").val();
+	if(branch_id=="" || branch_id=="-1"){
+		return false;
+	}
+	$.ajax({
+		url: "<?php echo $urlGetposbybranch;?>",
+		type: "post",
+		data: {'branch_id':branch_id},
+		dataType:"json",
+		success: function(data){
+			$("#name_borrow").html(data)
+			
+		},
+		error:function(err){
+			 alert(err);
+		}
+	});
+	
+}
+	$('#frm').submit(function() {
+		branch_id=$("#branch").val();
+		if(branch_id<=0){
+			alert("<?php echo $tr->translate("Please select branch");?> !!!");
+			$('#branch').select2('open');
+			return false;	
+		}
+		
+		name_pay=$("#name_pay").val();
+		if(name_pay<=0){
+			alert("Please input name");
+			$('#name_pay').focus();
+			return false;	
+		}
+		qtys=$("#qtys").val();
+		if(qtys<=0){
+			alert("Please input qty");
+			$('#qtys').focus();
+			return false;	
+		}
+		var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+		if (r == true) {
+			$("#save_close").attr("disabled", true);
+			return true;
+		} else {
+		   return false;	    
+		}
+	});
+	
+	$(function () {
+		$('#date').datetimepicker({
+            inline: true,
+			sideBySide: true
+		});
+	});
+
+	
+	function getPopupRepays(){
+		val = $('#name_borrow').val();
+		if(val==-1){
+			$('#repaypopup').modal('show');
+		}
+	}
+	function addNewRepays(){
+		name = $("#pay_name").val();
+		if(name==''){
+			$("#pay_name").focus();
+			return false;
+		} 
+		$('#save_repays').attr("disabled", true);
+		$('#name_borrow').append($("<option></option>").attr("value",name).attr("selected",true).text(name));  
+		$("#name_borrow").select2();	
+		$('#repaypopup').modal('hide');
+		$('#save_repays').attr("disabled", false);
+	}
+
+	function getRepayDetail(){
+		branch_id = $("#branch").val();
+		if(branch_id=="" || branch_id=="-1"){
+			return false;
+		}
+		var name_borrow  = $("#name_borrow").val();
+		if(name_borrow!='' && name_borrow!=-1){
+			$.ajax({
+				url: "<?php echo $this->baseUrl()?>/sales/repay/get-repay-detail",
+				type: "post",
+				data: {name_borrow:name_borrow,branch_id:branch_id},
+				success: function(data){
+				//	alert(data);
+					rs = $.parseJSON(data);
+					if(rs){
+						$('#gender').val(rs.gender).select2();
+						$('#phone').val(rs.phone);
+						$('#qtys').val(rs.total);
+						$('#notes').val(rs.notes);
+					}
+				},
+				error:function(err){
+					alert("failed");
+				}
+			});
+		}
+	}
+</script>
+<div id="repaypopup" class="modal fade" tabindex="-1" data-width="1000">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">   
+				<div class="row">
+					<div class="col-md-12">
+						<div class="portlet box blue">
+							<div class="portlet-title">
+								<div class="caption">
+									<i class="icon-home"></i>បន្ថែមឈ្មោះអ្នកខ្ចី
+								</div>
+								<div class="caption pull-right">
+									<a href="<?php echo $url_new;?>" >
+										 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+									</a>
+								</div>
+							</div>
+							<div class="portlet-body form">
+								<form id="frmreceiver" name="frmreceiver" dojoType="dijit.form.Form" autoComplete="off" enctype="application/x-www-form-urlencoded" class="form-horizontal" enctype="multipart/form-data" method="post">
+									<div class="form-body">
+										<div class="form-group">
+											<label class="control-label col-md-3">
+												ឈ្មោះអ្នកខ្ចី
+											</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<input name="pay_name" id="pay_name" class="form-control" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-md-12 center">
+												<button type="button" id="save_repays" name="save_repays" onclick="addNewRepays();" class="btn btn-primary"><i class="fa fa-save"></i> រក្សាទុក</button>
+											</label>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+ </div>

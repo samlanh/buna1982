@@ -1,0 +1,48 @@
+<?php 
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>
+<title><?php echo $tr->translate("កែប្រែចំនួនស្តុក");?></title>
+<?php 
+	$url_new = $this->url(array('module'=>'product','controller'=>'adjust','action'=>'add',));
+	$formFilter = $this->formFilter;
+?>
+<div class="portlet box blue">
+		<div class="portlet-title">
+			<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("កែប្រែចំនួនស្តុក");?>
+			</div>
+			<div class="tools">
+				<a href="<?php echo $url_new;?>"><button type="button" name="calcel" class="btn blue"><i class="fa fa-plus"></i> <?php echo $tr->translate("បន្ថែមថ្មី");?></button></a>
+			</div>
+		</div>
+		
+		<div class="portlet-body form">
+			<form class="form-horizontal" method="post" action="" autocomplete="off">
+				<div class="form-body">
+					<div class="form-group">
+						<div class="col-md-3">
+							<?php echo $formFilter->getElement('ad_search');?>
+						</div>
+						<div class="col-md-3">
+							<?php echo $formFilter->getElement('branch');?>
+						</div>
+						<div class="col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i>
+							<?php echo $formFilter->getElement('start_date');?></div>
+						</div>
+						<div class="col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i>
+							<?php echo $formFilter->getElement('end_date');?></div>
+						</div>
+						<div class="col-md-1">
+							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+						</div>
+					</div>		
+				</div>
+			</form>
+			
+		</div>
+	<div style="position: relative; clear: both;">
+		<div class="contain_form">
+			<?php echo $this->list; ?>
+		</div>
+	</div>
+</div><!-- end .right -->

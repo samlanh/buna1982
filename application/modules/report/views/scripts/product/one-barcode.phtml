@@ -1,0 +1,127 @@
+<?php 
+$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+$brach_name =  $this->branch;
+$formFilter = $this->formFilter;
+?>
+<title>របាយការណ៍បញ្ជីផលិតផល</title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("របាយការណ៍បញ្ជីផលិតផល");?>
+				</div>
+				<div class="btn-group pull-right">
+					 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+					   Actions <i class="fa fa-angle-down"></i>
+					 </button>
+					 <ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#" onclick="doPrint();">
+								<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+							</a>
+						</li>
+						<li>
+							<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+						</li>
+					 </ul>
+				</div>
+			</div>
+            <div class="portlet-body form frmfilter">
+				<form method="post" action="<?php //echo $formFilter->getAction(); ?>" autocomplete="off">
+					<div class="form-body">
+						<div class="form-group">
+							<label class="control-label col-md-3">
+								<select class="form-control select2me" id="pro_id" name="pro_id" >
+									<option value="0">ផលិតផល</option>
+									<?php if(!empty($this->rsproduct)){foreach ($this->rsproduct as $pro){?>
+										<option value="<?php echo $pro['id']?>" <?php if($pro['id']==$this->search['pro_id']){echo "selected";}?>><?php echo $pro['name']?></option>
+									<?php }}?>
+								</select>
+							</label>
+							<label class="control-label col-md-3">
+								<input name="qty" id="qty" class="form-control" type="number" value="<?php echo $this->search['qty']?>" />
+							</label>
+							<label class="control-label col-md-1">
+								<button type="submit" class="btn btn-primary col-md-12"><?php echo $tr->translate("ស្វែងរក");?></button>
+							</label>
+						</div>
+					</div>
+					<div style="clear:both;"></div>	
+				</form> 
+			</div>	
+		</div>	
+		<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm">
+			
+				<div  style="width: 100%;">
+					
+					
+					<div class="row">
+						<div class="col-md-12">
+							
+							<div class="portlet-body form">
+								<div class="form-body">
+									<div id="divPrint">
+										<div style="width:4cm;">
+											<?php 	$margin_bottom=4;$margin_top=5;$total = $this->search['qty'];
+													if(!empty($this->product)){for ($i=1;$i<=$this->search['qty'];$i++){
+											?>
+											<style>
+												.col-md-3{
+													width: 25%;
+													float: left;
+													page-break-inside:auto;
+												}
+												.center {
+													text-align: center !important;
+												}
+												.label_price{
+													margin-top: -12%;
+													margin-right: -59%;
+												}
+												table { page-break-inside:auto }
+												tr{ page-break-inside:avoid; page-break-after:auto }
+												
+												#header {
+												  display: table-header-group;
+												  page-break-inside:avoid; page-break-after:auto;
+												}
+											</style>
+											<div  class="col-md-12 center" style="<?php if($i==1){echo "margin-top:-5px;";}?>margin-bottom:2.45cm;white-space: nowrap;font-family: Khmer OS Battambang;">
+												<?php $url_barcode = $this->url(array("module"=>"report","controller"=>"product","action"=>"generate-barcode","pro_code"=>$this->product['item_code']),null,true); ?>
+												<div style="font-size: 11px;"><?php echo $this->product['item_name'].$i;?></div>
+												<img style="width:135px;" src="<?php echo $url_barcode;?>" /><div class="label_price" style="font-size: 11px;"><?php echo $this->product['selling_price']."$"?></div>
+											</div>
+											<?php /*if($i==8){?>
+												<div style="height:50px;background:red;">&nbsp;</div>
+											<?php }*/?>
+									
+											<?php }}?>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>	
+				</div>
+	 	</div>
+   	</div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script>
+
+function doPrint() {
+	  var divToPrint=document.getElementById('divPrint');
+
+	  var newWin=window.open('','Print-Window');
+
+	  newWin.document.open();
+
+	  newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+	  newWin.document.close();
+
+	  setTimeout(function(){newWin.close();},10);
+}
+
+</script>

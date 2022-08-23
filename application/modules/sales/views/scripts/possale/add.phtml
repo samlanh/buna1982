@@ -1,0 +1,1463 @@
+<?php 					
+	$url_new = $this->url(array('module'=>'sales','controller'=>'index','action'=>'add',));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$base_url = $this->baseUrl();
+	$url_back = $this->url(array('module'=>'sales','controller'=>'index','action'=>'index',));
+	
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+?>
+<style>
+table.calculate td,table.calculate th{padding:0px 3px !important; line-height: 20px; }
+.dijitTextBox, .dijitValidationTextBox, .dijitInputField, .dijitInputContainer, .dijitInputInner, dijitReset, .dijitRight, .dijitButtonNode, .dijitArrowButton, .dijitDownArrowButton, .dijitArrowButtonContainer {
+  height: 30px;
+}
+.dijitValidationTextBoxError input.dijitValidationInner, .dijitSelect input, .dijitTextBox input.dijitArrowButtonInner {
+	line-height:38px;
+}
+.fullside{ width:100%; height: 35px;}
+.fullblog{ width:100%; height: 28px;font-size: 15px !important;}
+td{padding: 1px !important;}
+.aligncenter{text-align: center;background:#4b8df8;color:#ececec;
+white-space: nowrap;font-size: 14px;line-height:33px;}
+.hover:hover{background: #eee;}
+.full_width{width:100%;}
+
+.spinner input {
+  text-align: right;
+}
+
+.input-group-btn-vertical {
+  position: relative;
+  white-space: nowrap;
+  width: 2%;
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.input-group-btn-vertical > .btn {
+  display: block;
+  float: none;
+  width: 100%;
+  max-width: 100%;
+  padding: 1px;
+  margin-left: 5px;
+  position: relative;
+  border-radius: 0;
+}
+
+.input-group-btn-vertical > .btn:first-child {
+  border-top-right-radius: 4px;
+}
+
+.input-group-btn-vertical > .btn:last-child {
+  margin-top: -2px;
+  border-bottom-right-radius: 4px;
+}
+
+span.lblcurrent_qty {
+    background: #eeeeee;
+    width: 100%;
+    min-height: 34px;
+    height: 100%;
+    display: block;
+    border: solid 1px #d0d1d2;
+    color: #000;
+}
+</style>
+<title>បន្ថែមការលក់</title>
+<script src="<?php echo $base_url;?>/js/dojo-1.6.1/dojo/dojo.js"  djConfig="isDebug: true,parseOnLoad: true"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo $base_url;?>/js/dojo-1.6.1/dijit/themes/soria/soria.css"/>
+<meta charset="utf-8" />
+<form class="form-horizontal" id="frm" method="post" action="" enctype="multipart/form-data" autocomplete="off" >	
+<div class="portlet box blue">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-gift"></i><strong>បន្ថែមការលក់</strong>
+		</div>
+		<div class="tools">
+			<label><a href="<?php echo $this->url(array('module'=>"sales",'controller'=>"possale",'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div class="tabbable-custom">
+			<div class="portlet-body form">
+				<div class="form-body">
+					<div class="row">
+						<div class="col-md-12">
+							<ul class="nav nav-tabs ">
+								<li class="active">
+									<a href="#tab_1" data-toggle="tab">
+									<strong><i class="fa fa-money" aria-hidden="true"></i> ការលក់</strong></a>
+								</li>
+								<li>
+									<a href="#tab_2" data-toggle="tab"><strong><i class="fa fa-users" aria-hidden="true"></i> ការជួលដៃគូខាងក្រៅ</strong></a>
+								</li>
+								
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="tab-pane active" id="tab_1">
+								<div class="row">
+									<div class="col-md-4" style="text-align: left !important;">
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												<?php echo $tr->translate("BRANCH_NAME");?>
+											</label>
+											<div class="col-md-8">
+												<select name="branch" id="branch" class="form-control select2me" onchange="getAllBranchFunction();" >
+													<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+													<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+													<option value="<?php echo $branch['id']?>"><?php echo $branch['name'];?></option>
+													<?php }}?>
+												</select>
+												<!-- 
+												<input type="hidden" name="branch" id="branch" value="<?php //echo $this->branch_id;?>" />
+												 -->
+											</div>
+										</div>
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												ទីតាំងបុណ្យ
+											</label>
+											<div class="col-md-8">
+												<input name="place_bun" id="place_bun" class="form-control" />
+											</div>
+										</div>
+										<div class="form-group" style="">
+											<label class="col-md-3 control-label">
+												ទីតាំង
+											</label>
+											<div class="col-md-3">
+												<select class="form-control select2me" id="type_pjos" name="type_pjos" onchange="popupProgram();">
+													<option value="1">បញ្ចុះ</option>
+													<option value="2">បូជា</option>
+												</select>
+											</div>
+											<div class="col-md-6">
+												<input name="place_pjos" id="place_pjos" class="form-control" />
+											</div>
+										</div>
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												<strong>ឈ្មោះអតិថិជន</strong>
+											</label>
+											<div class="col-md-8">
+												<select class="form-control select2me" id="customer_id" name="customer_id" onChange="getPopupCustomer();">
+													<option value="0">អតិថិជនទូទៅ</option>
+													<option value="-1">បន្ថែមអតិថិជន</option>
+													<?php if(!empty($this->rscustomer)){foreach($this->rscustomer as $rs){?>
+														<option value="<?php echo $rs['id'];?>"><?php echo $rs['name']." - ".$rs['phone'];?></option>
+													<?php }}?>
+												</select>
+											</div>
+										</div>
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												ទូរស័ព្ទ
+											</label>
+											<div class="col-md-8">
+												<input name="phone" id="phone" class="form-control" />
+											</div>
+										</div>
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												អាស័យដ្ឋាន
+											</label>
+											<div class="col-md-8">
+												<input name="address" id="address" class="form-control" />
+											</div>
+										</div>
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												កម្មវិធីបុណ្យ
+											</label>
+											<div class="col-md-6">
+												<select class="form-control select2me" id="program_id" name="program_id" onchange="popupProgram();">
+													<option value="0">ជ្រើសរើសកម្មវិធីបុណ្យ</option>
+													<option value="-1">បន្ថែមកម្មវិធីបុណ្យ</option>
+													<?php if(!empty($this->diepeople)){foreach($this->diepeople as $rs){?>
+														<option value="<?php echo $rs['id'];?>"><?php echo $rs['dead_name'].' - '.$rs['dead_name_chinese'].' - '.$rs['membersone'];?></option>
+													<?php }}?>
+												</select>
+											</div>
+											<div class="col-md-2">
+												<button type="button" class="btn red delete col-md-12 left" onclick="getRefreshProgram();" >
+													<i class="fa fa-refresh"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+									<!-- end blog1 -->
+									<div class="col-md-4" style="text-align: left !important;">
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												លេខវិក័យបត្រ
+											</label>
+											<div class="col-md-8">
+												<input type="text" id="invoice_no" name="invoice_no" class="form-control" readOnly value=""/>
+											</div>
+										</div>
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												ថ្ងៃលក់
+											</label>
+											<div class="col-md-8">
+												<div class="input-icon right">
+													<i class="fa fa-calendar"></i>
+													<input type="text" class="form-control date-picker" name="sale_date" id="sale_date" value="<?php echo date("d-m-Y")?>" data-date-format="dd-mm-yyyy" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												<strong>មកតាមរយះ</strong>
+											</label>
+											<div class="col-md-8">
+												<select class="form-control select2me" id="saleagent_id" name="saleagent_id" onchange="getPopupSaleagent()">
+													<option value="0">ជ្រើសរើសអ្នកណែនាំ</option>
+													<option value="-1">បន្ថែមថ្មី</option>
+													<?php if(!empty($this->sale_agent)){foreach($this->sale_agent as $rs){?>
+														<option value="<?php echo $rs['id'];?>"><?php echo $rs['name'];?></option>
+													<?php }}?>	
+												</select>
+											</div>
+										</div>
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												កំរៃជើងសា
+											</label>
+											<div class="col-md-8">
+												<input type="text" class="form-control validate[required,custom[number]]" name="comission" id="comission" value="0" />
+											</div>
+										</div>
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												អ្នកទទួលប្រាក់
+											</label>
+											<div class="col-md-8">
+												<select class="form-control select2me" id="receiver_name" name="receiver_name" onchange="getPopupReceiver()" >
+													<option value="">ជ្រើសរើសអ្នកទទួលប្រាក់</option>
+													<option value="-1">បន្ថែមថ្មី</option>
+													<?php if(!empty($this->receiver_name)){foreach($this->receiver_name as $rs){?>
+														<option value="<?php echo $rs['name'];?>"><?php echo $rs['name'];?></option>
+													<?php }}?>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" style="text-align: left !important;">
+										<div class="form-group" style="">
+											<label class="col-md-4 control-label">
+												សម្គាល់ផ្សេងៗ
+											</label>
+											<div class="col-md-7">
+												<textarea name="other_note" id="other_note" class="form-control" rows="5"></textarea>
+											</div>
+										</div>		
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group">
+										<div class="col-md-1" style="text-align: left !important;">
+										</div>
+										<div class="col-md-2" style="text-align: left !important;">										  
+											  <select class="form-control select2me" id="category" name="category" onchange="getProductByCategory();" >
+													<option value="-1">ជ្រើសរើសប្រភេទ</option>
+													<?php if(!empty($this->category)){foreach ($this->category as $rs){?>
+													<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+													<?php }}?>
+											  </select>
+										</div>							
+										<div class="col-md-5" style="text-align: left !important;">
+											  <select class="form-control select2me" id="product_id" name="product_id" onchange="getType();" >
+													<option value="-1">ជ្រើសរើសមុខទំនិញ/សេវាកម្ម</option>
+													<?php if(!empty($this->rsproduct)){foreach ($this->rsproduct as $rs){?>
+													<option value="<?php echo $rs['id']?>"><?php echo $rs['item_name']." - ".$rs['item_code'];?></option>
+													<?php }}?>
+											  </select>											  
+											  <input type="hidden" name="identity" id="identity" />
+											  <input type="hidden" name="identity_partner" id="identity_partner" />
+											  
+											  <input type="hidden" name="invoice" id="invoice" value="<?php echo $this->invoice;?>" /> 
+										</div>										
+										<div class="col-md-2" style="text-align: left !important;">
+											<button type="button" onclick="popupProduct();" class="btn red delete col-md-12">
+												<i class="fa fa-plus"></i><span>&nbsp;&nbsp;បន្ថែមមុខទំនិញថ្មី</span>
+											</button>
+										</div>
+										<div class="col-md-1">
+											<button type="button" class="btn red delete col-md-12" onclick="getRefreshProduct();" >
+												<i class="fa fa-refresh"></i>Refresh
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<table width="100%" id="table_row" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+											<thead>
+												<tr id="head-title" class="table table-bordered" align="right" style="border:1px solid #4c6184 !important;font-weight:bold">
+													<td width="5%" class="aligncenter">#</td>
+													<td width="20%" class="aligncenter">មុខទំនិញ/សេវាកម្ម</td>
+													<td width="7%"  class="aligncenter">ស្តុក</td>
+													<td width="7%" class="aligncenter">បរិ.ដុំ</td>
+													<td width="7%" class="aligncenter">បរិ.រាយ</td>
+													<td width="10%" class="aligncenter">បរិមាណសរុប</td>
+													<td width="7%"  class="aligncenter">តម្លៃលក់(៛)</td>
+													<td width="7%"  class="aligncenter">តម្លៃលក់($)</td>
+													<td width="8%"  class="aligncenter">សរុប</td>
+													<td width="8%"  class="aligncenter">ប.តម្លៃ($)</td>
+													<td width="8%" class="aligncenter">តម្លៃសរុប</td>
+													<td width="6%" class="aligncenter">លុប</td>
+												</tr>
+												<tr>
+													<td colspan="12" id="lbl_product_item" align="center"></td>
+												</tr>
+											</thead>
+										</table>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12">
+										&nbsp;
+									</div>
+									<div class="col-md-12">
+										&nbsp;
+									</div>
+									<div class="form-group">
+										<label class="col-md-4 control-label"><?php echo $tr->translate("អត្រាប្តូរប្រាក់");?></label>
+										<div class="col-md-8">
+											<input name="label_exchange" id="label_exchange" readOnly value="<?php echo "1 ដុល្លា = ".$this->exchange_rate." រៀល";?>" class="form-control" />
+											<input type="hidden" name="exchange_rate" id="exchange_rate"  value="<?php echo $this->exchange_rate;?>" class="form-control" />
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									&nbsp;
+								</div>
+								<div class="col-md-4" style="text-align: left !important;font-weight: bold;">
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+										</label>
+										<div class="col-md-8">
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											<strong style="font-size: 16px;">តម្លៃសរុប</strong>
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="sub_total" id="sub_total" readOnly />
+										</div>
+									</div>
+								
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											<strong style="font-size: 16px;color: red;">បានបង់សរុប</strong>
+										</label>
+										<div class="col-md-8">
+											<input style="font-size: 16px;" type="text" class="form-control" name="paid" id="paid" onkeyup="calCualtepaid();" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											<strong>នៅខ្វះ</strong>
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="balance" id="balance" readOnly />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-3"></div>
+									<div class="col-md-3">
+										<a href="<?php echo $this->url(array('module'=>$module,'controller'=>'possale','action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+									</div>
+									<div class="col-md-3">
+										<div class="input-icon right">
+											<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i> រក្សាទុក</button>
+										</div>
+									</div>
+									<div class="col-md-3"></div>
+								</div>
+							
+						</div>	
+						<div class="tab-pane" id="tab_2">
+							<div class="row">
+								<div class="form-group">
+									<div class="col-md-2" style="text-align: left !important;">
+									</div>
+									<div class="col-md-6" style="text-align: left !important;">
+										  <select class="form-control select2me" id="service_id" name="service_id" onchange="addServicePartner(2);" >
+												<option value="-1">ជ្រើសរើសសេវាកម្ម</option>
+												<?php if(!empty($this->rsservice)){foreach ($this->rsservice as $rs){?>
+												<option value="<?php echo $rs['id']?>"><?php echo $rs['item_name']." - ".$rs['item_code'];?></option>
+												<?php }}?>
+										  </select>
+									</div>
+									<div class="col-md-2" style="text-align: left !important;">
+										<button type="button" name="calcel" class="btn blue col-md-12"><i class="fa fa-search"></i>ស្វែងរកមុខទំនិញ</button>
+									</div>
+									<div class="col-md-2">
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-12">
+									<table id="table_row_partner" border="1px" style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+										<thead>
+											<tr id="head-title" class="table table-bordered" align="right" style="border:1px solid #4c6184 !important;">
+												<th class="aligncenter">#</th>
+												<th class="aligncenter">សេវាកម្ម</th>
+												<th class="aligncenter">អ្នកផ្គត់ផ្គង់</th>
+												<th class="aligncenter">តម្លៃជួល</th>
+												<th class="aligncenter">សម្គាល់</th>
+												<th class="aligncenter">លុប</th>
+											</tr>
+											<tr>
+												<td colspan="10" id="lbl_partnerservice" align="center"></td>
+											</tr>
+										</thead>
+									</table>
+								</div>
+							</div>
+							<div class="form-group" style="">
+								<label class="col-md-12 control-label">
+									&nbsp;
+								</label>
+							</div>
+							<div class="form-group" style="">
+								<label class="col-md-6 control-label">
+								</label>
+								<label class="col-md-2 control-label">
+									<strong style="font-size: 16px;">សរុប</strong>
+								</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" name="total_partner_service" id="total_partner_service" readOnly />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+
+<script>
+	$('#frm').submit(function() {
+
+		branch_id=$("#branch").val();
+		if(branch_id<=0){
+			alert("<?php echo $tr->translate("Please select branch");?> !!!");
+			$('#branch').select2('open');
+			return false;	
+		}
+		
+		customer_id=$("#customer_id").val();
+		if(customer_id<0){
+			alert("<?php echo $tr->translate("Please select customer name");?>");
+			$('#customer_id').select2('open');
+			return false;	
+		}
+		identity =$("#identity").val();
+		if(identity=='' || identity==-1){
+			alert("<?php echo $tr->translate("Please add product row");?>");
+			$('#product_id').select2('open');
+			//dijit.byId("product_id").focus();
+			return false;
+		}
+		
+		order_date=$("#sale_date").val();
+		if(order_date==''){
+			alert("<?php echo $tr->translate("Please select date");?>");
+			$('#sale_date').select2('open');
+			return false;
+		}
+		product_id=$("#product_id").val();
+		if(product_id<0){
+			alert("<?php echo $tr->translate("Please select customer name");?>");
+			$('#product_id').select2('open');
+			return false;	
+		}
+		var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+		if (r == true) {
+			return true;
+		} else {
+		   return false;	    
+		}
+		
+	});
+	
+	$(function () {
+		$('#date_deleivery').datetimepicker({
+            inline: true,
+			sideBySide: true
+		});
+	});
+	
+	function getPopupCustomer(){
+		val = $('#customer_id').val();
+		if(val==-1){
+			$('#customerpopup').modal('show');
+		}else{
+			getCustomerInfo();
+		}
+	}
+
+	function getPopupReceiver(){
+		val = $('#receiver_name').val();
+		if(val==-1){
+			$('#receiverpopup').modal('show');
+		}
+	}
+	
+	
+	function popupProgram(){
+		program_id = $("#program_id").val();
+		if(program_id==-1){
+			window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/sales/program/add";?>','_blank');
+		}
+	}
+	
+	var url_getprogram = '<?php echo $this->url(array("module"=>"sales","controller"=>"possale","action"=>"refresh-program"));?>';
+	function getRefreshProgram(){
+		loading();
+		$.ajax({
+			url: url_getprogram,
+			type: "post",
+			success: function(data){
+				rs = $.parseJSON(data);
+				//alert(rs);
+				/*if(rs){
+					 $('#program_id').empty();
+					 $('#program_id').append($("<option></option>").attr("value",0).text("ជ្រើសរើសកម្មវិធីបុណ្យ"));
+					 $('#program_id').append($("<option></option>").attr("value",-1).text("បន្ថែមកម្មវិធីបុណ្យ"));
+					 for(i=0;i<rs.length;i++){
+						$('#program_id').append($("<option></option>").attr("value",rs[i]['id']).text(rs[i]['dead_name']+" - "+rs[i]['dead_name_chinese']+" - "+rs[i]['membersone']+" - "+rs[i]['memberstwo']));
+					 }
+				}*/
+				$('#program_id').empty();
+				$('#program_id').append(rs);
+
+				document.getElementsByClassName("overlay")[0].style.display="none";
+			},
+			error:function(err){
+				document.getElementsByClassName("overlay")[0].style.display="none";
+				alert("failed");
+			}
+		});
+	}
+	
+	function popupProduct(){
+		window.open('<?php echo Zend_Controller_Front::getInstance()->getBaseUrl()."/product/index/add";?>','_blank');
+	}
+	var url_refreshproduct = '<?php echo $this->url(array("module"=>"sales","controller"=>"possale","action"=>"refresh-product"));?>';										
+	function getRefreshProduct(){
+		loading();
+		dojo.xhrPost({
+			url:url_refreshproduct,
+			handleAs:"json",
+			load: function(data) {
+				if(data){
+					product = data.product;
+					$('#product_id').empty();
+					for(i=0;i<product.length;i++){
+						$('#product_id').append($("<option></option>").attr("value",product[i]['id']).text(product[i]['item_name']+" - "+product[i]['item_code']));
+					}
+					
+					service = data.service;
+					$('#service_id').empty();
+					for(i=0;i<service.length;i++){
+						$('#service_id').append($("<option></option>").attr("value",service[i]['id']).text(service[i]['item_name']+"-"+service[i]['item_code']));
+					}
+				}
+				document.getElementsByClassName("overlay")[0].style.display="none";
+			},
+			error: function(err) {
+				document.getElementsByClassName("overlay")[0].style.display="none";
+			}
+		});
+	}
+	
+	
+	function loading(){
+		document.getElementsByClassName("overlay")[0].style.display="block";
+	}
+	
+</script>
+			
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script>
+
+dojo.require("dijit.form.ValidationTextBox");
+dojo.require("dijit.form.TextBox");
+dojo.require('dijit.form.FilteringSelect');
+dojo.require("dijit.form.NumberTextBox");  
+dojo.require('dijit.form.Button');
+dojo.require("dojo.NodeList-manipulate");
+dojo.require("dojo.html");
+dojo.require("dijit.form.Form");
+dojo.require("dijit.Dialog");
+dojo.require("dojo.number");
+dojo.require("dojo.data.ItemFileWriteStore");  
+dojo.require("dijit.Editor");
+dojo.require("dijit.form.DateTextBox");
+
+require(["dojo/ready"], function(ready){
+	 
+});
+function checkTime(i) {
+	  if (i < 10) {
+	    i = "0" + i;
+	  }
+	  return i;
+}
+
+<?php $url_add_customer =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'add-customer')); ?>
+function addNewCustomer(){
+	txt_name = $("#txt_name").val();
+	if(txt_name==''){
+		alert("សូមបញ្ជូលឈ្មោះអតិថិជន!");
+		$("#txt_name").focus();
+		return false;
+	} 
+	txt_name = $("#txt_name").val() + " - " + $("#txt_phone").val();
+	
+	$('#save_customer').attr("disabled", true);
+	
+	$.ajax({
+		url: "<?php echo $url_add_customer;?>",
+		type: "post",
+		data: $('#frmcustomer').serialize(),
+		success: function(data){
+			rs = $.parseJSON(data);
+			$('#customer_id').append($("<option></option>").attr("value",rs['cus_id']).attr("selected",true).text(txt_name));                       
+			$("#customer_id").select2();
+			
+			$("#phone").val($('#txt_phone').val());
+			$("#address").val($('#txt_address').val());
+			
+			$('#customerpopup').modal('hide');
+			$('#save_customer').attr("disabled", false);
+		},
+		error:function(err){
+			alert("faile insert");
+		}
+	});
+}
+
+function addNewReceiver(){
+	name = $("#name_receiver").val();
+	if(name==''){
+		$("#name_receiver").focus();
+		return false;
+	} 
+	$('#save_receiver').attr("disabled", true);
+	$('#receiver_name').append($("<option></option>").attr("value",name).attr("selected",true).text(name));  
+	$("#receiver_name").select2();	
+	$('#receiverpopup').modal('hide');
+	$('#save_receiver').attr("disabled", false);
+}
+
+function deleteRecord(index) {
+	// is_package = $("#is_package_"+index).val();
+	// if(is_package==1){
+		// package_id = $("#product_id"+index).val();
+		// var identity = $('#identity').val();
+		
+		// var arrays = identity.split(',');
+		// for(var i=0;i<arrays.length;i++) {
+			// if(arrays[i] == index){ arrays.splice(i,1);}
+		// }
+		// var strings = arrays.join(',');
+		// $('#identity').val(strings);
+		// dojo.query("#row"+index).forEach(dojo.destroy);
+		
+		// alert(strings);
+		// var array = strings.split(',');
+		
+		// for(var j=0;j<array.length;j++) {
+			// alert(array[j]+" - "+package_id+" = "+$("#packageid_"+array[j]).val());
+			// if(package_id == $("#packageid_"+array[j]).val()){array.splice(j,1);}
+		// }
+		// var string = array.join(',');
+		// $('#identity').val(string);
+		// //dojo.query("#row"+index).forEach(dojo.destroy);
+		
+	// }else{
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		dojo.query("#row"+index).forEach(dojo.destroy);
+		netTotal();
+	// }
+}
+
+term = 0;
+templateterm='';
+tmpterm = '';
+
+col=0;
+no=0;
+title=0;
+temp='';
+function addProductRow(product_id=null,txt_product_name=null,qty=1,is_package=0,package_id=0,is_package_cost=0){ // (pro_id,pro_name,qty,is_package,package_id)
+	branch_id = $('#branch').val();
+	if(branch_id=="" || branch_id=="0"){
+		alert("<?php echo $tr->translate("Please select branch");?> !!!");
+		$('#branch').select2('open');
+		return false;
+	}
+	if(product_id==null){
+		var product_name = $("#product_id");
+		var txt_product_name = $("option:selected",product_name).text();
+		var product_id = $("#product_id").val();
+	}
+	if(product_id<0){return false;}
+	col++;no++;
+	template='';
+	template+='<td width="5%"  style="text-align:right">'+col+'</td>';
+	template+='<td width="20%" style="font-size:13px;">'+txt_product_name+'<input type="hidden"  value="'+product_id+'" id="product_id'+col+'" name="product_id'+col+'" class="form-control" /></td>';
+	template+='<td width="7%" style=""><span class="lblcurrent_qty" id="lblcurrent_qty'+col+'"></span><input type="hidden" name="qty_perunit'+col+'" id="qty_perunit'+col+'" class="form-control"/><input type="hidden" readonly id="current_qty'+col+'" name="current_qty'+col+'" class="form-control" /><input type="hidden" name="measur_name'+col+'" id="measur_name'+col+'" class="form-control" /><input type="hidden" name="unit_label'+col+'" id="unit_label'+col+'" class="form-control"/><input type="hidden" name="is_package_cost_'+col+'" id="is_package_cost_'+col+'" value="'+is_package_cost+'" class="form-control" /><input type="hidden" name="is_package_'+col+'" id="is_package_'+col+'" value="'+is_package+'" class="form-control" /><input type="hidden" name="packageid_'+col+'" id="packageid_'+col+'" value="'+package_id+'" class="form-control" /></td>';
+	template+='<td width="7%"  style=""><input type="number" step="any" value="'+qty+'" onkeyup="calCualtePrice('+col+');" onClick="calCualtePrice('+col+');" name="qty_'+col+'" class="form-control" id="qty_'+col+'" onkeypress="return isNumberKey(event);" placeholder=""/></td>';
+	template+='<td width="7%"  style=""><input type="number" step="any" onkeyup="calCualtePrice('+col+');" onClick="calCualtePrice('+col+');" name="qtydetail_'+col+'" class="form-control" id="qtydetail_'+col+'" onkeypress="return isNumberKey(event);" placeholder=""/></td>';
+	template+='<td width="10%" style=""><input required="1" readonly name="qty_sold'+col+'" class="form-control" id="qty_sold'+col+'" placeholder=""/></td>';
+	template+='<td width="7%" style=""><input required="1" type="text" tabindex="'+col+'"  onkeyup="convertToDollar('+col+');" name="price_reil_'+col+'" id="price_reil_'+col+'" class="form-control" onkeypress="return isNumberKey(event);" placeholder=""/></td>';
+	template+='<td width="7%" style=""><input required="1" type="text" tabindex="'+col+'"  onkeyup="calCualtePrice('+col+');" name="price_'+col+'" class="form-control" id="price_'+col+'" onkeypress="return isNumberKey(event);" placeholder=""/><input type="hidden" name="'+col+'" id="cost_price'+col+'" /></td>';
+	template+='<td width="8%" style=""><input type="text" name="total_'+col+'" class="form-control" id="total_'+col+'" readonly/></td>';
+	template+='<td width="8%" style=""><input type="text" name="discount_'+col+'" id="discount_'+col+'" class="form-control" onkeyup="calCualtePrice('+col+');" /></td>';
+	template+='<td width="8%" style=""><input type="text" name="sub_total_'+col+'" class="form-control" id="sub_total_'+col+'" readonly/></td>';
+	template+='<td width="6%"  ><button style="height:30px" type="button" onclick="deleteRecord('+col+')" name="save_close" class="btn default red">លុប</button></td>';
+	tmp='<tr id="row'+col+'" class="hover">';
+	tmp+="</tr>";
+	dojo.query("#lbl_product_item").append(tmp);
+
+	if($("#identity").val()!="") {
+		var identity = $("#identity").val();
+		$("#identity").val(identity+','+col);
+	} else {$("#identity").val(col);}
+	dojo.html.set(dojo.byId("row"+col),template , {
+		 parseContent: true,
+	});
+	//alert(package_id+" , "+is_package_cost)
+	getProductinfo(col,product_id,is_package,package_id,is_package_cost);
+	
+}
+
+function convertToDollar(index){
+	var price_reil= $("#price_reil_"+index).val();
+	var exchange_rate  = $("#exchange_rate").val();
+	dollar = (price_reil / exchange_rate).toFixed(3);
+	$("#price_"+index).val(dollar);
+	calCualtePrice(index);
+}
+
+
+function calCualtePrice(index){
+	main_qty= $("#qty_"+index).val();
+	if(main_qty==''){main_qty=0;}
+	detail_qty= $("#qtydetail_"+index).val();//ចំនួនរាយ
+	if(detail_qty==''){detail_qty=0;}
+	qty_perunit= $("#qty_perunit"+index).val();//ចំនួនក្នុង១ឯកកតា
+	if(qty_perunit==''){qty_perunit=0;}
+	
+	qty_sold = parseFloat(main_qty) + parseFloat(detail_qty/(qty_perunit));
+	$('#qty_sold'+index).val(qty_sold);
+	price = $('#price_'+index).val();
+
+	total = (price*qty_sold);
+	$('#total_'+index).val(total);
+	
+	discount = $('#discount_'+index).val();
+	sub_total = total - discount;
+	$('#sub_total_'+index).val(sub_total);
+	
+	netTotal();
+}
+function netTotal() {//use
+	var netTotal=0;
+	var rowId = $('#identity').val();
+	if(rowId!=''){
+		var rowIDArray = rowId.split(',');
+		for(var n = 0; n < rowIDArray.length; n++) {
+			netTotal += Number($('#sub_total_'+rowIDArray[n]).val());
+		}
+	}
+	$('#sub_total').val(netTotal.toFixed(0));
+	$('#paid').val(netTotal.toFixed(0));
+	calCualtepaid();
+}
+function calCualtepaid(){
+	paid = $('#paid').val();
+	total_received = isNaN(paid)?0:paid;
+	total_dollar = $('#sub_total').val();
+	
+	balance = total_dollar - total_received;
+	if(balance<0){
+		alert("can not pay more than total payment !!! ");
+		$('#paid').val(total_dollar);
+		$('#balance').val(0);
+	}else{
+		$('#balance').val(balance.toFixed(2));
+	}
+}
+var url_getproduct = '<?php echo $this->url(array('module'=>'sales','controller'=>'possale','action'=>'getproduct')); ?>';
+function getProductinfo(index,product_id,is_package=0,package_id=0,is_package_cost=0){
+	branch_id = $('#branch').val();
+	if(branch_id=="" || branch_id=="0"){
+		$('#branch').select2('open');
+		return false;
+	}
+	dojo.xhrPost({
+	    url: url_getproduct,
+	    content : { 
+	    	'product_id':product_id,'branch_id':branch_id,
+		},				    
+	   handleAs:"json", 
+	   load: function(data) {
+		    
+		    $('#current_qty_'+index).val(data.qty);
+			$('#measur_name'+index).val(data.measue_name);
+			$('#unit_label'+index).val(data.unit_label);
+			
+			if(is_package==1 && package_id==0 && is_package_cost==1){
+				//alert(1);
+				$('#cost_price'+index).val(data.price);
+				$('#price_'+index).val(data.selling_price);
+				$('#price_reil_'+index).val(data.selling_price_khmer);
+			}else if(is_package==1 && package_id==0 && is_package_cost==0){
+				//alert(2);
+				$('#price_'+index).prop('readonly', true);
+				$('#price_reil_'+index).prop('readonly', true);
+			}else{
+				//alert(3);
+				if(package_id>0 && is_package_cost==1){
+					$('#price_'+index).prop('readonly', true);
+					$('#price_reil_'+index).prop('readonly', true);
+				}else{
+					$('#cost_price'+index).val(data.price);
+					$('#price_'+index).val(data.selling_price);
+					$('#price_reil_'+index).val(data.selling_price_khmer);
+				}
+			}
+			
+			qty = data.qty;
+			if(qty==null){qty=0;}
+			qtyall_detail = qty*(data.qty_perunit);//eg;qty 1.5 and 1unit =24cans; =>1.5*24 =36cans.
+			qty_unitlable = (qtyall_detail % (data.qty_perunit)).toFixed(0);//រកចំនួនរាយ
+			//qty_unitlable = qty_unitlable.toFixed(2)
+			if(qty_unitlable>0){qty_unitlable=qty_unitlable+""+data.unit_label;}else{qty_unitlable=""; }
+			qty=parseInt(qty);
+            measure_name = data.measue_name;
+			if(data.measue_name==null){measure_name='';}
+			
+			/*if(qty_unitlable==''){
+				qty_unitlable = "";
+			}else{
+				qty_unitlable = "និង"+qty_unitlable;
+			}*/
+			
+			current_stock = qty+""+measure_name;//data.unit_label;
+			if(qty<=0){
+				current_stock = '';
+			}else if(qty>0 && qty_unitlable!=''){
+				current_stock = current_stock + " និង ";
+			}
+			//$("#lblcurrent_qty"+index).val(current_stock+""+qty_unitlable);
+			$("#lblcurrent_qty"+index).html(current_stock+""+qty_unitlable);
+			$("#qty_perunit"+index).val(data.qty_perunit);
+			calCualtePrice(index);
+	    },		
+	   
+	    error: function(err) {
+			   alert(err);
+		}
+	});
+}
+
+
+col1=0;
+no1=0;
+title1=0;
+temp='';
+function addServicePartner(from_type){
+	branch_id = $('#branch').val();
+	if(branch_id=="" || branch_id=="0"){
+		alert("<?php echo $tr->translate("Please select branch");?> !!!");
+		$('#branch').select2('open');
+		return false;
+	}
+	if(from_type==1){
+		var product_name = $("#product_id");
+		var service_name = $("option:selected",product_name).text();
+		var service_id = $("#product_id").val();
+	}else{
+		var product_name = $("#service_id");
+		var service_name = $("option:selected",product_name).text();
+		var service_id = $("#service_id").val();
+	}
+	if(service_name=='' ){return false;}
+	
+	col1++;no1++;
+	template='';
+	
+	template+='<td style="min-width:20px;text-align:center">'+col1+'</td>';
+	template+='<td style="min-width:230px;font-size:13px;"><input type="hidden" value="'+service_name+'" id="service_name'+col1+'">'+service_name+'<input type="hidden"  value="'+service_id+'" id="service_id_'+col1+'" name="service_id_'+col1+'" class="form-control" /></td>';
+	
+	template+='<td width="20%"><select onchange="getServicePartnerPrice('+col1+');"  class="form-control select2me" id="partner_'+col1+'" name="partner_'+col1+'" >';
+		template+='<option value="">ជ្រើសរើសដៃគូសេវាកម្ម</option>';
+		<?php foreach($this->partner as $partner){?>
+			template+='<option value="'+<?php echo $partner['id']?>+'"><?php echo $partner['name'];?></option>';
+		<?php }?>
+	template+='</select></td>';
+	template+='<td style="min-width:60px"><input type="text" id="price_service_'+col1+'" name="price_service_'+col1+'" onkeyup="netTotalPartner();" class="form-control" onkeypress="return isNumberKey(event);" /></td>';
+	
+	template+='<td style="min-width:60px"><input type="text" name="note_'+col1+'" class="form-control" id="note_'+col1+'" /></td>';
+	template+='<td width="60px"><button style="height:30px" type="button" onclick="deleteRecordPartner('+col1+')" name="save_close" class="btn default red">លុប</button></td>';
+	tmp='<tr id="row_partner_'+col1+'" class="hover">';
+	tmp+="</tr>";
+	dojo.query("#table_row_partner").append(tmp);
+
+	if($("#identity_partner").val()!="") {
+		var identity_partner = $("#identity_partner").val();
+		$("#identity_partner").val(identity_partner+','+col1);
+	} else {$("#identity_partner").val(col1);}
+	dojo.html.set(dojo.byId("row_partner_"+col1),template , {
+		 parseContent: true,
+	});
+	$("#partner_"+col1).select2();
+}
+function deleteRecordPartner(index) {	
+	var identity_partner = $('#identity_partner').val();
+	var arrays = identity_partner.split(',');
+	for(var i=0;i<arrays.length;i++) {
+		if(arrays[i] == index) arrays.splice(i,1);
+	}
+	var strings = arrays.join(',');
+	$('#identity_partner').val(strings);
+	dojo.query("#row_partner_"+index).forEach(dojo.destroy);
+	netTotalPartner();
+}
+function netTotalPartner() {//use
+	var netTotal=0;
+	var rowId = $('#identity_partner').val();
+	if(rowId!=''){
+		var rowIDArray = rowId.split(',');
+		for(var n = 0; n < rowIDArray.length; n++) {
+			netTotal += Number($("#price_service_"+rowIDArray[n]).val());
+		}
+	}
+	$("#total_partner_service").val(netTotal);
+}
+
+var url_getservicepartnerprice = '<?php echo $this->url(array('module'=>'sales','controller'=>'possale','action'=>'get-service-partner-price')); ?>';
+function getServicePartnerPrice(index){
+	partner_id = $("#partner_"+index).val(); 
+	service_id = $("#service_id_"+index).val(); 
+	if(partner_id>0 && service_id>0){
+		dojo.xhrPost({
+			url: url_getservicepartnerprice,
+			content : {
+				'partner_id':partner_id,
+				'service_id':service_id,
+			},				    
+		    handleAs:"json", 
+		    load: function(data) {
+				if(data){
+					$("#price_service_"+index).val(data.prices);
+					$("#note_"+index).val(data.notes);
+				}else{
+					$("#price_service_"+index).val(0);
+					$("#note_"+index).val('');
+				}
+				netTotalPartner();
+		    },		
+			error: function(err) {
+				   alert(err);
+			}
+		});
+	}
+}
+
+
+var url_gettype = '<?php echo $this->url(array('module'=>'sales','controller'=>'possale','action'=>'get-type')); ?>';
+function getType(){
+	
+	var product_name = $("#product_id");
+	var txt_product_name = $("option:selected",product_name).text();
+	var product_id = $("#product_id").val();
+	
+	if(product_id>0){
+		dojo.xhrPost({
+			url: url_gettype,
+			content : {
+				'product_id':product_id,
+			},				    
+		    handleAs:"json", 
+		    load: function(data) {
+				if(data.is_package==1){// product package
+					addProductRow(product_id,txt_product_name,1,1,0,data.is_package_cost); // (pro_id,pro_name,qty,is_package,package_id,is_package_cost)
+					getPackageProduct(product_id,data.is_package_cost);
+				}else{
+					addProductRow(product_id,txt_product_name,1,0,0,0); // (pro_id,pro_name,qty,is_package,package_id,is_package_cost)
+					if(data.is_service==1){
+						$("#service_id").val(product_id).select2();
+						addServicePartner(1);
+					}
+				}
+		    },		
+			error: function(err) {
+				   alert(err);
+			}
+		});
+	}
+}
+
+var url_getcategory = '<?php echo $this->url(array('module'=>'sales','controller'=>'possale','action'=>'get-productbycategory'));?>';
+function getProductByCategory(){
+	$('#product_id').empty();
+	category = $("#category").val();
+		dojo.xhrPost({
+			url: url_getcategory,
+			content : {
+				'category':category,
+				'type':0 // get all product and service
+			},				    
+		    handleAs:"json", 
+		    load: function(data) {
+				//alert(data)
+				$('#product_id').append(data); 
+		    },		
+			error: function(err) {
+				   alert(err);
+			}
+		});
+}
+
+
+
+var url_getpackage = '<?php echo $this->url(array('module'=>'sales','controller'=>'possale','action'=>'get-packageproduct')); ?>';
+function getPackageProduct(product_id,is_package_cost){
+	dojo.xhrPost({
+		url: url_getpackage,
+		content : {
+			'product_id':product_id,
+		},				    
+		handleAs:"json", 
+		load: function(data) {
+			if(data){
+				//alert(data);
+				for(i=0;i<data.length;i++){
+					//alert(data[i]['name']);
+					addProductRow(data[i]['product_id'],data[i]['name']+" - "+data[i]['code'],data[i]['qty'],0,product_id,is_package_cost);// (pro_id,pro_name,qty,is_package,package_id,is_package_cost)
+				}
+			}
+		},		
+		error: function(err) {
+			   alert(err);
+		}
+	});
+}
+
+function getPopupSaleagent(){
+	val = $('#saleagent_id').val();
+	if(val==-1){
+		$('#saleagentpopup').modal('show');
+	}
+}
+
+<?php $url_sale_agent =  $this->url(array('module'=>'product','controller'=>'index','action'=>'add-saleagent')); ?>
+function addNewsaleagent(){	
+	name_saleagent = $("#name_saleagent").val();
+	if(name_saleagent==''){
+		$("#name_saleagent").focus();
+		return false;
+	} 
+//	alert(1);		
+	$('#save_saleagent').attr("disabled", true);		
+	$.ajax({			
+		url: "<?php echo $url_sale_agent;?>",
+		type: "post",
+		data: $('#frmsaleagent').serialize(),
+		success: function(data){
+			rs = $.parseJSON(data);
+			$('#saleagent_id').append($("<option></option>").attr("value",rs['saleagent_id']).attr("selected",true).text(name_saleagent));                       
+			$("#saleagent_id").select2();
+			$('#saleagentpopup').modal('hide');
+			$('#save_saleagent').attr("disabled", false);
+		},
+		error:function(err){
+			alert("faile insert");
+		}
+	});
+}
+
+function isNumberKey(evt)
+{
+	var charCode = (evt.which) ? evt.which : event.keyCode;
+	if (charCode != 46 && charCode != 45 && charCode > 31 && (charCode < 48 || charCode > 57)){
+		return false;
+	}else{
+		return true;
+	}
+}
+
+
+<?php $url_getcustomerinfo =  $this->url(array('module'=>'sales','controller'=>'customer','action'=>'get-customerinfo')); ?>
+function getCustomerInfo(){
+	customer_id = $("#customer_id").val();
+	if(customer_id==-1){
+	}else{
+		dojo.xhrPost({
+		    url: "<?php echo $url_getcustomerinfo;?>",
+		    content : { 
+		    	'customer_id':customer_id,
+			},				    
+		   handleAs:"json", 
+		   load: function(data) {
+			   $("#phone").val(data.phone);
+			   $("#address").val(data.address);
+		   },		
+		    error: function(err) {
+				   alert(err);
+			}
+		});
+	}
+}
+
+$(function(){
+
+    $('.spinner .btn:first-of-type').on('click', function() {
+      var btn = $(this);
+      var input = btn.closest('.spinner').find('input');
+      if (input.attr('max') == undefined || parseInt(input.val()) < parseInt(input.attr('max'))) {    
+        input.val(parseInt(input.val(), 10) + 1);
+      } else {
+        btn.next("disabled", true);
+      }
+    });
+    $('.spinner .btn:last-of-type').on('click', function() {
+      var btn = $(this);
+      var input = btn.closest('.spinner').find('input');
+      if (input.attr('min') == undefined || parseInt(input.val()) > parseInt(input.attr('min'))) {    
+        input.val(parseInt(input.val(), 10) - 1);
+      } else {
+        btn.prev("disabled", true);
+      }
+    });
+
+})
+
+
+$( document ).ready(function() {
+
+	
+});
+function getAllBranchFunction(){
+	getInvoiceByBranch();
+}
+
+<?php $urlGetReceipt =  $this->url(array('module'=>'sales','controller'=>'possale','action'=>'getinvoceno')); ?>
+function getInvoiceByBranch(){
+	branch_id = $("#branch").val();
+	if(branch_id=="" || branch_id=="-1"){
+		return false;
+	}
+	$.ajax({
+		url: "<?php echo $urlGetReceipt;?>",
+		type: "post",
+		data: {'branch_id':branch_id,},
+		success: function(data){
+			 $("#invoice_no").val(data);
+		},
+		error:function(err){
+			 alert(err);
+		}
+	});
+	
+}
+</script>
+
+
+
+<?php $form = $this->form_customer; ?>
+<div id="customerpopup" class="modal fade" tabindex="-1" data-width="1200">
+       <div class="modal-dialog">
+		      <div class="modal-content">
+		      <div class="modal-header">   
+				<div class="row">
+				<div class="col-md-12">
+					<div class="portlet box blue">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-home"></i><?php echo $tr->translate("ADD_NEW_CUSTOMER");?>
+						</div>
+						<div class="caption pull-right">
+							<a href="<?php echo $url_new;?>" >
+								 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							</a>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form id="frmcustomer" name="frmcustomer" dojoType="dijit.form.Form" autoComplete="off" enctype="application/x-www-form-urlencoded" class="form-horizontal" enctype="multipart/form-data" method="post">
+							<div class="form-body">
+								<div class="form-group">
+									<label class="control-label col-md-3"><?php echo $tr->translate("សាខា");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement("branch_id");?>
+										</div>
+									</div>
+									
+								</div>
+								
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("លេខកូដអតិថិជន");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('cu_code'); ?>
+										</div>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="control-label col-md-3"><?php echo $tr->translate("ឈ្មោះអតិថិជន");?><span class="required"></span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('txt_name'); ?>
+										</div>
+									</div>
+								</div>
+								
+								
+								<div class="form-group">
+									<label class="control-label col-md-3">
+									<?php echo $tr->translate("លេខទំនាក់ទំនង");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('txt_phone'); ?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("អាសយដ្ឋាន");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement("txt_address");?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("អ៊ីម៉ែល");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('txt_mail'); ?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("សម្គាល់");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<?php echo $form->getElement('remark'); ?>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-md-12 center">
+										<button type="button" id="save_customer" name="btnsavenew" onclick="addNewCustomer();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("រក្សាទុក")?> </button>
+									</label>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+          </div>
+        </div>
+    </div>
+ </div>
+ 
+ <div id="saleagentpopup" class="modal fade" tabindex="-1" data-width="1200">
+       <div class="modal-dialog">
+		      <div class="modal-content">
+		      <div class="modal-header">   
+				<div class="row">
+				<div class="col-md-12">
+					<div class="portlet box blue">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="icon-home"></i><?php echo $tr->translate("បន្ថែមអ្នកណែនាំ");?>
+						</div>
+						<div class="caption pull-right">
+							<a href="<?php //echo $url_new;?>" >
+								 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							</a>
+						</div>
+					</div>
+					<div class="portlet-body form">
+						<form id="frmsaleagent" name="frmsaleagent" dojoType="dijit.form.Form" autoComplete="off" enctype="application/x-www-form-urlencoded" class="form-horizontal" enctype="multipart/form-data" method="post">
+							<div class="form-body">								
+								<div class="form-group">
+									<label class="control-label col-md-3"><?php echo $tr->translate("NAME");?><span class="required"></span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<input name="name_saleagent" id="name_saleagent" class="form-control" placeholder="Add name customer"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+									<?php echo $tr->translate("PHONE_NUMBER");?><span class="required">
+										</span>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<input name="phone" id="phone" class="form-control" placeholder="Phone customer" />
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("ADDRESS");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<input name="address" id="address" class="form-control"  placeholder="Address customer"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("EMAIL");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<input name="email" id="email" class="form-control" placeholder="Email"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label col-md-3">
+										<?php echo $tr->translate("NOTE");?>
+									</label>
+									<div class="col-md-9">
+										<div class="input-icon right">
+											<i class="fa"></i>
+											<input name="note" id="note" class="form-control" placeholder="Notes"/>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label  class="col-md-12 center">
+										<button type="button" id="save_saleagent" name="save_saleagent" onclick="addNewsaleagent();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("រក្សាទុក")?> </button>
+									</label>
+								</div>
+							</div>
+						 </form>
+					  </div>
+					</div>
+			   	 </div>
+			  </div>
+           </div>
+        </div>
+     </div>
+ </div>
+
+ <div id="receiverpopup" class="modal fade" tabindex="-1" data-width="1000">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">   
+				<div class="row">
+					<div class="col-md-12">
+						<div class="portlet box blue">
+							<div class="portlet-title">
+								<div class="caption">
+									<i class="icon-home"></i><?php echo $tr->translate("បន្ថែមអ្នកទទួលប្រាក់");?>
+								</div>
+								<div class="caption pull-right">
+									<a href="<?php echo $url_new;?>" >
+										 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+									</a>
+								</div>
+							</div>
+							<div class="portlet-body form">
+								<form id="frmreceiver" name="frmreceiver" dojoType="dijit.form.Form" autoComplete="off" enctype="application/x-www-form-urlencoded" class="form-horizontal" enctype="multipart/form-data" method="post">
+									<div class="form-body">
+										<div class="form-group">
+											<label class="control-label col-md-3">
+												<?php echo $tr->translate("ឈ្មោះអ្នកទទួលប្រាក់");?>
+											</label>
+											<div class="col-md-9">
+												<div class="input-icon right">
+													<input name="name_receiver" id="name_receiver" class="form-control" />
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label  class="col-md-12 center">
+												<button type="button" id="save_receiver" name="save_receiver" onclick="addNewReceiver();" class="btn btn-primary"><i class="fa fa-save"></i> <?php echo $tr->translate("រក្សាទុក")?> </button>
+											</label>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+ </div>
+
+<div class="overlay">
+	<div class="overlay-load">
+		<div class="overlay-msg">
+	    </div>
+	</div>
+</div>
+<style>
+.overlay {display: none;position: absolute;width: 100%;height: 150%;top: 0px;left: 0px;background: #FCFCFC;z-index: 1001;opacity: .5;}
+.overlay-load {width: 350px;height: 100px;margin: auto;top: 0px;bottom: 0px;position: absolute;left: 0px;right: 0px;
+           text-align: center;
+           background: #fff url("/psst/trunk/public/images/loading.gif") 50% 25%;
+           background-repeat: no-repeat;          
+}
+.overlay-msg{margin-bottom: 10px;bottom: 0px;position: absolute;font-style: italic;color: rgb(19, 19, 19);} 
+</style>

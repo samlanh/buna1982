@@ -1,0 +1,99 @@
+<?php 
+	$url_new = $this->url(array('module'=>'mong','controller'=>'constructor','action'=>'add',));
+	$url_edit = $this->url(array('module'=>'mong','controller'=>'constructor','action'=>'edit',));
+	$url_delete = $this->url(array('module'=>'mong','controller'=>'constructor','action'=>'delete',));
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$formFilter = $this->formFilter;
+	$rs = $this->product;
+	
+?>
+<title>ជាងសាងសង់</title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i><?php echo $tr->translate("ជាងសាងសង់");?>
+				</div>
+				<a href="<?php echo $url_new;?>" class="btn btn-bg blue  pull-right">
+					<i class="fa fa-plus"></i>&nbsp;<?php echo $tr->translate("ADD_NEW");?>
+				</a>
+			</div>
+			<div class="portlet-body form frmfilter">
+				<form method="post" action="<?php echo $formFilter->getAction(); ?>">
+					<div class="form-group">
+							<label class="control-label col-md-2">
+								<?php echo $formFilter->getElement('ad_search');?>
+							</label>
+							<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i>
+								<?php echo $formFilter->getElement('start_date');?></div>
+							</label>
+							<label class="control-label col-md-2"><div class="input-icon right"><i class="fa fa-calendar"></i>
+								<?php echo $formFilter->getElement('end_date');?></div>
+							</label>
+							<label class="control-label col-md-2">
+								<?php echo $formFilter->getElement('status');?>
+							</label>
+							<label class="control-label col-md-2">
+								<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+							</label>
+						</div>				
+				</form> 
+				<div class="contain_form" style="clear: both;">
+						<?php echo $this->list; ?>
+			    </div>
+		   </div>
+		</div>
+	</div>
+</div>
+<script>
+var row=0;
+var url="";
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one', 
+		callback: function(key, options) {		
+			var m = "clicked: " + key;
+			if(key=="edit"){
+				url='<?php echo $this->baseUrl()."/mong/constructor/edit/id/";?>';
+			}else if(key=="add"){
+				url='<?php echo $this->baseUrl()."/mong/constructor/add/id/";?>';
+			}
+			
+			gotoAction();
+		},
+		items: {
+			"edit": {name: "កែប្រែ", icon: "edit", accesskey: "e"},
+			"add": {name: "បន្ថែម", icon: "add", accesskey: "e"},
+		}
+	});
+});
+function setrowdata(index){
+	  row = index;
+	}
+var recordid ='';
+function gotoAction(){
+	 window.open(url+row, '_blank');
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

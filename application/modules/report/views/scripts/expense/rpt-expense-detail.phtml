@@ -1,0 +1,229 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$this->headTitle('Reprint Expense'); 
+	echo $this->headTitle();
+?>
+<style>
+#footer{display: none;}
+table tr td strong{
+	padding-left: 10px;
+}
+</style>	
+<div style="border: 1px dotted #000;background: #fff; margin: 0 auto;min-height: 27cm;width:27cm;padding: 25px;">
+		<div class="portlet-title">
+			<div class="caption">
+			</div>
+			<div class="btn-group pull-right">
+			 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+			   Actions <i class="fa fa-angle-down"></i>
+			 </button>
+				<ul class="dropdown-menu" role="menu">
+					<li>
+						<a href="#" onclick="doPrint();">
+							<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+						</a>
+					</li>
+					<li>
+						<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="divPrint">
+			<?php for($print=0;$print<2;$print++){?>
+			<table width="100%"  class="print" cellspacing="0"  cellpadding="0" style=" font-family: 'Khmer OS Battambang' !important; height:10cm; font-size:11px !important; margin-top: -10px;white-space:nowrap;">
+				<tr>
+				    <td colspan="10"  style="" align="center">
+						<table width="100%" style="font-size: 10px;margin-bottom: 0px;">
+							<tr>
+								<td width="30%">
+									<img style="width: 55%;" alt="<?php ?>" src="<?php echo $this->baseUrl().'/images/logo.png'?>"><br />
+								</td>
+								<td width="40%" align="center" valign="top" style="">
+									<div style="font-size: 16px;text-align:center;font-family: Khmer OS Muol Light;"><?php echo $tr->translate('COMPANY_CUSTOMER');?></div>
+									<div style="font-size: 16px;font-family: khmer OS Muol Light;">ប័ណ្ណចំណាយ</div> 
+									<div style="font-size: 16px;font-family:Battambang,Arial,Helvetica,sans-serif;margin-top:2px;">PAYMENT VOUCHER</div> 
+								</td>
+								<td width="30%">
+									<div style="font-size: 16px;font-weight:bold;text-align:center;">
+										N<sup>o</sup> : <?php echo $this->expense['receipt'];?>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									&nbsp;
+								</td>
+							</tr>
+						</table>
+				    </td>
+				</tr>
+				<tr>
+					<td colspan="10">
+						<table width="100%" style="font-family: Khmer OS Battambang;font-size:14px;white-space:nowrap;margin-top:-8px;line-height: 17px;">
+							<tr >
+								<td width="10%"></td>
+								<td width="18%"></td>
+								<td width="9%"></td>
+								<td width="18%"></td>
+								<td width="4%"></td>
+								<td width="8%"></td>
+								<td width="4%"></td>
+								<td width="5%"></td>
+								<td width="3%"></td>
+								<td width="8%"></td>
+							</tr>
+							<style>
+								.data{font-weight: bold;}
+							</style>	
+							<tr >
+								<td >ចំណាយឱ្យ​ <br />Pay To </td>
+								<td valign="top" class="data"> :&nbsp; <?php echo $this->expense['expense_title'];?> </td>
+								<td  align="center">ថ្ងៃចំណាយ <br />Paid Date</td>
+								<td valign="top" class="data"> :&nbsp; <?php echo date("d-M-Y",strtotime($this->expense['for_date']));?> </td>
+								<td colspan="1"><label id="" >សម្គាល់  <br /> Note</label></td>
+								<td colspan="5" valign="top" class="data">:&nbsp;<?php echo $this->expense['note'];?></td>
+							</tr>
+							<tr >
+								<td colspan="10">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="10">
+									<table width="100%" border="1" style="border:1px solid #000; border-collapse: collapse;line-height: 21px;">
+										<tr style=" font-size:14px; text-align:center; height:25px; background:#b0bdfd !important;">
+											<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">លរ/No</strong></td>
+											<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">ប្រភេទចំណាយ/Expense Type</strong></td>
+											<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">ពណ៌នា/Description</strong></td>
+											<td style="border:1px solid #000;"><strong style="font-family: Khmer OS Battambang;color:#000;font-size: 14;">ចំនួនប្រាក់/Amount</strong></td>
+										</tr>
+										<?php $i=0;$total=0;if(!empty($this->expense_detail)){foreach ($this->expense_detail as $row){$i++;?>
+											<tr style=" font-size:14px; text-align:center; height:25px;">
+												<td><?php echo $i;?></td>
+												<td align="left">&nbsp;&nbsp;<?php echo $row['expense_type']?></td>
+												<td align="left">&nbsp;&nbsp;<?php echo $row['note']?></td>
+												<td><?php echo "$ ".number_format($row['price'],2)?></td>
+											</tr>	
+										<?php 
+											$total = $total + $row['price'];
+										}?>
+										<?php for($i++;$i<=5;$i++){?>
+											<tr style="height: 20px;font-size: 12px;">
+												<td width="10%" align="center"><?php echo $i;?></td>
+												<td width="35%"></td>
+												<td width="35%"></td>
+												<td width="20%"></td>
+											</tr>
+										<?php }}?>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="10" valign="bottom">
+									<table width="100%"   style="font-family:'Khmer OS Battambang';font-size:14px; line-height:18px;margin-top:-5px;margin-bottom:5px;">
+										<tr>
+											<td width="20%"></td>
+											<td width="20%"></td>
+											<td width="15%"></td>
+											<td width="15%"></td>
+											<td width="15%"></td>
+											<td width="15%"></td>
+										</tr>
+										<tr>
+											<td colspan="2"  align="center">
+												<div style="margin-top:-5px;"></div>
+											</td>
+											<td colspan="2">&nbsp;
+												
+											</td>
+											<td>
+												<div style="margin-top:-15px;"></div>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2"  align="center">
+												<div style="margin-top:-5px;"></div>
+											</td>
+											<td colspan="2">&nbsp;
+												
+											</td>
+											<td>
+												<div style="margin-top:-15px;"></div>
+											</td>
+											<td>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="4"></td>
+											<td>
+												<div style="margin-top:-20px;">ចំណាយសរុប <br />Paid Amount</div>
+											</td>
+											<td>
+												<div style="width:100%;border-bottom:1px solid #000;margin-bottom:px;margin-top: -20px; font-weight: bold;font-size: 16px;">: &nbsp;<?php echo "$ ".number_format($total,2);?></div>
+											</td>
+										</tr>
+										<tr >
+											<td colspan="2" align="center" valign="top">
+												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
+													<?php 
+													   $session_user=new Zend_Session_Namespace('authstu');
+													   $last_name=$session_user->last_name;
+													   $username = $session_user->first_name;
+													   echo"Paid By : ".$last_name." ".$username;
+													?>
+												</div>
+											</td>
+											<td colspan="2" valign="top" align="center">
+												<div style="font-weight:bold;color:#000; font-size: 14px;margin-top:-10px;"> 
+													<?php 
+													   echo"Received By :............................ &nbsp;&nbsp;";
+													?>
+												</div>
+											</td>
+											<td></td>
+											<td></td>
+										</tr>
+										
+										<tr>
+											<td colspan="6">
+												&nbsp;
+											</td>
+										</tr>
+										
+										<tr>
+											<td colspan="2" align="center" >
+												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 30px;"></div>
+												<div style="margin-top:-11px;">Date : <?php echo date('d / m  /Y , H:i:s ',strtotime($this->expense['create_date']));?></div>
+											</td>
+											<td colspan="2" align="center" width="30%">
+												<div style="width:70%;border-bottom:1px solid #000;margin-bottom:10px;margin-top: 30px;"></div>
+												<div style="margin-top:-11px;">Date : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / </div>
+											</td>
+											<td colspan="2" align="center"></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		<?php if($print==0){?>
+			<hr style="border:1px dotted #000;" /><br />
+		<?php }}?>
+	</div>	
+</div>
+
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script type="text/javascript">
+	function doPrint(){
+		var divToPrint = document.getElementById('divPrint');
+		var htmlToPrint = '' +'<style type="text/css">' +'</style>';
+		htmlToPrint += divToPrint.outerHTML;
+		window.document.write(htmlToPrint);
+		window.print();
+		window.close();
+	}
+</script>
+

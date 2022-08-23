@@ -1,0 +1,148 @@
+<?php 
+	$tr=Application_Form_FrmLanguages::getCurrentlanguage();
+	$formFilter = $this->partnerservice;
+	$search = $this->search;
+?>
+<title><?php echo $tr->translate("RPT_PURCHASE");?></title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe"></i>ដៃគូសេវាកម្ម						
+				</div>
+				<div class="btn-group pull-right">
+					 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false">
+					   Actions <i class="fa fa-angle-down"></i>
+					 </button>
+						<ul class="dropdown-menu" role="menu">
+							<li>
+								<a href="#" onclick="doPrint();">
+									<i class="fa fa-print" aria-hidden="true"></i>&nbsp;&nbsp;Print
+								</a>
+							</li>
+							<li>
+								<a href="#" onClick="exports()"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;&nbsp;Export Excel </a>
+							</li>								
+						</ul>
+					</div>
+				</div>
+            <div class="portlet-body form frmfilter">
+				<form method="post" action="<?php //echo $formFilter->getAction(); ?>">
+					<?php $formFilter = $this->partnerservice; ?>
+						<div class="form-group" style="padding-top: -6px;">
+						<label class="control-label col-md-3"><?php echo $formFilter->getElement('ad_search');?></label>
+						<label class="control-label col-md-3"><?php echo $formFilter->getElement('status');?></label>
+					</div>
+					<div class="form-group" style="padding-top: -6px;">
+						<label class="control-label col-md-3">
+							<button class="btn btn-primary col-md-12" value="" ><i class="fa fa-save"></i>&nbsp;<?php echo $tr->translate("REFRESH");?></button>
+						</label>
+					</div>
+					<div style="clear:both;"></div>	
+				</form> 
+	<div style=" min-height:28cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.2cm">
+	<div id="divPrint" style="width: 100%;">
+	<style>
+		.style{
+			line-height: 25px;font-size: 14px !important;
+			font-family: 'Khmer OS Battambang';
+		}
+		ul{margin: 0;padding:0;}
+		table tr td ul li{text-align: center;list-style: none;line-height: 29px; font-weight: bold;}
+		th{padding: 5px;}
+		.hover:hover{background: #ccc;}
+		table { page-break-inside:auto }
+		tr{ page-break-inside:avoid; page-break-after:auto; }
+		#header {
+		  display: table-header-group;
+		  page-break-inside:avoid; page-break-after:auto;
+		}		
+	</style>
+		<table style="font-family: 'Khmer OS Content'; width:100%;">
+			<tbody>
+			<tr>
+		    	<td align="center">
+		        	<table width="100%" style="font-family: 'Khmer OS Battambang';" cellpadding="0" cellpadding="0">
+		            	<tbody><tr>
+		                	<td align="center" width="16%" valign="top"><img  height="95px" src="<?php echo $this->baseUrl();?>/images/logosbona.jpg"></td>
+		                	<td width="70%" valign="top">
+		                		<ul>
+		                			<li style="text-align:center; font-size:18px; font-family:'Khmer OS Muol Light'; color: #F31A1A   !important"><?php echo $tr->translate("COMPANY_CUSTOMER");?></li>
+		                			<li style="text-align:center; font-size:17px; font-family:'Khmer OS Muol Light'; color: #F31A1A   !important">របាយការណ៍ ដៃគូសេវាកម្ម</li>
+		                		</ul>
+		                	</td>
+		                    <td width="20%"></td>
+		                </tr> 
+		                <tr>
+		                	<td colspan="3" valign="top">
+		                		<table width="100%" cellpadding="0" cellspacing="0">
+		                			<tbody><tr>
+		                				<td style="font-size: 11px;"></td>
+		                				<td width="65%"></td>
+		                			</tr>
+				                	</tbody>
+				                </table>
+				              </td>
+				           </tr>   
+		            </tbody></table>
+		        </td>
+		    </tr>
+		    <tr>
+		    	<td class="table2excel" id="exportExcel">
+		            <table  border="1" style="border-collapse:collapse;border:1px solid #000; font-size:14px;" width="100%" cellspacing="0">
+		                 <thead>
+		                 	<tr align="center" style="background-color: #b0bdfd !important;font-weight:bold; line-height: 28px; font-size:14px; padding:1px 0px; white-space: nowrap; ">
+			                    <td style="border:1px solid #000;">&nbsp;<?php echo $tr->translate("NUM");?></td>
+								<td style="border:1px solid #000;">&nbsp;ឈ្មោះដៃគូ</td>
+								<td style="border:1px solid #000;">&nbsp;ភេទ</td>
+								<td style="border:1px solid #000;">&nbsp;លេខទូរស័ព្ទ</td>
+								<td style="border:1px solid #000;">&nbsp;អាស័យដ្ឋាន</td>
+								<td style="border:1px solid #000;">&nbsp;ពណ៏នា</td>
+						        <td>&nbsp;ប្រើប្រាស់</td>
+						        <td>&nbsp;ស្ថានការ</td>						
+		               	 	</tr>
+		                <thead>
+		                <?php $num=1;
+		                $d_balance = 0;
+		                $db_bal = 0;
+		                if(!empty($this->other))foreach ($this->other AS $index => $rs){?>     
+						<tr class='row-format hover' style="border:1px solid #000; font-size:13px; ">
+						   <td align="center" style="border:1px solid #000;">&nbsp;<?php echo $index+1?></td>
+						   <td style="border:1px solid #000;">&nbsp;<?php echo $rs["partner_name"];?></td>
+						   <td style="border:1px solid #000;">&nbsp;<?php echo $rs["gender"];?></td>
+						  
+						   <td style="border:1px solid #000;">&nbsp;<?php echo $rs["tel"];?></td>
+						   <td style="border:1px solid #000;">&nbsp;<?php echo $rs["addresss"];?></td>						   <td style="border:1px solid #000;">&nbsp;<?php echo $rs["description"];?></td>
+						   <td style="border:1px solid #000;">&nbsp;<?php echo $rs["user_name"];?></td>
+						   <td>&nbsp;<?php echo $rs["STATUS"];?></td>					
+						</tr>
+						   <?php }?>               
+		                </tbody>
+		           </table>
+		              <br>
+		              <table align="center" width="100%">
+						   <tbody>
+						   	<tr style="font-size: 14px;">
+						        <th style="width:20%;text-align:center;  font-family:'Khmer MEF2'">យល់ព្រមដោយ</th>
+						        <th></th>
+						        <th style="width:20%;text-align:center; font-family:'Khmer MEF2'">ត្រួតពិនិត្យដោយ</th>
+						        <th></th>
+						        <th style="width:20%;text-align:center;font-family:'Khmer MEF2'">រៀបចំដោយ</th>
+						   </tr>
+						</tbody>
+					</table>	
+		    		</td>
+		    	</tr>
+			</tbody>
+		</table>
+		</div>
+	  </div>		
+	</div>
+	 </div>
+   </div>
+</div>
+<iframe name=print_frame width=0 height=0 frameborder=0 src=about:blank></iframe>
+<script>
+function doPrint() {var divToPrint = document.getElementById('divPrint');var htmlToPrint = '' +'<style type="text/css">' +'</style>';htmlToPrint += divToPrint.outerHTML;window.document.write(htmlToPrint);window.print();window.close();}
+</script>

@@ -1,0 +1,886 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>						 
+<title>កែប្រែកម្មវិធីបុណ្យ</title>
+<body>
+	<form class="form-horizontal" id="frm" method="post" action="" autocomplete="off">				
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i><strong>កម្មវិធីបុណ្យ</strong>
+				</div>
+				<div class="tools">
+					<label><a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" name="calcel" class="btn red"><i class="fa fa-times"></i>ត្រលប់ក្រោយ</button></a></label>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="tabbable-custom ">
+					<div class="portlet-body form">
+						<div class="form-body">
+							<div class="row">
+								<div class="col-md-4">
+									<h4 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មានលម្អិតរបស់សព</h4>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											<?php echo $tr->translate("BRANCH_NAME");?>
+										</label>
+										<div class="col-md-8">
+											<select name="branch" id="branch" class="form-control select2me" onchange="getAllBranchFunction();" >
+												<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+												<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+												<option value="<?php echo $branch['id']?>" <?php if ($this->row['branch_id']==$branch['id']){ echo 'selected="selected"';}?>><?php echo $branch['name'];?></option>
+												<?php }}?>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ឈ្មោះអ្នកស្លាប់
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="validate[required] form-control" name="dead_name" id="dead_name" value="<?php echo $this->row['dead_name']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ឈ្មោះ(ចិន)
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="dead_name_chinese" id="dead_name_chinese" value="<?php echo $this->row['dead_name_chinese']?>"/>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label ">
+											ភេទ
+										</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="dead_sex" id="dead_sex" >
+												<option value="1" <?php if($this->row['dead_sex']==1){echo "selected='selected'";}?>>ប្រុស</option>
+												<option value="2" <?php if($this->row['dead_sex']==2){echo "selected='selected'";}?>>ស្រី</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ឆ្នាំ
+										</label>
+										<div class="col-md-8">
+											<select class="validate[required] form-control select2me" name="dead_khmer_year" id="dead_khmer_year" >
+												<option value="">ជ្រើសរើស</option>
+												<?php if(!empty($this->khmer_year)){foreach ($this->khmer_year as $rs){?>
+												<option value="<?php echo $rs['id']?>" <?php if($this->row['dead_khmer_year']==$rs['id']){echo "selected='selected'";}?>><?php echo $rs['name']?></option>
+												<?php }}?>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											អាយុ
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="dead_age" id="dead_age" value="<?php echo $this->row['dead_age']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ថ្ងៃកំណើត
+										</label>
+										<div class="col-md-8 right">
+											<div class="input-icon right">
+												<i class="fa fa-calendar"></i>
+												<input type="text" class="form-control date-picker" name="dead_dob" id="dead_dob" value="<?php echo date("d-m-Y",strtotime($this->row['dead_dob']))?>" data-date-format="dd-mm-yyyy" />
+											</div>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ទីកន្លែងកំណើត
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="dead_pob" id="dead_pob" value="<?php echo $this->row['dead_pob']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ស្លាប់-រស់
+										</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="dead_status" id="dead_status" >
+												<option value="0" <?php if($this->row['dead_status']==0){echo "selected='selected'";}?>>ស្លាប់</option>
+												<option value="1" <?php if($this->row['dead_status']==1){echo "selected='selected'";}?>>រស់</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ស្លាប់នៅថ្ងៃទី
+										</label>
+										<div class="col-md-8">
+											<div class="input-icon right">
+												<i class="fa fa-calendar"></i>
+												<input type="text" class="form-control " name="date_time_dead" id="date_time_dead" value="<?php echo date("d-m-Y H:i",strtotime($this->row['date_time_dead']))?>" data-date-format="dd-mm-yyyy  hh:ii" />
+											</div>
+										</div>
+									</div>
+									
+								</div>
+								
+								
+								<div class="col-md-4" style="text-align: left !important;">
+										<h4 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មានលម្អិតរបស់ដៃគូសព</h4>
+									<div class="form-group" >
+										<label class="col-md-4 control-label">
+											ដែគូឈ្មោះ
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="partner_name" id="partner_name" value="<?php echo $this->row['partner_name']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ឈ្មោះ(ចិន)
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="partner_name_chinese" id="partner_name_chinese" value="<?php echo $this->row['partner_name_chinese']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label ">
+											ភេទ
+										</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="partner_sex" id="partner_sex" >
+												<option value="1" <?php if($this->row['partner_sex']==1){echo "selected='selected'";}?>>ប្រុស</option>
+												<option value="2" <?php if($this->row['partner_sex']==2){echo "selected='selected'";}?>>ស្រី</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ឆ្នាំ
+										</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="partner_khmer_year" id="partner_khmer_year" >
+												<option value="">ជ្រើសរើស</option>
+												<?php if(!empty($this->khmer_year)){foreach ($this->khmer_year as $rs){?>
+												<option value="<?php echo $rs['id']?>" <?php if($this->row['partner_khmer_year']==$rs['id']){echo "selected='selected'";}?>><?php echo $rs['name']?></option>
+												<?php }}?>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											អាយុ
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="partner_age" id="partner_age" value="<?php echo $this->row['partner_age']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ថ្ងៃកំណើត
+										</label>
+										<div class="col-md-8 right">
+											<div class="input-icon right">
+												<i class="fa fa-calendar"></i>
+												<input type="text" class="form-control date-picker" name="partner_dob" id="partner_dob" value="<?php echo date("d-m-Y",strtotime($this->row['partner_dob']))?>" data-date-format="dd-mm-yyyy" />
+											</div>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ទីកន្លែងកំណើត
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="partner_pob" id="partner_pob" value="<?php echo $this->row['partner_pob']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ស្លាប់-រស់
+										</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="partner_status" id="partner_status" >
+												<option value="1" <?php if($this->row['partner_status']==1){echo "selected='selected'";}?>>រស់</option>
+												<option value="0" <?php if($this->row['partner_status']==0){echo "selected='selected'";}?>>ស្លាប់</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ស្លាប់នៅថ្ងៃទី
+										</label>
+										<div class="col-md-8">
+											<div class="input-icon right">
+												<i class="fa fa-calendar"></i>
+												<input type="text" class="form-control " name="date_time_female" id="date_time_female" value="<?php echo date("d-m-Y H:i",strtotime($this->row['date_time_female']))?>" data-date-format="dd-mm-yyyy  hh:ii" />
+											</div>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+										</label>
+										<div class="col-md-8">
+											<button type="button" name="save_close" class="btn blue btn-block btn-lg" onclick="exchangeInfo();" ><i class="fa fa-refresh"></i>&nbsp;&nbsp;&nbsp;ប្តូរទិន្នន័យ</button>
+										</div>
+										
+									</div>
+								</div>
+								
+								
+								
+								<div class="col-md-4" style="text-align: left !important;">
+									<h4 style="border-bottom: 1px solid #ccc;" class="center">ព័ត៌មានទីតាំង</h4>
+									<div class="form-group" >
+										<label class="col-md-4 control-label">
+											ទីតាំងបុណ្យ
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="place_of_program" id="place_of_program" value="<?php echo $this->row['place_of_program']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ប្រភេទរំលាយសព
+										</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="type_romleay_sop" id="type_romleay_sop" >
+												<option value="1" <?php if($this->row['type_romleay_sop']==1){echo "selected='selected'";}?>>បញ្ចុះ</option>
+												<option value="2" <?php if($this->row['type_romleay_sop']==2){echo "selected='selected'";}?>>បូជា</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ទីតាំងបញ្ចុះ/បូជា
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="place_pjos_sop" id="place_pjos_sop" value="<?php echo $this->row['place_pjos_sop']?>" />
+										</div>
+									</div>
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ទូរស័ព្ទសមាជិក
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="membersone" id="membersone" value="<?php echo $this->row['membersone']?>" />
+										</div>
+									</div>									
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											សម្គាល់
+										</label>
+										<div class="col-md-8">
+											<input type="text" class="form-control" name="note" id="note" value="<?php echo $this->row['note']?>" />
+										</div>
+									</div>
+									
+									<div class="form-group" style="">
+										<label class="col-md-4 control-label">
+											ស្ថានការ
+										</label>
+										<div class="col-md-8">
+											<select class="form-control select2me" name="status" id="status" >
+												<option value="1" <?php if($this->row['status']==1){echo "selected='selected'";}?>>ប្រើប្រាស់</option>
+												<option value="0" <?php if($this->row['status']==0){echo "selected='selected'";}?>>មិនប្រើប្រាស់</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-12">
+									<ul class="nav nav-tabs ">
+										<li class="active">
+											<a href="#tab_1" data-toggle="tab">
+											<strong>កំណត់វេលាពិធី</strong></a>
+										</li>
+										<li>
+											<a href="#tab_2" data-toggle="tab"><strong>ឆ្នាំកូនប្រុស-ស្រី</strong></a>
+										</li>
+										<li>
+											<a href="#tab_3" data-toggle="tab"><strong>រូបភាពកម្មវិធី</strong></a>
+										</li>
+									</ul>
+								</div>
+								<div class="tab-content">
+									<div class="tab-pane active" id="tab_1">
+										<div class="col-md-4">
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ថ្ងៃលើកសពចូលម្ឈូស
+												</label>
+												<div class="col-md-8">
+													<div class="input-icon right">
+														<i class="fa fa-calendar"></i>
+														<input type="text" class="form-control date-picker" name="lerk_sop_date" id="lerk_sop_date" value="<?php echo date("d-m-Y",strtotime($this->row['lerk_sop_date']))?>" data-date-format="dd-mm-yyyy" />
+													</div>
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">វេលាម៉ោង</label>
+												<div class="col-md-2">
+													<select id="lerk_sop_time" name="lerk_sop_time" class="form-control">
+														<option value="">ម៉ោង</option>
+														<option value="១">១</option>
+														<option value="២">២</option>
+														<option value="៣">៣</option>
+														<option value="៤">៤</option>
+														<option value="៥">៥</option>
+														<option value="៦">៦</option>
+														<option value="៧">៧</option>
+														<option value="៨">៨</option>
+														<option value="៩">៩</option>
+														<option value="១០">១០</option>
+														<option value="១១">១១</option>
+														<option value="១២">១២</option>
+													</select>
+												</div>
+												<label class="col-md-1 control-label">ដល់</label>
+												<div class="col-md-2">
+													<select id="lerk_sop_time_to" name="lerk_sop_time_to" class="form-control">
+														<option value="">ម៉ោង</option>
+														<option value="១">១</option>
+														<option value="២">២</option>
+														<option value="៣">៣</option>
+														<option value="៤">៤</option>
+														<option value="៥">៥</option>
+														<option value="៦">៦</option>
+														<option value="៧">៧</option>
+														<option value="៨">៨</option>
+														<option value="៩">៩</option>
+														<option value="១០">១០</option>
+														<option value="១១">១១</option>
+														<option value="១២">១២</option>
+													</select>
+												</div>	
+												<div class="col-md-3">
+													<select class="form-control" id="lerk_sop_time_mail" name="lerk_sop_time_mail" >
+														<option value="">ពេល</option>
+														<option value="ព្រឹក">ព្រឹក</option>
+														<option value="ថ្ងៃត្រង់">ថ្ងៃត្រង់</option>
+														<option value="រសៀល">រសៀល</option>
+														<option value="ល្ងាច">ល្ងាច</option>
+														<option value="យប់">យប់</option>
+													</select>
+												</div>																							
+											</div>	
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ឆ្នាំឆុង
+												</label>
+												<div class="col-md-8">
+													<select class="form-control select2me" name="lerk_sop_opposite_year" id="lerk_sop_opposite_year" >
+														<option value="">ជ្រើសរើស</option>
+														<?php if(!empty($this->khmer_year)){foreach ($this->khmer_year as $rs){?>
+														<option value="<?php echo $rs['id']?>" <?php if($this->row['lerk_sop_opposite_year']==$rs['id']){echo "selected='selected'";}?>><?php echo $rs['name']?></option>
+														<?php }}?>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ថ្ងៃហែសពចេញ
+												</label>
+												<div class="col-md-8">
+													<div class="input-icon right">
+														<i class="fa fa-calendar"></i>
+														<input type="text" class="form-control date-picker" name="hae_sop_date" id="hae_sop_date" value="<?php echo date("d-m-Y",strtotime($this->row['hae_sop_date']))?>" data-date-format="dd-mm-yyyy" />
+													</div>
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">វេលាម៉ោង</label>
+												<div class="col-md-2">
+													<select id="hae_sop_time" name="hae_sop_time" class="form-control">
+														<option value="">ម៉ោង</option>
+														<option value="១">១</option>
+														<option value="២">២</option>
+														<option value="៣">៣</option>
+														<option value="៤">៤</option>
+														<option value="៥">៥</option>
+														<option value="៦">៦</option>
+														<option value="៧">៧</option>
+														<option value="៨">៨</option>
+														<option value="៩">៩</option>
+														<option value="១០">១០</option>
+														<option value="១១">១១</option>
+														<option value="១២">១២</option>
+													</select>
+												</div>
+												<label class="col-md-1 control-label">ដល់</label>
+												<div class="col-md-2">
+													<select id="hae_sop_time_to" name="hae_sop_time_to" class="form-control">
+														<option value="">ម៉ោង</option>
+														<option value="១">១</option>
+														<option value="២">២</option>
+														<option value="៣">៣</option>
+														<option value="៤">៤</option>
+														<option value="៥">៥</option>
+														<option value="៦">៦</option>
+														<option value="៧">៧</option>
+														<option value="៨">៨</option>
+														<option value="៩">៩</option>
+														<option value="១០">១០</option>
+														<option value="១១">១១</option>
+														<option value="១២">១២</option>
+													</select>
+												</div>
+												<div class="col-md-3">
+													<select class="form-control" id="hae_sop_mail" name="hae_sop_mail" >
+														<option value="">ពេល</option>
+														<option value="ព្រឹក">ព្រឹក</option>
+														<option value="ថ្ងៃត្រង់">ថ្ងៃត្រង់</option>
+														<option value="រសៀល">រសៀល</option>
+														<option value="ល្ងាច">ល្ងាច</option>
+														<option value="យប់">យប់</option>
+													</select>
+												</div>																						
+											</div>						
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ឆ្នាំឆុង
+												</label>
+												<div class="col-md-8">
+													<select class="form-control select2me" name="hae_sop_opposite_year" id="hae_sop_opposite_year" >
+						 								<option value="">ជ្រើសរើស</option>
+														<?php if(!empty($this->khmer_year)){foreach ($this->khmer_year as $rs){?>
+														<option value="<?php echo $rs['id']?>" <?php if($this->row['hae_sop_opposite_year']==$rs['id']){echo "selected='selected'";}?>><?php echo $rs['name']?></option>
+														<?php }}?>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ថ្ងៃ​បញ្ចុះ
+												</label>
+												<div class="col-md-8">
+													<div class="input-icon right">
+														<i class="fa fa-calendar"></i>
+														<input type="text" class="form-control date-picker" name="pjos_sop_date" id="pjos_sop_date" value="<?php echo date("d-m-Y",strtotime($this->row['pjos_sop_date']))?>" data-date-format="dd-mm-yyyy" />
+													</div>
+												</div>
+											</div>
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">វេលាម៉ោង</label>
+												<div class="col-md-2">
+													<select id="pjos_sop_time" name="pjos_sop_time" class="form-control">
+														<option value="">ម៉ោង</option>
+														<option value="១">១</option>
+														<option value="២">២</option>
+														<option value="៣">៣</option>
+														<option value="៤">៤</option>
+														<option value="៥">៥</option>
+														<option value="៦">៦</option>
+														<option value="៧">៧</option>
+														<option value="៨">៨</option>
+														<option value="៩">៩</option>
+														<option value="១០">១០</option>
+														<option value="១១">១១</option>
+														<option value="១២">១២</option>
+													</select>
+												</div>
+												<label class="col-md-1 control-label">ដល់</label>
+												<div class="col-md-2">
+													<select id="pjos_sop_time_to" name="pjos_sop_time_to" class="form-control">
+														<option value="">ម៉ោង</option>
+														<option value="១">១</option>
+														<option value="២">២</option>
+														<option value="៣">៣</option>
+														<option value="៤">៤</option>
+														<option value="៥">៥</option>
+														<option value="៦">៦</option>
+														<option value="៧">៧</option>
+														<option value="៨">៨</option>
+														<option value="៩">៩</option>
+														<option value="១០">១០</option>
+														<option value="១១">១១</option>
+														<option value="១២">១២</option>
+													</select>
+												</div>
+												<div class="col-md-3">
+													<select class="form-control" id="pjos_sop_mail" name="pjos_sop_mail" >
+														<option value="">ពេល</option>
+														<option value="ព្រឹក">ព្រឹក</option>
+														<option value="ថ្ងៃត្រង់">ថ្ងៃត្រង់</option>
+														<option value="រសៀល">រសៀល</option>
+														<option value="ល្ងាច">ល្ងាច</option>
+														<option value="យប់">យប់</option>
+													</select>
+												</div>																							
+											</div>						
+											<div class="form-group" style="">
+												<label class="col-md-4 control-label">
+													ឆ្នាំឆុង
+												</label>
+												<div class="col-md-8">
+													<select class="form-control select2me" name="pjos_sop_opposite_year" id="pjos_sop_opposite_year" >
+														<option value="">ជ្រើសរើស</option>
+														<?php if(!empty($this->khmer_year)){foreach ($this->khmer_year as $rs){?>
+														<option value="<?php echo $rs['id']?>" <?php if($this->row['pjos_sop_opposite_year']==$rs['id']){echo "selected='selected'";}?>><?php echo $rs['name']?></option>
+														<?php }}?>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div><!-- end tab1 -->
+									
+									<div class="tab-pane" id="tab_2">
+										<div class="row">
+											<div class="col-md-5" >
+												<div class="form-group" style=""></div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														<strong>ជ្រើសរើសឆ្នាំ</strong>
+													</label>
+													<div class="col-md-8">
+														<select name="khmer_year_boy" id="khmer_year_boy" onchange="addKhmerYearBoyRow();" class="form-control select2me">
+															<option value="-1">ជ្រើសរើសឆ្នាំ</option>
+															<?php if(!empty($this->khmer_year)){ foreach($this->khmer_year as $rs){?>
+															<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+															<?php }}?>
+										    			</select>
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-md-1"></div>
+											
+											<div class="col-md-6" style="margin-left: 90px;">
+												<div class="form-group" style=""></div>
+												<div class="form-group" style="">
+													<label class="col-md-4 control-label">
+														<strong>ជ្រើសរើសឆ្នាំ</strong>
+													</label>
+													<div class="col-md-7">
+														<select name="khmer_year_girl" id="khmer_year_girl" onchange="addKhmerYearGirlRow();" class="form-control select2me">
+															<option value="-1">ជ្រើសរើសឆ្នាំ</option>
+															<?php if(!empty($this->khmer_year)){ foreach($this->khmer_year as $rs){?>
+															<option value="<?php echo $rs['id']?>"><?php echo $rs['name'];?></option>
+															<?php }}?>
+										    			</select>
+													</div>
+													<div class="col-md-1"></div>
+												</div>
+											</div>
+										</div>
+									
+									
+										<div class="row">
+											<div class="col-md-5" style="margin-left: 30px;">
+												 <div class="portlet box blue">
+													<div class="portlet-title">
+														<div class="caption">
+															<i class="fa fa-calendar"></i>ឆ្នាំកូនប្រុស
+														</div>
+													</div>
+													 <div class="portlet-body">
+														<div class="table-responsive">
+															 <table id="table_row" class="table table-bordered" style="font-size:12px !important;">
+																<thead>
+																	<tr style="text-align: center !important;">
+																		<th style="width:35px;text-align: center ;">#</th>
+																		<th style="width:100px;white-space: nowrap;text-align: center ;">ឆ្នាំ</th>
+																		<th style="width:230px;white-space: nowrap;text-align: center;">សម្គាល់</th>
+																		<th style="width:65px;text-align: center;">លុប</th>
+																	</tr>
+																</thead>
+																<tbody id="lbl_khmer_year_boy">
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-md-1">
+												<input id="identity_boy" name="identity_boy" type="hidden" />
+												<input id="identity_girl" name="identity_girl" type="hidden" />
+											</div>
+											
+											<div class="col-md-5" style="margin-left: 30px;">
+												 <div class="portlet box blue">
+													<div class="portlet-title">
+														<div class="caption" style="text-align: center;">
+															<i class="fa fa-calendar"></i>ឆ្នាំកូនស្រី
+														</div>
+													</div>
+													 <div class="portlet-body">
+														<div class="table-responsive">
+															 <table id="table_row" class="table table-bordered" style="font-size:12px !important;">
+																<thead>
+																	<tr style="text-align: center !important;">
+																		<th style="width:35px;text-align: center ;">#</th>
+																		<th style="width:100px;white-space: nowrap;text-align: center ;">ឆ្នាំ</th>
+																		<th style="width:230px;white-space: nowrap;text-align: center;">សម្គាល់</th>
+																		<th style="width:65px;text-align: center;">លុប</th>
+																	</tr>
+																</thead>
+																<tbody id="lbl_khmer_year_girl">
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<div class="tab-pane " id="tab_3">
+										<div class="row">
+											<div class="col-md-6" style="font-size: 16px;text-align: right;">
+											    Select Photo (one or multiple):
+											</div>
+											<div class="col-md-6" >
+											    <input type="file" name="photo[]" id="photo" multiple />
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12" style="font-size: 16px;text-align: center;" >
+												&nbsp;
+											</div>
+										</div>
+										
+										<div class="row">
+											<div class="col-md-12" style="font-size: 16px;text-align: center;" >
+												Note: Supported image format: .jpeg, .jpg, .png, .gif
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12" style="font-size: 16px;text-align: center;" >
+												&nbsp;
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<div class="col-md-3"></div>
+								<div class="col-md-3">
+									<a href="<?php echo $this->url(array('module'=>$module,'controller'=>$controller,'action'=>'index'),null,true); ?>"><button type="button" class="btn red btn-block btn-lg"><i class="icon-refresh icon-white"></i> ត្រឡប់ក្រោយ</button></a>
+								</div>
+								<div class="col-md-3">
+									<div class="input-icon right">
+										<button type="submit" name="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-save"></i>កែប្រែទិន្នន័យ</button>
+									</div>
+								</div>
+								<div class="col-md-3"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>	
+</body>
+</html>
+
+<script type="text/javascript">
+
+	$( document ).ready(function() {
+		initializeKhmerYearBoyRow();
+		initializeKhmerYearGirlRow();
+	});
+	function getAllBranchFunction(){
+	}
+	$(function () {
+		$('#date_time_dead').datetimepicker({
+            inline: true,
+			sideBySide: true
+		});
+	});
+	$(function () {
+		$('#date_time_female').datetimepicker({
+            inline: true,
+			sideBySide: true
+		});
+	});
+
+
+	index_boy=0;
+	function addKhmerYearBoyRow(){
+		index_boy++;
+		var khmer_year_boy_name = $("#khmer_year_boy");
+		var txt_khmer_year = $("option:selected",khmer_year_boy_name).text();
+		var khmer_year_boy_id = $("#khmer_year_boy").val();
+		
+		if(khmer_year_boy_id<0){return false;}
+		template='<tr align="center" id="row_khmer_year_boy_'+index_boy+'">';
+		template+='<td>'+index_boy+'</td>';
+		template+='<td>'+txt_khmer_year+'<input type="hidden" id="khmer_year_boy_'+index_boy+'" name="khmer_year_boy_'+index_boy+'" value="'+khmer_year_boy_id+'" </td>';
+		template+='<td><input type="text" id="boy_note_'+index_boy+'" name="boy_note_'+index_boy+'" value="" class="form-control"></td>';
+		template+='<td><button type="button" onClick="deleteKhmerYearBoyRecord('+index_boy+')" name="delete_boy" class="btn default red">លុប</button></td>';
+		template+='</tr>';
+		$('#lbl_khmer_year_boy').append(template);
+		if($('#identity_boy').val()!="") {
+			var identity = $('#identity_boy').val();
+			$('#identity_boy').val(identity+','+index_boy);
+		} else {$('#identity_boy').val(index_boy);}
+	}
+
+	function initializeKhmerYearBoyRow(){
+		<?php if(!empty($this->khmer_year_boy)){foreach ($this->khmer_year_boy as $rs){?>
+		index_boy++;
+		var khmer_year_boy_name = "<?php echo $rs['khmer_year_name']?>";
+		var khmer_year_boy_id = <?php echo $rs['khmer_year_id']?>;
+		
+		if(khmer_year_boy_id<0){return false;}
+		template='<tr align="center" id="row_khmer_year_boy_'+index_boy+'">';
+		template+='<td>'+index_boy+'</td>';
+		template+='<td>'+khmer_year_boy_name+'<input type="hidden" id="khmer_year_boy_'+index_boy+'" name="khmer_year_boy_'+index_boy+'" value="'+khmer_year_boy_id+'" </td>';
+		template+='<td><input type="text" id="boy_note_'+index_boy+'" name="boy_note_'+index_boy+'" value="" class="form-control"></td>';
+		template+='<td><button type="button" onClick="deleteKhmerYearBoyRecord('+index_boy+')" name="delete_boy" class="btn default red">លុប</button></td>';
+		template+='</tr>';
+		$('#lbl_khmer_year_boy').append(template);
+		if($('#identity_boy').val()!="") {
+			var identity = $('#identity_boy').val();
+			$('#identity_boy').val(identity+','+index_boy);
+		} else {$('#identity_boy').val(index_boy);}
+
+		$("#boy_note_"+index_boy).val("<?php echo $rs['note'];?>");
+		
+		<?php }}?>
+	}
+	
+	function deleteKhmerYearBoyRecord(index_boy) {
+		var identity = $('#identity_boy').val();
+		var arrays = identity.split(',');
+		
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index_boy) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity_boy').val(strings);
+		$("#row_khmer_year_boy_"+index_boy).remove();
+	}
+
+	
+	index_girl=0;
+	function addKhmerYearGirlRow(){
+		index_girl++;
+		var khmer_year_girl_name = $("#khmer_year_girl");
+		var txt_khmer_year = $("option:selected",khmer_year_girl_name).text();
+		var khmer_year_girl_id = $("#khmer_year_girl").val();
+		
+		if(khmer_year_girl_id<0){return false;}
+		template='<tr align="center" id="row_khmer_year_girl_'+index_girl+'">';
+		template+='<td>'+index_girl+'</td>';
+		template+='<td>'+txt_khmer_year+'<input type="hidden" id="khmer_year_girl_'+index_girl+'" name="khmer_year_girl_'+index_girl+'" value="'+khmer_year_girl_id+'" </td>';
+		template+='<td><input type="text" id="girl_note_'+index_girl+'" name="girl_note_'+index_girl+'" value="" class="form-control"></td>';
+		template+='<td><button type="button" onClick="deleteKhmerYearGirlRecord('+index_girl+')" name="delete_girl" class="btn default red">លុប</button></td>';
+		template+='</tr>';
+		$('#lbl_khmer_year_girl').append(template);
+		if($('#identity_girl').val()!="") {
+			var identity = $('#identity_girl').val();
+			$('#identity_girl').val(identity+','+index_girl);
+		} else {$('#identity_girl').val(index_girl);}
+	}
+
+	function initializeKhmerYearGirlRow(){
+		<?php if(!empty($this->khmer_year_girl)){foreach ($this->khmer_year_girl as $rs){?>
+		
+		index_girl++;
+		var khmer_year_girl_name = "<?php echo $rs['khmer_year_name']?>";
+		var khmer_year_girl_id = <?php echo $rs['khmer_year_id']?>;
+		
+		if(khmer_year_girl_id<0){return false;}
+		template='<tr align="center" id="row_khmer_year_girl_'+index_girl+'">';
+		template+='<td>'+index_girl+'</td>';
+		template+='<td>'+khmer_year_girl_name+'<input type="hidden" id="khmer_year_girl_'+index_girl+'" name="khmer_year_girl_'+index_girl+'" value="'+khmer_year_girl_id+'" </td>';
+		template+='<td><input type="text" id="girl_note_'+index_girl+'" name="girl_note_'+index_girl+'" value="" class="form-control"></td>';
+		template+='<td><button type="button" onClick="deleteKhmerYearGirlRecord('+index_girl+')" name="delete_girl" class="btn default red">លុប</button></td>';
+		template+='</tr>';
+		$('#lbl_khmer_year_girl').append(template);
+		if($('#identity_girl').val()!="") {
+			var identity = $('#identity_girl').val();
+			$('#identity_girl').val(identity+','+index_girl);
+		} else {$('#identity_girl').val(index_girl);}
+
+		$("#girl_note_"+index_girl).val("<?php echo $rs['note'];?>");
+		
+		<?php }}?>
+	}
+	
+	function deleteKhmerYearGirlRecord(index_girl) {
+		var identity = $('#identity_girl').val();
+		var arrays = identity.split(',');
+		
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index_girl) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity_girl').val(strings);
+		$("#row_khmer_year_girl_"+index_girl).remove();
+	}
+	
+	
+	function exchangeInfo(){
+		dead_name = $("#dead_name").val();
+		dead_name_chinese = $("#dead_name_chinese").val();
+		dead_sex = $("#dead_sex").val();
+		dead_khmer_year = $("#dead_khmer_year").val();
+		dead_age = $("#dead_age").val();
+		dead_dob = $("#dead_dob").val();
+		dead_status = $("#dead_status").val();
+		dead_pob = $("#dead_pob").val();
+		date_time_dead = $("#date_time_dead").val();
+		
+		partner_name = $("#partner_name").val();
+		partner_name_chinese = $("#partner_name_chinese").val();
+		partner_sex = $("#partner_sex").val();
+		partner_khmer_year = $("#partner_khmer_year").val();
+		partner_age = $("#partner_age").val();
+		partner_dob = $("#partner_dob").val();
+		partner_status = $("#partner_status").val();
+		partner_pob = $("#partner_pob").val();
+		date_time_female = $("#date_time_female").val();
+
+		$("#dead_name").val(partner_name);
+		$("#dead_name_chinese").val(partner_name_chinese);
+		$("#dead_sex").val(partner_sex).select2();
+		$("#dead_khmer_year").val(partner_khmer_year).select2();
+		$("#dead_age").val(partner_age);
+		$("#dead_dob").val(partner_dob);
+		$("#dead_status").val(partner_status).select2();
+		$("#dead_pob").val(partner_pob);
+		$("#date_time_dead").val(date_time_female);
+
+		$("#partner_name").val(dead_name);
+		$("#partner_name_chinese").val(dead_name_chinese);
+		$("#partner_sex").val(dead_sex).select2();
+		$("#partner_khmer_year").val(dead_khmer_year).select2();
+		$("#partner_age").val(dead_age);
+		$("#partner_dob").val(dead_dob);
+		$("#partner_status").val(dead_status).select2();
+		$("#date_time_female").val(date_time_dead);
+		$("#partner_pob").val(dead_pob);
+	}
+
+	$(document).ready(function() {
+		  setValue();
+		});	
+
+	function setValue(){
+		$('#lerk_sop_time').val('<?php echo $this->row['lerk_sop_time']?>');
+		$('#lerk_sop_time_to').val('<?php echo $this->row['lerk_sop_time_to']?>');
+		$('#lerk_sop_time_mail').val('<?php echo $this->row['lerk_sop_time_mail']?>');
+		
+		$('#hae_sop_time').val('<?php echo $this->row['hae_sop_time']?>');
+		$('#hae_sop_time_to').val('<?php echo $this->row['hae_sop_time_to']?>');
+		$('#hae_sop_mail').val('<?php echo $this->row['hae_sop_mail']?>');
+		
+		$('#pjos_sop_time').val('<?php echo $this->row['pjos_sop_time']?>');
+		$('#pjos_sop_time_to').val('<?php echo $this->row['pjos_sop_time_to']?>');
+		$('#pjos_sop_mail').val('<?php echo $this->row['pjos_sop_mail']?>');
+	}
+</script>
+

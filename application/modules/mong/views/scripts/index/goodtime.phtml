@@ -1,0 +1,95 @@
+<?php 
+	$request=Zend_Controller_Front::getInstance()->getRequest();
+	$module = $request->getModuleName();
+	$controller=$request->getControllerName();
+	$db_global = new Application_Model_DbTable_DbGlobal();
+	//echo $db_global->getNumberInkhmer(date('m',strtotime($this->row['date_sen'])));
+	$row = $this->row;
+?>
+<title>ព័ត៌មានសែនបើកឆាក</title>
+<div id="Printgoodtime">	
+	<div class="wrapper" id="borderimg1" style="background: #fff;width:24cm;margin: 0 auto;min-height: 35cm;padding: 0.5cm;">
+		<style>
+	    	.wrapper{
+	    		width: 100%;
+	    		margin: 0px;
+	    		padding: 0px;
+	    	}
+	    	.contain{
+	    		width: 1024px;
+	    		margin: 0 auto;
+	    	}
+			table {
+	    		border-collapse: collapse;
+	    		width: 100%;
+			}
+			th, td {
+	    		padding: 4px;
+			}
+			#borderimg1 { 
+			     border: 85px dotted ;
+			    border-image: url("<?php echo $this->baseUrl()?>/images/ifrmas.jpg") 125 stretch;
+			}
+	    </style>
+		<table cellpadding="0" cellspacing="0" width="100%">
+			<tr class="no-boder">
+				<td>
+				<table width="100%" >
+					<tr>
+						<td width="21%" align="center">
+							<img style="width: 78%;height: 130px;" alt="<?php ?>" src="<?php echo $this->baseUrl()?>/images/logosbona.jpg"><br>
+							<span style="font-family: Freestyle Script;font-size: 20px;"></span>
+							
+						</td>
+						<td width="24%" valign="top" align="center">
+							<table   style="text-align:center;">
+								<tr style="list-style:12px; font-family:  Khmer OS Muol; font-size:79px;font-weight: bold;">								
+									<td style="color:red !important;">វេលាល្អ</td>							
+								</tr>				
+							</table>
+						</td>
+						<td width="10%" >&nbsp;</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+	  		<table style="font-size:15px;font-family: Khmer OS Battambang, Times New Roman;">  			
+	  			<tr>
+	  				<td style="list-style:25px; font-family:  Khmer OS Muol; font-size:65px;font-weight: bold; list-style:none;">
+	  					<li style="color:#60A0E0 !important;">សែនបើកឆាក</li>
+	  				</td>
+	  			</tr>
+	  			<tr align="center" style="list-style:25px; font-family:  Khmer OS Muol;line-height:130px;; font-size:50px;font-weight: bold; list-style:none;">
+	  				<td>
+	  					<li style="color:#800080 !important;">ថ្ងៃទីៈ  <?php echo $db_global->getNumberInkhmer(date('d',strtotime($this->row['date_sen'])));?> ខែ <?php echo $db_global->getNumberInkhmer(date('m',strtotime($this->row['date_sen'])));?>
+	  					ឆ្នាំ ២០<?php echo $db_global->getNumberInkhmer(date('y',strtotime($this->row['date_sen'])));?></li>
+	  					<li style="color:#800080 !important;">ម៉ោងៈ <?php echo $this->row['time_sen']?><?php if(!empty($this->row['time_sen_to'])){?> ដល់ <?php echo $this->row['time_sen_to']?><?php }?>&nbsp;<?php echo $this->row['time_mas']?></li>
+	  				</td>
+	  			</tr>
+	  		</table>	  			
+		</table>
+	</div>
+</div>
+<div style="padding-left:14%; margin: 0 auto;"> 
+    	<lable class="col-md-3" style=""></lable>
+    	<div class="col-md-2">
+			<a href="<?php echo $this->baseUrl();?>/mong/index"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i>ចាកចេញ</button></a>
+		</div>
+    	<lable class="col-md-2" style="">
+             <button type="button" onclick="printinvoice();" name="btnsavenew" class="btn blue btn-block btn-lg"><i class="fa fa-print"></i> បោះពុម្ភ </button>
+		</lable>
+		<lable class="col-md-3" style=""></lable>
+	</div>
+
+<script>
+function printinvoice(){
+	var printContents = document.getElementById('Printgoodtime').innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+	document.getElementById("office_goodtime").submit();
+}
+</script>
+
+

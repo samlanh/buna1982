@@ -1,0 +1,380 @@
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$form=$this->form_sale;
+	$url_submit = $this->url(array('module'=>'sales','controller'=>'partnerservicepayment','action'=>'add'));
+?>
+<title><?php echo $tr->translate("បន្ថែមបង់ប្រាក់ថ្លៃជួលសេវាកម្ម");?></title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo $tr->translate("បន្ថែមបង់ប្រាក់ថ្លៃជួលសេវាកម្ម")?>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post" autocomplete="off">
+					<div class="form-body" style="background:#fbf9f9;">
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("BRANCH_NAME");?><span class="required">
+								</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<select name="branch_id" id="branch_id" class="form-control select2me" onchange="getAllBranchFunction();" >
+										<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+										<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+										<option value="<?php echo $branch['id']?>"><?php echo $branch['name'];?></option>
+										<?php }}?>
+									</select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("ដៃគូរសេវាកម្ម");?><span class="required">
+								</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<select name="partner_id" id="partner_id" class="form-control select2me" onchange="getAllPartnerService();" >
+										<option value="-1">ជ្រើសរើសដៃគូរ</option>
+										<?php if(!empty($this->partner)){foreach($this->partner as $partner){?>
+										<option value="<?php echo $partner['id']?>"><?php echo $partner['name']." - ".$partner['tel']?></option>
+										<?php }}?>
+									</select>
+								</div>
+							</div>
+							
+							<label class="control-label col-md-2"><?php echo $tr->translate("កាលបរិច្ឆេទ");?><span class="required">
+							*</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<i class="fa fa-calendar"></i>
+									<input class="form-control date-picker" name="date_payment" id="date_payment" value="<?php echo date("d-m-Y")?>" data-date-format="dd-mm-yyyy" />
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("បង់ជា");?><span class="required">
+							*</span>
+							</label>
+							<div class="col-md-4">
+								<select name="payment_type" id="payment_type" class="form-control select2me" onchange="checkpayment();" >
+									<option value="Cash">Cash</option>
+									<option value="Cheque">Cheque</option>
+									<option value="Credit">Credit</option>
+									<option value="Bank Transtransfer">Bank Transtransfer</option>
+								</select>
+							</div>
+							<label class="control-label col-md-2"><?php echo $tr->translate("សែក");?>
+								<span class="required">*</span>
+							</label>
+							<div class="col-md-2">
+								<input type="text" class="form-control" name="cheque_number" id="cheque_number" readonly placeholder="លេខសែក"​/>
+							</div>
+							<div class="col-md-2">
+								<input type="text" class="form-control" name="bank_name" id="bank_name" readonly placeholder="ឈ្មោះធនាគារ"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("សម្គាល់");?>
+							</label>
+							<div class="col-md-4">
+								<textarea name="note" id="note" class="form-control" rows="2"></textarea>
+							</div>
+							
+							
+						</div>
+						
+						<div class="portlet-body">
+							<table class="table table-striped table-bordered table-hover" id="table_order" style="font-size:12px;">
+								<tr height="33px" align="center" style="font-weight: bold;">
+									<td><?php echo $tr->translate("NUM");?></td>
+									<td style="white-space:nowrap;"><?php echo $tr->translate("ថ្ងៃបង់");?></td>
+									<td><?php echo $tr->translate("លេខបង្កាន់ដៃ");?></td>
+									<td><?php echo $tr->translate("ចំនួនទឹកប្រាក់");?></td>
+									<td><?php echo $tr->translate("ទឹកប្រាក់បានបង់");?></td>
+									<td><?php echo $tr->translate("ទឹកប្រាក់នៅខ្វះ");?></td>
+								</tr>
+							</table>
+						 	<input type="hidden" id="identity" name="identity" />
+							<input type="hidden" id="array_sale_partner_id" name="array_sale_partner_id" />
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-7"><span class="required">
+								 </span>
+							</label>
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("ប្រាក់ត្រូវបង់ :");?>Total Payment
+							</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" name="total_payment" id="total_payment" readonly />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-md-4"></div>
+							<div class="col-md-2">
+								<a href="<?php echo $this->baseUrl();?>/sales/partnerservicepayment/"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
+							</div>
+							<div class="col-md-2">
+								<div class="input-icon right">
+									<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
+								</div>
+							</div>
+							<div class="col-md-4">
+							</div>
+						</div>
+					</div>	
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end new product -->
+<script>
+	
+	$('#frm').submit(function() {
+		
+		sale_order_id=$("#sale_order_id").val();
+		if(sale_order_id<=0){
+			alert("Please select invoice !!! ");
+			$('#sale_order_id').select2('open');
+			return false;	
+		}
+		
+		paid=$("#paid").val();
+		if(paid<=0){
+			alert("Please input paid amount !!!");
+			$('#paid').focus();
+			return false;	
+		}
+		var r = confirm("សូមត្រួតពិនិត្យទិន្នន័យ អោយបានត្រឹមត្រូវ !\nតើលោកអ្នកពិតជាចង់រក្សាទុកទិន្នន័យនេះមែនឫទេ?");
+		if (r == true) {
+			$("#save_close").attr("disabled", true);
+			return true;
+		} else {
+		   return false;	    
+		}
+	});
+	
+	function checkpayment(){
+		payment_type = $("#payment_type").val();
+		if(payment_type=="Cheque"){
+			$( "#bank_name" ).attr( "readOnly", false );
+			$( "#cheque_number" ).attr( "readOnly", false );
+		}else{
+			$("#bank_name").val("");
+			$("#cheque_number").val("");
+			$( "#bank_name" ).attr( "readOnly", true );
+			$( "#cheque_number" ).attr( "readOnly", true );}
+	}
+	
+	
+	<?php $urlreceipt =  $this->url(array('module'=>'sales','controller'=>'partnerservicepayment','action'=>'get-partner-service-payment')); ?>
+	function getReceipt(){
+		sale_order_id=$("#sale_order_id").val();
+		if(sale_order_id>0){
+			//alert(cus_id+"-"+mong_id);
+			$.ajax({
+				url:"<?php echo $urlreceipt;?>",
+				type:"post",
+				data:{'sale_order_id':sale_order_id,'action':"add"},
+				success: function(data){	
+					$("#table_order").html("");
+					template='<tr height="33px" align="center" style="font-weight: bold;">';
+						template+='<td><?php echo $tr->translate("NUM");?></td>';
+						template+='<td style="white-space:nowrap;"><?php echo $tr->translate("ថ្ងៃបង់");?></td>';
+						template+='<td><?php echo $tr->translate("ចំនួនទឹកប្រាក់");?></td>';
+						template+='<td><?php echo $tr->translate("ទឹកប្រាក់បានបង់");?></td>';
+						template+='<td><?php echo $tr->translate("ទឹកប្រាក់នៅខ្វះ");?></td>';
+						template+='<td><?php echo $tr->translate("សម្គាល់");?></td>';
+					template+='</tr>';
+					
+					$('#identity').val("");
+					data = $.parseJSON(data);
+					
+					for(i=0;i<data.length;i++){
+						/*if(i==0){
+							$("#customer_id").val(data[i].customer_id);
+							$("#customer_id").select2();
+						}*/
+						index=i+1;
+						template+='<tr style="height:30px;" align="center">';
+							template+='<td >'+index+'</td>';
+							template+='<td >'+data[i].receipt_date+'</td>';
+							//template+='<td >'+data[i].receipt_no+'<input type="hidden" value='+data[i].id+' id="invoice_no'+index+'" name="invoice_no'+index+'"/></td>';
+							template+='<td >'+"$ "+data[i].total_payment+'<input type="hidden" value='+data[i].total_payment+' id="subtotal'+index+'" name="subtotal'+index+'"/></td>';
+							if(data[i].paid==null){data[i].paid=0;}
+							template+='<td >'+"$ "+data[i].paid+'<input type="hidden" value='+data[i].paid+' id="paid_amount'+index+'" name="paid_amount'+index+'"/></td>';
+							template+='<td >'+"$ "+data[i].balance+'<input type="hidden" value='+data[i].balance+' id="balance_after'+index+'" name="balance_after'+index+'"/></td>';
+							template+='<td >'+data[i].note+'<input type="hidden" value='+data[i].note+' id="note_'+index+'" name="note_'+index+'"/></td>';
+						template+="</tr>";
+						
+						if($('#identity').val()!="") {
+							var identity = $('#identity').val();
+							$('#identity').val(identity+','+index);
+						} else {$('#identity').val(index);}
+						
+						$('#total_payment').val(data[i].partner_service_balance);
+						$('#balance').val(data[i].partner_service_balance);
+					}
+					$('#table_order').append(template);
+					
+					//if(data.length>0){netTotal();}else{$('#balance').val(0);$('#all_total').val(0);$('#paid').val(0); alert("No invoice to make payment");}
+				},
+				error:function(e){
+					alert("error"+e);
+				}
+			});	
+		}else{
+			$("#table_order").html("");
+			$('#identity').val("");
+			$('#total_payment').val(0);
+			$('#balance').val(0);
+			$('#paid').val(0);
+		}
+	}
+	
+	<?php $urlpartner =  $this->url(array('module'=>'sales','controller'=>'partnerservicepayment','action'=>'get-allservice')); ?>
+	function getAllPartnerService(){
+		partner_id=$("#partner_id").val();
+		branch_id = $("#branch_id").val();
+		if(branch_id=="" || branch_id=="0"){
+			alert("<?php echo $tr->translate("Please select branch");?> !!!");
+			$('#branch_id').select2('open');
+			return false;
+		}
+		if(partner_id>0){
+			$.ajax({
+				url:"<?php echo $urlpartner;?>",
+				type:"post",
+				data:{'partner_id':partner_id,'action':"add",'branch_id':branch_id},
+				success: function(data){	
+					$("#table_order").html("");
+					template='<tr height="33px" align="center" style="font-weight: bold;white-space:nowrap;">';
+						template+='<td><label>All <input type="checkbox" id="checkall" name="checkall" onclick="checkAll('+data.length+')" checked/></label></td>';
+						template+='<td><?php echo $tr->translate("ល.រ");?></td>';
+						template+='<td><?php echo $tr->translate("លេខវិក័យបត្រ");?></td>';
+						template+='<td><?php echo $tr->translate("ថ្ងៃទី");?></td>';
+						template+='<td><?php echo $tr->translate("ទីតាំងបុណ្យ");?></td>';
+						template+='<td><?php echo $tr->translate("សេវាកម្ម");?></td>';
+						template+='<td><?php echo $tr->translate("តម្លៃ");?></td>';
+						template+='<td><?php echo $tr->translate("សម្គាល់");?></td>';
+					template+='</tr>';
+					
+					$('#identity').val("");
+					data = $.parseJSON(data);
+					
+					for(i=0;i<data.length;i++){
+						index=i+1;
+						template+='<tr style="height:30px;" align="center">';
+							template+='<td ><input type="checkbox" onclick="getValue('+data.length+');calculateTotal('+data.length+')" checked id="sales_partner_service_id_'+index+'" name="sales_partner_service_id_'+index+'" value="'+data[i].id+'" /></td>';
+							template+='<td >'+index+'</td>';
+							template+='<td >'+data[i].invoice_no+'</td>';
+							template+='<td >'+data[i].date_sold+'</td>';
+							template+='<td align="left">'+data[i].place_bun+'</td>';
+							template+='<td align="left">'+data[i].service_name+'</td>';
+							template+='<td >'+"$ "+data[i].price+'<input type="hidden" value='+data[i].price+' id="price_'+index+'" name="price_'+index+'"/></td>';
+							template+='<td >'+data[i].note+'</td>';
+						template+="</tr>";
+						
+						if($('#identity').val()!="") {
+							var identity = $('#identity').val();
+							$('#identity').val(identity+','+index);
+						} else {$('#identity').val(index);}
+					}
+					$('#table_order').append(template);
+					
+					getValue(data.length);
+					calculateTotal(data.length);
+				},
+				error:function(e){
+					alert("error"+e);
+				}
+			});	
+		}
+	}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	function getValue(length){
+		$('#array_sale_partner_id').val('');
+		for(var j=1;j<=length;j++){
+			if($('#sales_partner_service_id_'+j).attr('checked')){
+				
+				id = $("#sales_partner_service_id_"+j).val();
+
+				if($("#array_sale_partner_id").val()!="") {
+					var sale_partner_id = $("#array_sale_partner_id").val();
+					$("#array_sale_partner_id").val(sale_partner_id+','+id);
+				} else{
+					$("#array_sale_partner_id").val(id);
+				}
+				
+			}
+		}
+	}
+	
+	function checkAll(length){
+		if($('#checkall').attr('checked')){
+			for(var j=1;j<=length;j++){
+				$("#sales_partner_service_id_"+j).attr('checked', 'checked');
+			}
+		}else{
+			for(var j=1;j<=length;j++){
+				$("#sales_partner_service_id_"+j).removeAttr("checked");
+			}
+		}
+		getValue(length);
+		calculateTotal(length);
+	}
+	
+	function calculateTotal(length){
+		var netTotal=0;
+		for(var j=1;j<=length;j++){
+			if($('#sales_partner_service_id_'+j).attr('checked')){
+				netTotal += Number($('#price_'+j).val());
+			}
+		}
+		$("#total_payment").val(netTotal);
+	}
+	
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		$("#row_order_"+index).remove();
+		netTotal();
+	}
+	function doRemain() {
+		var total_payment = Number($('#total_payment').val());
+		var paid = Number($('#paid').val());
+		if(paid > total_payment){
+			var paid = $('#paid').val(total_payment);
+			 $('#balance').val(0);
+	   }else{
+		   remain = total_payment-paid;
+		   $('#balance').val(remain.toFixed(2));
+		}	
+	}
+
+
+	function getAllBranchFunction(){
+		getAllPartnerService();
+	}
+	
+</script>	

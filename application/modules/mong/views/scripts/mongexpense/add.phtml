@@ -1,0 +1,344 @@
+<?php 
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	$form=$this->form_sale;
+	$url_submit = $this->url(array('module'=>'mong','controller'=>'mongexpense','action'=>'add'));
+?>
+<title><?php echo $tr->translate("បន្ថែមចំណាយម៉ុង");?></title>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet box blue">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-home"></i><?php echo $tr->translate("បន្ថែមចំណាយម៉ុង")?>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<!-- BEGIN FORM-->
+				<form id="frm" action="<?php echo $url_submit; ?>" class="form-horizontal" enctype="multipart/form-data" method="post" autocomplete="off">
+					
+					<div class="form-body" style="background:#fbf9f9;">
+						<div class="form-group" style="">
+							<label class="control-label col-md-2"> 
+								<?php echo $tr->translate("BRANCH_NAME");?>
+							</label>
+							<div class="col-md-4">
+								<select name="branch" id="branch" required class="form-control select2me" onchange="getAllBranchFunction();" >
+									<option value=""><?php echo $tr->translate("SELECT_BRANCH");?></option>
+									<?php if(!empty($this->branch)){foreach($this->branch as $branch){?>
+									<option value="<?php echo $branch['id']?>"><?php echo $branch['name'];?></option>
+									<?php }}?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-2"> <?php echo $tr->translate("អតិថិជន");?><span class="required">
+								</span>
+							</label>
+							<div class="col-md-4">
+									<select name="customer_id" id="customer_id" class="form-control select2me" onchange="getConstructorInfo(1);" >
+										<option value="-1">ជ្រើសរើសអតិថិជន</option>
+										<?php if(!empty($this->customer_name)){foreach($this->customer_name as $customer){?>
+										<option value="<?php echo $customer['id']?>"><?php echo $customer['name']." - ".$customer['place_bun']." - ".$customer['phone']?></option>
+										<?php }}?>
+									</select>
+							</div>
+							
+							<label class="control-label col-md-2"><?php echo $tr->translate("លេខវិក័យបត្រ");?><span class="required">
+								</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<select name="invoice_id" id="invoice_id" class="form-control select2me" onchange="getConstructorInfo(2);" >
+										<option value="-1">ជ្រើសរើសវិក័យបត្រ</option>
+										<?php if(!empty($this->customer_invoice)){foreach($this->customer_invoice as $invoice){?>
+										<option value="<?php echo $invoice['id']?>"><?php echo $invoice['name']?></option>
+										<?php }}?>
+									</select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("ឈ្មោះជាង");?>
+							</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" name="constructor_name" id="constructor_name" readonly />
+								<input type="hidden" id="constructor_id" name="constructor_id" />
+							</div>
+							
+							<label class="control-label col-md-2"><?php echo $tr->translate("លេខចំណាយ");?><span class="required">
+								 </span>
+							</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" name="expense_number" id="expense_number" readonly value="<?php echo $this->invoice;?>" style="color:red"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-2"><?php echo $tr->translate("ថ្ងៃចំណាយ");?><span class="required">
+							*</span>
+							</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<i class="fa fa-calendar"></i>
+									<input class="form-control date-picker" name="date_in" id="date_in" value="<?php echo date("d-m-Y")?>" data-date-format="dd-mm-yyyy" />
+								</div>
+							</div>
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("សម្គាល់");?>
+							</label>
+							<div class="col-md-4">
+								<textarea name="other_note" id="other_note" class="form-control" height="100px"></textarea>
+							</div>
+						</div>
+						
+						<div class="form-group" style="">
+							<label class="col-md-2 control-label">
+								<input id="identity" name="identity" type="hidden" />
+								<strong>ប្រភេទចំណាយ</strong>
+							</label>
+							<div class="col-md-4">
+								<select name="construct_item" id="construct_item" onchange="addConstructItem();" class="form-control select2me">
+									<option value="-1">ជ្រើសរើសចំណាយ</option>
+									<?php if(!empty($this->constructor_item)){ foreach($this->constructor_item as $rs){?>
+									<option value="<?php echo $rs['id']?>">
+										<?php echo $rs['title'];?>
+									</option>
+									<?php }}?>
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group" style="">
+							<div class="col-md-1 control-label">
+							</div>
+							<div class="col-md-10 control-label">
+								<table id="table_row"  style="border-collapse: collapse; border:1px solid #ccc;width:100%;">
+									<thead>
+										<tr id="head-title" class="table table-bordered" align="right" style="background:#ccc">
+											<th class="center">#</th>
+											<th class="center">ឈ្មោះចំណាយ</th>
+											<th class="center">តម្លៃរាយ ($)</th>
+											<th class="center">បរិមាណ</th>
+											<th class="center">សរុប ($)</th>
+											<th class="center">លុប</th>
+										</tr>
+									</thead>
+									<tbody id="lbl_construct_item">
+									</tbody>
+								</table>
+							</div>
+							<div class="col-md-1 control-label">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="control-label col-md-7"><span class="required">
+								</span>
+							</label>
+							<label class="control-label col-md-2">
+								<?php echo $tr->translate("ចំណាយសរុប​ :");?>Total
+							</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" name="total_payment" id="total_payment" readonly />
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<div class="col-md-4"></div>
+							<div class="col-md-2">
+								<a href="<?php echo $this->baseUrl();?>/mong/mongexpense/"><button type="button" class="btn red btn-block btn-lg"><i class="fa fa-times"></i> <?php echo $tr->translate("GO_BACK")?></button></a>
+							</div>
+							<div class="col-md-2">
+								<div class="input-icon right">
+									<button type="submit" id="save_close" class="btn blue btn-block btn-lg" ><i class="fa fa-close"></i> <?php echo $tr->translate("SAVE_CLOSE")?></button>
+								</div>
+							</div>
+							<div class="col-md-4">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end new product -->
+<script>
+	$( document ).ready(function() {
+		getAllBranchFunction();
+	});
+	function getAllBranchFunction(){
+		getPOsaleByBranch(1);
+		getPOsaleByBranch(2);
+		getExpenseNumber();
+	}
+	<?php $urlGetposbybranch = $this->url(array('module'=>'mong','controller'=>'mongexpense','action'=>'getmongbybranch'));?>
+	function getPOsaleByBranch(postype=0){
+		branch_id = $("#branch").val();
+		if(branch_id=="" || branch_id=="-1"){
+			return false;
+		}
+		$.ajax({
+			url: "<?php echo $urlGetposbybranch;?>",
+			type: "post",
+			data: {'branch_id':branch_id,'postype':postype},
+			dataType:"json",
+			success: function(data){
+				if(postype==1){
+					$("#customer_id").html(data)
+				}else{
+					$("#invoice_id").html(data)
+				}
+			},
+			error:function(err){
+				 alert(err);
+			}
+		});
+	}
+	
+	<?php $url =  $this->url(array('module'=>'mong','controller'=>'mongexpense','action'=>'get-constructor-info')); ?>
+	function getConstructorInfo(type){
+		if(type==1){
+			var id = $('#customer_id').val();
+			$('#invoice_id').val(id).select2();
+		}else{
+			var id = $('#invoice_id').val();
+			$('#customer_id').val(id).select2();
+		}
+		if(id>0){
+			$.ajax({
+				url: "<?php echo $url;?>",
+				type: "post",
+				data: {id:id},
+				success: function(data){
+					rs = $.parseJSON(data);
+					if(data){
+						$('#constructor_id').val(rs.id);
+						$('#constructor_name').val(rs.name);
+					}
+				},
+				error:function(err){
+					alert("failed");
+				}
+			});
+		}
+
+	}
+	
+	function checkpayment(){
+		payment_id = $("#payment_id").val();
+		if(payment_id==2){
+			$( "#bank_name" ).attr( "readOnly", false );
+			$( "#cheque" ).attr( "readOnly", false );
+		}else{
+			$("#bank_name").val("");
+			$("#cheque").val("");
+			$( "#bank_name" ).attr( "readOnly", true );
+			$( "#cheque" ).attr( "readOnly", true );
+		}
+	}
+
+	index=0;
+	function addConstructItem(){
+		var construct_item = $("#construct_item");
+		var txt_construct_item = $("option:selected",construct_item).text();
+		var construct_item_id = $("#construct_item").val();
+		
+		if(construct_item_id>0){
+			index++;
+			template='<tr align="center" id="row_construct_item_'+index+'">';
+			template+='<td>'+index+'</td>';
+			template+='<td>'+txt_construct_item+'<input type="hidden" id="item_'+index+'" name="item_'+index+'" value="'+construct_item_id+'" </td>';
+			template+='<td><input style="text-align:center;" type="text" id="item_price_'+index+'" name="item_price_'+index+'"  value="" onkeyup="calculateTotal('+index+')" class="form-control"></td>';
+			template+='<td><input style="text-align:center;" type="text" id="item_qty_'+index+'" name="item_qty_'+index+'" onkeyup="calculateTotal('+index+')" value="1" class="form-control"></td>';
+			template+='<td><input style="text-align:center;" type="text" id="item_total_'+index+'" name="item_total_'+index+'" readonly value="" class="form-control"></td>';
+			template+='<td><button type="button" onClick="deleteRecord('+index+')" name="delete" class="btn default red">លុប</button></td>';
+			template+='</tr>';
+			$('#lbl_construct_item').append(template);
+			if($('#identity').val()!="") {
+				var identity = $('#identity').val();
+				$('#identity').val(identity+','+index);
+			} else {$('#identity').val(index);}
+
+			getItemPrice(index);
+		}
+	}
+	function getItemPrice(index){
+		var item_id  = $("#item_"+index).val();
+		if(item_id>0){
+			$.ajax({
+				url: "<?php echo $this->baseUrl()?>/mong/index/get-item-price",
+				type: "post",
+				data: {item_id:item_id},
+				success: function(data){
+					//alert(data);
+					rs = $.parseJSON(data);
+					//alert(rs.constructor_type);
+					if(rs){
+						$('#item_price_'+index).val(rs);
+						calculateTotal(index);
+					}
+				},
+				error:function(err){
+					alert("failed");
+				}
+			});
+		}
+	}
+	function calculateTotal(index){
+		var price = $("#item_price_"+index).val();
+		var qty  = $("#item_qty_"+index).val();
+
+		price = isNaN(price)?0:price;
+		qty = isNaN(qty)?0:qty;
+
+		total = price * qty;
+		$("#item_total_"+index).val(total.toFixed(2));
+		
+		netTotalConstructItem();
+	}
+	function netTotalConstructItem(){//use
+		var netTotal=0;
+		var rowId = $('#identity').val();
+		var rowIDArray = rowId.split(',');
+		for(var n = 0; n < rowIDArray.length; n++) {
+			netTotal += Number($("#item_total_"+rowIDArray[n]).val());
+		}
+		$("#total_payment").val(netTotal.toFixed(2));
+	}
+	function deleteRecord(index) {
+		var identity = $('#identity').val();
+		var arrays = identity.split(',');
+		
+		for(var i=0;i<arrays.length;i++) {
+			if(arrays[i] == index) arrays.splice(i,1);
+		}
+		var strings = arrays.join(',');
+		$('#identity').val(strings);
+		$("#row_construct_item_"+index).remove();
+		netTotalConstructItem();
+	}
+	function getExpenseNumber(){
+		var branch_id  = $("#branch").val();
+		if(branch_id>0){
+			$.ajax({
+				url: "<?php echo $this->baseUrl()?>/mong/mongexpense/get-expense-number",
+				type: "post",
+				data: {branch_id:branch_id},
+				success: function(data){
+					//alert(data);
+					rs = $.parseJSON(data);
+					//alert(rs.constructor_type);
+					if(rs){
+						$('#expense_number').val(rs);
+					}
+				},
+				error:function(err){
+					alert("failed");
+				}
+			});
+		}
+	}
+</script>	
